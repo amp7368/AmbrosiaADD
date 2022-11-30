@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+repositories {
+    maven { url "https://reposilite.appleptr16.com/appleptr16" }
+    mavenCentral()
+}
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+project.group groupValue
+project.version versionValue
+
+configurations {
+    all {
+        resolutionStrategy.cacheDynamicVersionsFor 1, 'seconds'
+        resolutionStrategy.cacheChangingModulesFor 1, 'seconds'
+    }
+}
+dependencies {
+    implementation 'net.dv8tion:JDA:5.0.0-beta.1'
+    implementation 'apple.lib:applemodules:2.0-SNAPSHOT'
+}
+mainClassName = 'com.ambrosia.add.Ambrosia'
+shadowJar {
+    doLast {
+        copy {
+            from getArchiveFile()
+            into file(botsBuildDir + '/ambrosia')
+        }
+    }
+}
