@@ -28,18 +28,16 @@ configurations {
 project.ext.ebean_version = '13.10.2'
 // https://search.maven.org/search?q=g:io.ebean
 dependencies {
-    annotationProcessor 'io.ebean:ebean-annotation:8.3'
     annotationProcessor "io.ebean:ebean-querybean:${ebean_version}"
-    annotationProcessor 'io.ebean:persistence-api:3.0'
     annotationProcessor "io.ebean:querybean-generator:${ebean_version}"
 
     implementation 'mysql:mysql-connector-java:8.0.30'
 
-    implementation 'io.ebean:ebean-annotation:8.3'
     implementation "io.ebean:ebean-ddl-generator:${ebean_version}"
     implementation "io.ebean:ebean-querybean:${ebean_version}"
     implementation "io.ebean:ebean-mysql:${ebean_version}"
 
+    // logging
     implementation 'org.apache.logging.log4j:log4j-core:2.19.0'
     implementation 'org.apache.logging.log4j:log4j-slf4j2-impl:2.19.0'
 

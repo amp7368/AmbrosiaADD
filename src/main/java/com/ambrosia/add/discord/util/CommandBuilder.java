@@ -52,9 +52,15 @@ public interface CommandBuilder extends SendMessage {
 
     default Integer getOptionAmount(SlashCommandInteractionEvent event) {
         OptionMapping amountOption = event.getOption(AMOUNT_OPTION);
-        if (amountOption != null) return amountOption.getAsInt();
-        event.replyEmbeds(this.missingOption(AMOUNT_OPTION)).queue();
-        return null;
+        if (amountOption == null) {
+            event.replyEmbeds(this.missingOption(AMOUNT_OPTION)).queue();
+            return null;
+        }
+        if (amountOption.getAsInt() < 0) {
+            event.replyEmbeds(error(String.format("%s must be positive!", AMOUNT_OPTION))).queue();
+            return null;
+        }
+        return amountOption.getAsInt();
     }
 
     default void addOptionAmount(SlashCommandData command) {

@@ -25,10 +25,17 @@ public abstract class CommandOperation extends DCFSlashCommand implements Comman
         @Nullable ClientEntity client = findClient(event, clientName);
         if (client == null) return;
         long conductorId = event.getUser().getIdLong();
-        client = OperationStorage.get().saveOperation(conductorId, client, amount, operationReason());
+        if (sign() < 0 && amount > client.credits) {
+            String msg = String.format("%s cannot afford losing %d credits.\nBalance: %d", client.displayName, amount, client.credits);
+            event.replyEmbeds(error(msg)).queue();
+            return;
+        }
+        client = OperationStorage.get().saveOperation(conductorId, client, sign() * amount, operationReason());
         event.replyEmbeds(successMessage(client, amount)).queue();
     }
 
+
+    protected abstract int sign();
 
     @Override
     public CommandData getData() {

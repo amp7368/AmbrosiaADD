@@ -8,12 +8,22 @@ import com.ambrosia.add.database.client.ClientStorage;
 import com.ambrosia.add.database.operation.OperationEntity;
 import com.ambrosia.add.database.operation.OperationStorage;
 import io.ebean.DatabaseFactory;
+import io.ebean.annotation.Platform;
 import io.ebean.config.DatabaseConfig;
 import io.ebean.datasource.DataSourceConfig;
+import io.ebean.dbmigration.DbMigration;
+import java.io.IOException;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 public class AmbrosiaDatabase extends AppleModule {
+
+    public static void main(String[] args) throws IOException {
+        // doesn't work
+        DbMigration migration = DbMigration.create();
+        migration.setPlatform(Platform.MYSQL);
+        migration.generateMigration();
+    }
 
     @Override
     public void onLoad() {
@@ -31,7 +41,7 @@ public class AmbrosiaDatabase extends AppleModule {
         dbConfig.setDataSourceConfig(dataSourceConfig);
         dbConfig.setAutoPersistUpdates(true);
         dbConfig.setDdlGenerate(true);
-        dbConfig.setDdlRun(true);
+//        dbConfig.setDdlRun(true);
         dbConfig.addAll(List.of(OperationEntity.class, ClientEntity.class));
         return dbConfig;
     }

@@ -2,6 +2,7 @@ package com.ambrosia.add.database.client;
 
 import com.ambrosia.add.database.client.query.QClientEntity;
 import io.ebean.DB;
+import io.ebean.Transaction;
 import org.jetbrains.annotations.Nullable;
 
 public class ClientStorage {
@@ -22,10 +23,14 @@ public class ClientStorage {
 
     @Nullable
     public ClientEntity saveClient(long conductorId, String clientName) {
-        boolean previousExists = this.find(clientName) != null;
-        if (previousExists) return null;
         ClientEntity client = new ClientEntity(conductorId, clientName);
-        DB.getDefault().save(client);
+        try (Transaction transaction = DB.getDefault().beginTransaction()) {
+            boolean isUnique = DB.getDefault().checkUniqueness(client, transaction).isEmpty();
+            if (!isUnique) return null;
+            DB.getDefault().save(client, transaction);
+            transaction.commit();
+        }
+
         return client;
     }
 }
