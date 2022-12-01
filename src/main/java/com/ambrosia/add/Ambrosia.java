@@ -2,23 +2,28 @@ package com.ambrosia.add;
 
 import apple.lib.modules.AppleModule;
 import apple.lib.modules.ApplePlugin;
+import com.ambrosia.add.database.AmbrosiaDatabase;
 import com.ambrosia.add.discord.DiscordModule;
-import java.util.Collection;
 import java.util.List;
 
 public class Ambrosia extends ApplePlugin {
 
     public static void main(String[] args) {
-        new Ambrosia().run();
+        new Ambrosia().start();
     }
 
     @Override
-    public Collection<AppleModule> getModules() {
-        return List.of(new DiscordModule());
+    public List<AppleModule> createModules() {
+        return List.of(new AmbrosiaDatabase(), new DiscordModule());
+    }
+
+    @Override
+    public boolean isAsync() {
+        return true;
     }
 
     @Override
     public String getName() {
-        return "Ambrosia Add";
+        return "ADD";
     }
 }

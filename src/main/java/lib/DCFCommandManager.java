@@ -1,4 +1,4 @@
-package com.ambrosia.add.apple.discord.lib;
+package lib;
 
 import java.util.HashMap;
 import java.util.List;
