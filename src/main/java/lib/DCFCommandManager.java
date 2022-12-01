@@ -16,9 +16,11 @@ public class DCFCommandManager {
         this.dcf = dcf;
     }
 
-    public void addCommand(DCFSlashCommand command) {
+    public void addCommand(DCFSlashCommand... commands) {
         synchronized (this.data) {
-            this.data.put(command.getData().getName(), command);
+            for (DCFSlashCommand command : commands) {
+                this.data.put(command.getData().getName(), command);
+            }
         }
     }
 

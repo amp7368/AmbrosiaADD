@@ -8,8 +8,18 @@ import java.util.List;
 
 public class Ambrosia extends ApplePlugin {
 
+    private static Ambrosia instance;
+
     public static void main(String[] args) {
         new Ambrosia().start();
+    }
+
+    public Ambrosia() {
+        instance = this;
+    }
+
+    public static Ambrosia get() {
+        return instance;
     }
 
     @Override

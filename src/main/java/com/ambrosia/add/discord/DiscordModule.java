@@ -3,8 +3,13 @@ package com.ambrosia.add.discord;
 import apple.lib.modules.AppleModule;
 import apple.lib.modules.configs.factory.AppleConfigLike;
 import com.ambrosia.add.discord.create.CreateProfileCommand;
+import com.ambrosia.add.discord.operation.add.CommandDeposit;
+import com.ambrosia.add.discord.operation.add.CommandWin;
+import com.ambrosia.add.discord.operation.minus.CommandLoss;
+import com.ambrosia.add.discord.operation.minus.CommandWithdraw;
 import java.util.List;
 import lib.DCF;
+import lib.DCFCommandManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -17,8 +22,10 @@ public class DiscordModule extends AppleModule {
         JDA jda = builder.build();
         jda.getPresence().setPresence(Activity.playing("!"), false);
         DCF dcf = new DCF(jda);
-        dcf.commands().addCommand(new CreateProfileCommand());
-        dcf.commands().updateCommands();
+        DCFCommandManager dcfCommands = dcf.commands();
+        dcfCommands.addCommand(new CreateProfileCommand());
+        dcfCommands.addCommand(new CommandDeposit(), new CommandWin(), new CommandWithdraw(), new CommandLoss());
+        dcfCommands.updateCommands();
     }
 
 

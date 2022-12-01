@@ -2,51 +2,36 @@ package com.ambrosia.add.discord.create;
 
 import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.client.ClientStorage;
-import com.ambrosia.add.discord.DiscordPermissions;
+import com.ambrosia.add.discord.util.CommandBuilder;
 import lib.DCFSlashCommand;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
-import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import org.jetbrains.annotations.Nullable;
 
-public class CreateProfileCommand extends DCFSlashCommand implements CreateProfileMessage {
+public class CreateProfileCommand extends DCFSlashCommand implements CommandBuilder, CreateProfileMessage {
 
     @Override
     public void onCommand(SlashCommandInteractionEvent event) {
-        Member sender = event.getMember();
-        if (sender == null) return; // this is a guild only command
-
-        boolean hasPermission = DiscordPermissions.get().isDealer(sender.getRoles());
-        if (!hasPermission) {
-            event.replyEmbeds(this.isNotDealer(event)).queue();
-            return;
-        }
-        this.asyncRun(event);
-    }
-
-    private void asyncRun(SlashCommandInteractionEvent event) {
-        OptionMapping clientNameOption = event.getOption("name");
-        if (clientNameOption == null) {
-            event.replyEmbeds(this.error("Please provide a valid 'name'")).queue();
-            return;
-        }
-        String clientName = clientNameOption.getAsString();
-        boolean previousExists = ClientStorage.get().find(clientName).isPresent();
-        if (previousExists) {
+        if (!this.isBadPermission(event)) return;
+        @Nullable String clientName = getOptionProfileName(event);
+        if (clientName == null) return;
+        long conductorId = event.getUser().getIdLong();
+        ClientEntity client = ClientStorage.get().saveClient(conductorId, clientName);
+        if (client == null) {
             event.replyEmbeds(this.error(String.format("'%s' is already a user", clientName))).queue();
             return;
         }
-        ClientEntity client = new ClientEntity(clientName, event.getUser().getIdLong());
-        ClientStorage.get().save(client);
         event.replyEmbeds(this.success(String.format("Successfully created %s", client.displayName))).queue();
     }
 
+
     public SlashCommandData getData() {
-        return Commands.slash("create", "Create a profile for a customer")
-            .addOption(OptionType.STRING, "name", "The name of the customer", true)
-            .setDefaultPermissions(DefaultMemberPermissions.DISABLED).setGuildOnly(true);
+        SlashCommandData command = Commands.slash("create", "Create a profile for a customer");
+        addOptionProfileName(command);
+        return command.setDefaultPermissions(DefaultMemberPermissions.DISABLED).setGuildOnly(true);
     }
+
+
 }
