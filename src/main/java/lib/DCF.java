@@ -1,4 +1,4 @@
-package com.ambrosia.add.apple.discord.lib;
+package lib;
 
 import net.dv8tion.jda.api.JDA;
 
