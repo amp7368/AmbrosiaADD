@@ -72,7 +72,7 @@ public interface CommandBuilder extends SendMessage {
         return null;
     }
 
-    default void addOptionAmount(SlashCommandData command) {
+    default void addOptionAmount(SubcommandData command) {
         command.addOption(OptionType.STRING, AMOUNT_OPTION, "The amount to change", true);
     }
 }

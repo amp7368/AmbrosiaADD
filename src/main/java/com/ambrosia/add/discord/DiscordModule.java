@@ -3,6 +3,7 @@ package com.ambrosia.add.discord;
 import apple.lib.modules.AppleModule;
 import apple.lib.modules.configs.factory.AppleConfigLike;
 import com.ambrosia.add.discord.create.CreateProfileCommand;
+import com.ambrosia.add.discord.operation.CommandCash;
 import com.ambrosia.add.discord.operation.add.CommandDeposit;
 import com.ambrosia.add.discord.operation.add.CommandWin;
 import com.ambrosia.add.discord.operation.minus.CommandLoss;
@@ -29,7 +30,7 @@ public class DiscordModule extends AppleModule {
         DCF dcf = new DCF(jda);
         DCFCommandManager dcfCommands = dcf.commands();
         dcfCommands.addCommand(new CreateProfileCommand(), new CommandLink());
-        dcfCommands.addCommand(new CommandDeposit(), new CommandWin(), new CommandWithdraw(), new CommandLoss());
+        dcfCommands.addCommand(new CommandCash());
         dcfCommands.addCommand(new ViewProfileCommand());
         dcfCommands.updateCommands();
     }
