@@ -27,7 +27,7 @@ public class ClientStorage {
         try (Transaction transaction = DB.getDefault().beginTransaction()) {
             boolean isUnique = DB.getDefault().checkUniqueness(client, transaction).isEmpty();
             if (!isUnique) return null;
-            DB.getDefault().save(client, transaction);
+            client.save(transaction);
             transaction.commit();
         }
 

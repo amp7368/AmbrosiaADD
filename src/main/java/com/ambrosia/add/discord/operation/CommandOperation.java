@@ -18,11 +18,9 @@ public abstract class CommandOperation extends DCFSlashCommand implements Comman
     @Override
     public void onCommand(SlashCommandInteractionEvent event) {
         if (!this.isBadPermission(event)) return;
-        @Nullable String clientName = getOptionProfileName(event);
-        if (clientName == null) return;
-        @Nullable Integer amount = getOptionAmount(event);
+        @Nullable Integer amount = findOptionAmount(event);
         if (amount == null) return;
-        @Nullable ClientEntity client = findClient(event, clientName);
+        @Nullable ClientEntity client = findClient(event);
         if (client == null) return;
         long conductorId = event.getUser().getIdLong();
         if (sign() < 0 && amount > client.credits) {

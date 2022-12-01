@@ -39,9 +39,8 @@ public class AmbrosiaDatabase extends AppleModule {
     private static DatabaseConfig configureDatabase(DataSourceConfig dataSourceConfig) {
         DatabaseConfig dbConfig = new DatabaseConfig();
         dbConfig.setDataSourceConfig(dataSourceConfig);
-        dbConfig.setAutoPersistUpdates(true);
         dbConfig.setDdlGenerate(true);
-//        dbConfig.setDdlRun(true);
+        dbConfig.setDdlRun(false);
         dbConfig.addAll(List.of(OperationEntity.class, ClientEntity.class));
         return dbConfig;
     }

@@ -1,5 +1,6 @@
 package com.ambrosia.add.database.client;
 
+import io.ebean.Model;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.UUID;
@@ -8,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class ClientEntity {
+public class ClientEntity extends Model {
 
     @Id
     @Column
@@ -16,8 +17,8 @@ public class ClientEntity {
 
     @Column(unique = true)
     public UUID minecraft;
-    @Column(unique = true)
-    public Long discord;
+    @Column
+    public ClientDiscordDetails discord;
 
     @Column(unique = true, nullable = false)
     public String displayName;
@@ -42,5 +43,10 @@ public class ClientEntity {
 
     public void setCredits(long credits) {
         this.credits = credits;
+    }
+
+    public void setDiscord(ClientDiscordDetails discord) {
+        this.discord = discord;
+        this.displayName = discord.guildName;
     }
 }
