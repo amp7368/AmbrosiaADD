@@ -1,6 +1,7 @@
 package com.ambrosia.add.discord.util;
 
 import com.ambrosia.add.database.client.ClientEntity;
+import com.ambrosia.add.database.operation.OperationReason;
 import com.ambrosia.add.discord.DiscordModule;
 import java.awt.Color;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -48,8 +49,10 @@ public interface SendMessage {
             embed.setThumbnail(client.minecraft.skinUrl());
         } else embed.setFooter(null, DiscordModule.AMBROSIA_ICON);
         embed.setTimestamp(client.dateCreated.toInstant());
-        embed.addField("Credits", String.valueOf(client.credits), true);
-        embed.setDescription("idk what else to put here");
+        embed.addField("Credits", Emeralds.longMessage(client.credits), false);
+        embed.addField("Winnings", Emeralds.longMessage(client.total(OperationReason.WIN)), true);
+        embed.addBlankField(true);
+        embed.addField("Losses", Emeralds.longMessage(client.total(OperationReason.LOSS)), true);
         return embed.build();
     }
 }

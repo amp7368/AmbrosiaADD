@@ -13,7 +13,7 @@ public class ViewProfileCommand extends DCFSlashCommand implements CommandBuilde
 
     @Override
     public void onCommand(SlashCommandInteractionEvent event) {
-        if (!this.isBadPermission(event)) return;
+        if (this.isBadPermission(event)) return;
         ClientEntity client = this.findClient(event);
         if (client == null) return;
         event.replyEmbeds(embedClientProfile(client)).queue();

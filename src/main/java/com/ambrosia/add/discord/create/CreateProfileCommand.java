@@ -15,7 +15,7 @@ public class CreateProfileCommand extends DCFSlashCommand implements CommandBuil
 
     @Override
     public void onCommand(SlashCommandInteractionEvent event) {
-        if (!this.isBadPermission(event)) return;
+        if (this.isBadPermission(event)) return;
         @Nullable String clientName = findOptionProfileName(event);
         if (clientName == null) return;
         long conductorId = event.getUser().getIdLong();

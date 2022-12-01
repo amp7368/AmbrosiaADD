@@ -15,7 +15,7 @@ public class CommandLinkMinecraft extends DCFSlashSubCommand implements CommandB
 
     @Override
     public void onCommand(SlashCommandInteractionEvent event) {
-        if (!this.isBadPermission(event)) return;
+        if (this.isBadPermission(event)) return;
         ClientEntity client = this.findClient(event);
         if (client == null) return;
         String username = this.findOption(event, OPTION_MINECRAFT, OptionMapping::getAsString);

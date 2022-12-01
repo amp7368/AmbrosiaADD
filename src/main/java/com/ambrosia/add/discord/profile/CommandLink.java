@@ -14,7 +14,6 @@ public class CommandLink extends DCFSlashCommand {
     public SlashCommandData getData() {
         SlashCommandData command = Commands.slash("link", "Link minecraft and/or discord");
         return command.setDefaultPermissions(DefaultMemberPermissions.ENABLED).setGuildOnly(true);
-
     }
 
     @Override

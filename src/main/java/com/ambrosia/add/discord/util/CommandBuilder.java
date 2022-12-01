@@ -21,14 +21,14 @@ public interface CommandBuilder extends SendMessage {
         Member sender = event.getMember();
         if (sender == null) {
             event.replyEmbeds(this.error("Guilds only")).queue(); // this is a guild only command
-            return false;
+            return true;
         }
         boolean hasPermission = DiscordPermissions.get().isDealer(sender.getRoles());
         if (!hasPermission) {
             event.replyEmbeds(this.isNotDealer(event)).queue();
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Nullable

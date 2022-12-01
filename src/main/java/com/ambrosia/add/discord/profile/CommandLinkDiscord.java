@@ -16,7 +16,7 @@ public class CommandLinkDiscord extends DCFSlashSubCommand implements CommandBui
 
     @Override
     public void onCommand(SlashCommandInteractionEvent event) {
-        if (!this.isBadPermission(event)) return;
+        if (this.isBadPermission(event)) return;
         ClientEntity client = this.findClient(event);
         if (client == null) return;
         Member option = this.findOption(event, DISCORD_OPTION, OptionMapping::getAsMember);

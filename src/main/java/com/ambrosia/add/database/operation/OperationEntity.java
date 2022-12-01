@@ -1,5 +1,6 @@
 package com.ambrosia.add.database.operation;
 
+import io.ebean.annotation.Aggregation;
 import java.sql.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,15 +26,19 @@ public class OperationEntity {
     public int changeAmount;
     @Column(nullable = false)
     public long conductorId;
-
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     public OperationReason operationType;
+
+    @Aggregation("sum(changeAmount)")
+    public long sumAmount;
 
     public OperationEntity(long conductorId, long clientId, int changeAmount, OperationReason reason) {
         this.conductorId = conductorId;
         this.clientId = clientId;
         this.changeAmount = changeAmount;
         this.dateCreated = new Date(System.currentTimeMillis());
+        this.operationType = reason;
     }
 
     public OperationEntity() {

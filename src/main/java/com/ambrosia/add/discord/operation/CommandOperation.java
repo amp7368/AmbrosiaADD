@@ -16,7 +16,7 @@ public abstract class CommandOperation extends DCFSlashCommand implements Comman
 
     @Override
     public void onCommand(SlashCommandInteractionEvent event) {
-        if (!this.isBadPermission(event)) return;
+        if (this.isBadPermission(event)) return;
         @Nullable Integer amount = findOptionAmount(event);
         if (amount == null) return;
         @Nullable ClientEntity client = findClient(event);
