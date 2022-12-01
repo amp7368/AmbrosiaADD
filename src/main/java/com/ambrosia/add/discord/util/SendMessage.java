@@ -1,4 +1,4 @@
-package com.ambrosia.add.discord.format;
+package com.ambrosia.add.discord.util;
 
 import java.awt.Color;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -25,5 +25,9 @@ public interface SendMessage {
 
     default MessageEmbed isNotDealer(SlashCommandInteractionEvent event) {
         return error(String.format("You must be a dealer to run '/%s'", event.getFullCommandName()));
+    }
+
+    default MessageEmbed missingOption(String option) {
+        return error(String.format("'%s' is required", option));
     }
 }

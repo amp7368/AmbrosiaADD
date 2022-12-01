@@ -8,8 +8,6 @@ public abstract class DCFSlashCommand {
 
     public abstract CommandData getData();
 
-    public void onCommand(SlashCommandInteractionEvent event) {
-
-    }
+    public abstract void onCommand(SlashCommandInteractionEvent event);
 
 }

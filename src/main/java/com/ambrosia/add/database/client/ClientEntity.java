@@ -13,24 +13,27 @@ public class ClientEntity {
 
     @Id
     @Column
-    public UUID uuid;
+    public long uuid;
+
     @Column(unique = true)
+    public UUID minecraft;
+    @Column(unique = true)
+    public Long discord;
+    @Column(unique = true, nullable = false)
     public String displayName;
-    @Column
+    @Column(nullable = false)
     public Date dateCreated;
 
-    @Column
+    @Column(nullable = false)
     public long credits;
-    @Column
+    @Column(nullable = false)
     public long creator;
 
-    public ClientEntity(String displayName, long creator) {
-        this.uuid = UUID.randomUUID();
+    public ClientEntity(long creator, String displayName) {
         this.displayName = displayName;
         this.dateCreated = new Date(System.currentTimeMillis());
         this.credits = 0;
         this.creator = creator;
-
     }
 
     public ClientEntity() {

@@ -5,6 +5,8 @@ import apple.lib.modules.configs.factory.AppleConfigLike;
 import com.ambrosia.add.Ambrosia;
 import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.client.ClientStorage;
+import com.ambrosia.add.database.operation.OperationEntity;
+import com.ambrosia.add.database.operation.OperationStorage;
 import io.ebean.DatabaseFactory;
 import io.ebean.config.DatabaseConfig;
 import io.ebean.datasource.DataSourceConfig;
@@ -20,6 +22,7 @@ public class AmbrosiaDatabase extends AppleModule {
         DatabaseFactory.createWithContextClassLoader(dbConfig, Ambrosia.class.getClassLoader());
         logger().info("Successfully created database");
         new ClientStorage();
+        new OperationStorage();
     }
 
     @NotNull
@@ -29,7 +32,7 @@ public class AmbrosiaDatabase extends AppleModule {
         dbConfig.setAutoPersistUpdates(true);
         dbConfig.setDdlGenerate(true);
         dbConfig.setDdlRun(true);
-        dbConfig.addAll(List.of(ClientEntity.class));
+        dbConfig.addAll(List.of(OperationEntity.class, ClientEntity.class));
         return dbConfig;
     }
 
