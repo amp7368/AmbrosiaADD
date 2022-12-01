@@ -3,6 +3,7 @@ package com.ambrosia.add.discord.create;
 import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.client.ClientStorage;
 import com.ambrosia.add.discord.util.CommandBuilder;
+import com.ambrosia.add.discord.util.SendMessage;
 import lib.DCFSlashCommand;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
@@ -10,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.jetbrains.annotations.Nullable;
 
-public class CreateProfileCommand extends DCFSlashCommand implements CommandBuilder, CreateProfileMessage {
+public class CreateProfileCommand extends DCFSlashCommand implements CommandBuilder, SendMessage {
 
     @Override
     public void onCommand(SlashCommandInteractionEvent event) {

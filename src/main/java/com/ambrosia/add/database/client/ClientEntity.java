@@ -1,6 +1,7 @@
 package com.ambrosia.add.database.client;
 
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,10 +18,11 @@ public class ClientEntity {
     public UUID minecraft;
     @Column(unique = true)
     public Long discord;
+
     @Column(unique = true, nullable = false)
     public String displayName;
     @Column(nullable = false)
-    public Date dateCreated;
+    public Timestamp dateCreated;
 
     @Column(nullable = false)
     public long credits;
@@ -29,7 +31,7 @@ public class ClientEntity {
 
     public ClientEntity(long creator, String displayName) {
         this.displayName = displayName;
-        this.dateCreated = new Date(System.currentTimeMillis());
+        this.dateCreated = Timestamp.from(Instant.now());
         this.credits = 0;
         this.creator = creator;
     }
