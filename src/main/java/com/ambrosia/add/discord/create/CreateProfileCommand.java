@@ -4,7 +4,7 @@ import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.client.ClientStorage;
 import com.ambrosia.add.discord.util.CommandBuilder;
 import com.ambrosia.add.discord.util.SendMessage;
-import lib.DCFSlashCommand;
+import lib.slash.DCFSlashCommand;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -31,7 +31,7 @@ public class CreateProfileCommand extends DCFSlashCommand implements CommandBuil
     public SlashCommandData getData() {
         SlashCommandData command = Commands.slash("create", "Create a profile for a customer");
         addOptionProfileName(command);
-        return command.setDefaultPermissions(DefaultMemberPermissions.DISABLED).setGuildOnly(true);
+        return command.setDefaultPermissions(DefaultMemberPermissions.ENABLED).setGuildOnly(true);
     }
 
 

@@ -58,11 +58,12 @@ public class ClientEntity extends Model {
         this.minecraft = minecraft;
     }
 
-    @Override
-    public void save() {
+    public boolean trySave() {
         try (Transaction transaction = DB.getDefault().beginTransaction()) {
-            super.save();
+            if (!DB.getDefault().checkUniqueness(this, transaction).isEmpty()) return false;
+            super.save(transaction);
             transaction.commit();
+            return true;
         }
     }
 }

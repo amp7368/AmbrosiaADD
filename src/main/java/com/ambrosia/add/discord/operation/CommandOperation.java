@@ -4,11 +4,10 @@ import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.operation.OperationReason;
 import com.ambrosia.add.database.operation.OperationStorage;
 import com.ambrosia.add.discord.util.CommandBuilder;
-import lib.DCFSlashCommand;
+import lib.slash.DCFSlashCommand;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.jetbrains.annotations.Nullable;
@@ -36,11 +35,11 @@ public abstract class CommandOperation extends DCFSlashCommand implements Comman
     protected abstract int sign();
 
     @Override
-    public CommandData getData() {
+    public SlashCommandData getData() {
         SlashCommandData command = Commands.slash(commandName(), "Deposits credits to a profile");
         addOptionProfileName(command);
         addOptionAmount(command);
-        return command.setDefaultPermissions(DefaultMemberPermissions.DISABLED).setGuildOnly(true);
+        return command.setDefaultPermissions(DefaultMemberPermissions.ENABLED).setGuildOnly(true);
     }
 
     protected abstract MessageEmbed successMessage(ClientEntity client, int amount);
