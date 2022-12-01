@@ -7,6 +7,9 @@ import com.ambrosia.add.discord.operation.add.CommandDeposit;
 import com.ambrosia.add.discord.operation.add.CommandWin;
 import com.ambrosia.add.discord.operation.minus.CommandLoss;
 import com.ambrosia.add.discord.operation.minus.CommandWithdraw;
+import com.ambrosia.add.discord.profile.CommandLink;
+import com.ambrosia.add.discord.profile.CommandLinkMinecraft;
+import com.ambrosia.add.discord.profile.ViewProfileCommand;
 import java.util.List;
 import lib.DCF;
 import lib.DCFCommandManager;
@@ -16,6 +19,9 @@ import net.dv8tion.jda.api.entities.Activity;
 
 public class DiscordModule extends AppleModule {
 
+    public static final String AMBROSIA_ICON = "https://cdn.discordapp"
+        + ".com/icons/923749890104885271/a_52da37c184005a14d15538cb62271b9b.webp";
+
     @Override
     public void onEnable() {
         JDABuilder builder = JDABuilder.createLight(DiscordConfig.get().token);
@@ -23,8 +29,9 @@ public class DiscordModule extends AppleModule {
         jda.getPresence().setPresence(Activity.playing("!"), false);
         DCF dcf = new DCF(jda);
         DCFCommandManager dcfCommands = dcf.commands();
-        dcfCommands.addCommand(new CreateProfileCommand());
+        dcfCommands.addCommand(new CreateProfileCommand(), new CommandLink(), new CommandLinkMinecraft());
         dcfCommands.addCommand(new CommandDeposit(), new CommandWin(), new CommandWithdraw(), new CommandLoss());
+        dcfCommands.addCommand(new ViewProfileCommand());
         dcfCommands.updateCommands();
     }
 
