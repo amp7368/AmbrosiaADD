@@ -1,48 +1,62 @@
 package lib;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lib.slash.DCFAbstractCommand;
+import lib.slash.DCFSlashCommand;
+import lib.slash.DCFSlashSubCommand;
 import net.dv8tion.jda.api.interactions.commands.Command;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.Command.Subcommand;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 public class DCFCommandManager {
 
-    private final Map<String, DCFSlashCommand> data = new HashMap<>();
+    private final List<DCFSlashCommand> baseCommands = new ArrayList<>();
+    private final Map<String, DCFAbstractCommand> nameToCommand = new HashMap<>();
     private final DCF dcf;
-    private final Map<Long, DCFSlashCommand> commands = new HashMap<>();
+    private final Map<Long, DCFAbstractCommand> idToCommand = new HashMap<>();
 
     public DCFCommandManager(DCF dcf) {
         this.dcf = dcf;
     }
 
     public void addCommand(DCFSlashCommand... commands) {
-        synchronized (this.data) {
+        synchronized (this.nameToCommand) {
             for (DCFSlashCommand command : commands) {
-                this.data.put(command.getData().getName(), command);
+                String commandName = command.getFullData().getName();
+                this.nameToCommand.put(commandName, command);
+                this.baseCommands.add(command);
+                for (DCFSlashSubCommand subCommand : command.getSubCommands()) {
+                    String subCommandName = commandName + " " + subCommand.getData().getName();
+                    this.nameToCommand.put(subCommandName, subCommand);
+                }
             }
         }
     }
 
     public void updateCommands() {
-        synchronized (this.data) {
-            List<CommandData> dataList = data.values().stream().map(DCFSlashCommand::getData).toList();
+        synchronized (this.nameToCommand) {
+            List<SlashCommandData> dataList = baseCommands.stream().map(DCFSlashCommand::getFullData).toList();
             dcf.jda().updateCommands().addCommands(dataList).queue(this::setCommands);
         }
     }
 
     private void setCommands(List<Command> commands) {
-        synchronized (this.commands) {
+        synchronized (this.idToCommand) {
             for (Command command : commands) {
-                this.commands.put(command.getIdLong(), this.data.get(command.getFullCommandName()));
+                this.idToCommand.put(command.getIdLong(), this.nameToCommand.get(command.getFullCommandName()));
+                for (Subcommand subCommand : command.getSubcommands()) {
+                    this.idToCommand.put(subCommand.getIdLong(), this.nameToCommand.get(subCommand.getFullCommandName()));
+                }
             }
         }
-
     }
 
-    public DCFSlashCommand getCommand(long commandId) {
-        synchronized (this.commands) {
-            return this.commands.get(commandId);
+    public DCFAbstractCommand getCommand(String fullCommandName) {
+        synchronized (this.nameToCommand) {
+            return this.nameToCommand.get(fullCommandName);
         }
     }
 }

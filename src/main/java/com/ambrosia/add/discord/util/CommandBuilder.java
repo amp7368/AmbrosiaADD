@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.jetbrains.annotations.Nullable;
 
 public interface CommandBuilder extends SendMessage {
@@ -20,14 +21,14 @@ public interface CommandBuilder extends SendMessage {
         Member sender = event.getMember();
         if (sender == null) {
             event.replyEmbeds(this.error("Guilds only")).queue(); // this is a guild only command
-            return false;
+            return true;
         }
         boolean hasPermission = DiscordPermissions.get().isDealer(sender.getRoles());
         if (!hasPermission) {
             event.replyEmbeds(this.isNotDealer(event)).queue();
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Nullable
@@ -40,6 +41,7 @@ public interface CommandBuilder extends SendMessage {
         return null;
     }
 
+    @Nullable
     default <T> T findOption(SlashCommandInteractionEvent event, String optionName, Function<OptionMapping, T> getAs) {
         OptionMapping option = event.getOption(optionName);
         if (option == null || getAs.apply(option) == null) {
@@ -58,6 +60,10 @@ public interface CommandBuilder extends SendMessage {
         command.addOption(OptionType.STRING, PROFILE_NAME_OPTION, "The name of the profile to be created", true);
     }
 
+    default void addOptionProfileName(SubcommandData command) {
+        command.addOption(OptionType.STRING, PROFILE_NAME_OPTION, "The name of the profile to be created", true);
+    }
+
     default Integer findOptionAmount(SlashCommandInteractionEvent event) {
         Integer amount = findOption(event, AMOUNT_OPTION, OptionMapping::getAsInt);
         if (amount == null) return null;
@@ -66,7 +72,7 @@ public interface CommandBuilder extends SendMessage {
         return null;
     }
 
-    default void addOptionAmount(SlashCommandData command) {
+    default void addOptionAmount(SubcommandData command) {
         command.addOption(OptionType.STRING, AMOUNT_OPTION, "The amount to change", true);
     }
 }

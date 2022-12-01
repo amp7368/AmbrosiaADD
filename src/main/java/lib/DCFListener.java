@@ -1,5 +1,7 @@
 package lib;
 
+import lib.slash.DCFAbstractCommand;
+import lib.slash.DCFSlashCommand;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +17,7 @@ public class DCFListener extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
-        DCFSlashCommand command = dcf.commands().getCommand(event.getCommandIdLong());
+        DCFAbstractCommand command = dcf.commands().getCommand(event.getFullCommandName());
         if (command == null) return;
         command.onCommand(event);
     }

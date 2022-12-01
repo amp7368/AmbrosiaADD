@@ -1,10 +1,13 @@
 package com.ambrosia.add.database.client;
 
+import com.ambrosia.add.database.operation.OperationReason;
 import io.ebean.DB;
 import io.ebean.Model;
 import io.ebean.Transaction;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -34,6 +37,8 @@ public class ClientEntity extends Model {
     @Column(nullable = false)
     public long creator;
 
+    public transient Map<OperationReason, Long> totals = new HashMap<>();
+
     public ClientEntity(long creator, String displayName) {
         this.displayName = displayName;
         this.dateCreated = Timestamp.from(Instant.now());
@@ -58,11 +63,16 @@ public class ClientEntity extends Model {
         this.minecraft = minecraft;
     }
 
-    @Override
-    public void save() {
+    public boolean trySave() {
         try (Transaction transaction = DB.getDefault().beginTransaction()) {
-            super.save();
+            if (!DB.getDefault().checkUniqueness(this, transaction).isEmpty()) return false;
+            super.save(transaction);
             transaction.commit();
+            return true;
         }
+    }
+
+    public long total(OperationReason operationType) {
+        return this.totals.getOrDefault(operationType, 0L);
     }
 }

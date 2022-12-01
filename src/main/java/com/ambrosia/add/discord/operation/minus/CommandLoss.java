@@ -15,7 +15,7 @@ public class CommandLoss extends CommandOperation {
 
     @Override
     protected OperationReason operationReason() {
-        return OperationReason.LOSE;
+        return OperationReason.LOSS;
     }
 
     @NotNull
