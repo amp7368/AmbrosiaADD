@@ -1,10 +1,12 @@
 package com.ambrosia.add.database.client;
 
+import io.ebean.DB;
 import io.ebean.Model;
+import io.ebean.Transaction;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.UUID;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -15,9 +17,11 @@ public class ClientEntity extends Model {
     @Column
     public long uuid;
 
-    @Column(unique = true)
-    public UUID minecraft;
     @Column
+    @Embedded
+    public ClientMinecraftDetails minecraft;
+    @Column
+    @Embedded
     public ClientDiscordDetails discord;
 
     @Column(unique = true, nullable = false)
@@ -48,5 +52,17 @@ public class ClientEntity extends Model {
     public void setDiscord(ClientDiscordDetails discord) {
         this.discord = discord;
         this.displayName = discord.guildName;
+    }
+
+    public void setMinecraft(ClientMinecraftDetails minecraft) {
+        this.minecraft = minecraft;
+    }
+
+    @Override
+    public void save() {
+        try (Transaction transaction = DB.getDefault().beginTransaction()) {
+            super.save();
+            transaction.commit();
+        }
     }
 }

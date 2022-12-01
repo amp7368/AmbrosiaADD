@@ -2,12 +2,14 @@ package com.ambrosia.add.database.client;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 
 @Embeddable()
 public class ClientDiscordDetails {
 
+    @EmbeddedId
     @Column(unique = true)
     public Long discordId;
     @Column
@@ -22,7 +24,7 @@ public class ClientDiscordDetails {
     public ClientDiscordDetails(Member member) {
         this.discordId = member.getIdLong();
         this.avatarUrl = member.getEffectiveAvatarUrl();
-        this.username = member.getEffectiveName();
+        this.guildName = member.getEffectiveName();
         User user = member.getUser();
         this.username = user.getName();
         this.discriminator = user.getDiscriminator();

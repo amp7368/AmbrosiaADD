@@ -1,6 +1,7 @@
 package com.ambrosia.add.discord.util;
 
 import com.ambrosia.add.database.client.ClientEntity;
+import com.ambrosia.add.discord.DiscordModule;
 import java.awt.Color;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -42,10 +43,12 @@ public interface SendMessage {
         if (client.discord != null) {
             embed.setAuthor(client.discord.fullName(), null, client.discord.avatarUrl);
         }
-        embed.setFooter("footer here", "https://cdn.discordapp.com/icons/923749890104885271/a_52da37c184005a14d15538cb62271b9b.webp");
+        if (client.minecraft != null) {
+            embed.setFooter(client.minecraft.name, DiscordModule.AMBROSIA_ICON);
+            embed.setThumbnail(client.minecraft.skinUrl());
+        } else embed.setFooter(null, DiscordModule.AMBROSIA_ICON);
         embed.setTimestamp(client.dateCreated.toInstant());
         embed.addField("Credits", String.valueOf(client.credits), true);
-        embed.setThumbnail("https://cdn.discordapp.com/icons/923749890104885271/a_52da37c184005a14d15538cb62271b9b.webp");
         embed.setDescription("idk what else to put here");
         return embed.build();
     }

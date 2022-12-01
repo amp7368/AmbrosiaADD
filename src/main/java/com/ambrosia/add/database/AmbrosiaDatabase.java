@@ -3,7 +3,9 @@ package com.ambrosia.add.database;
 import apple.lib.modules.AppleModule;
 import apple.lib.modules.configs.factory.AppleConfigLike;
 import com.ambrosia.add.Ambrosia;
+import com.ambrosia.add.database.client.ClientDiscordDetails;
 import com.ambrosia.add.database.client.ClientEntity;
+import com.ambrosia.add.database.client.ClientMinecraftDetails;
 import com.ambrosia.add.database.client.ClientStorage;
 import com.ambrosia.add.database.operation.OperationEntity;
 import com.ambrosia.add.database.operation.OperationStorage;
@@ -40,8 +42,8 @@ public class AmbrosiaDatabase extends AppleModule {
         DatabaseConfig dbConfig = new DatabaseConfig();
         dbConfig.setDataSourceConfig(dataSourceConfig);
         dbConfig.setDdlGenerate(true);
-        dbConfig.setDdlRun(false);
-        dbConfig.addAll(List.of(OperationEntity.class, ClientEntity.class));
+//        dbConfig.setDdlRun(true);
+        dbConfig.addAll(List.of(OperationEntity.class, ClientEntity.class, ClientMinecraftDetails.class, ClientDiscordDetails.class));
         return dbConfig;
     }
 
@@ -51,6 +53,7 @@ public class AmbrosiaDatabase extends AppleModule {
         dataSourceConfig.setUsername(loadedConfig.getUsername());
         dataSourceConfig.setPassword(loadedConfig.getPassword());
         dataSourceConfig.setUrl(loadedConfig.getUrl());
+        dataSourceConfig.setAutoCommit(true);
         return dataSourceConfig;
     }
 
