@@ -2,6 +2,7 @@ package com.ambrosia.add.discord.log;
 
 import apple.utilities.util.Pretty;
 import com.ambrosia.add.database.client.ClientEntity;
+import com.ambrosia.add.database.operation.OperationEntity;
 import com.ambrosia.add.discord.DiscordConfig;
 import com.ambrosia.add.discord.DiscordModule;
 import java.awt.Color;
@@ -30,16 +31,13 @@ public class DiscordLog {
 
     public void modifyDiscord(ClientEntity client, User actor) {
         EmbedBuilder msg = normal("Modify Discord", actor);
-        client(msg, client);
-        msg.setDescription(client.discord.fullName());
-        msg.setThumbnail(client.discord.avatarUrl);
+        client(msg, client).setDescription(client.discord.fullName()).setThumbnail(client.discord.avatarUrl);
         log(msg.build());
     }
+
     public void modifyMinecraft(ClientEntity client, User actor) {
         EmbedBuilder msg = normal("Modify Minecraft", actor);
-        client(msg, client);
-        msg.setDescription(client.minecraft.name);
-        msg.setThumbnail(client.minecraft.skinUrl());
+        client(msg, client).setDescription(client.minecraft.name).setThumbnail(client.minecraft.skinUrl());
         log(msg.build());
     }
 
@@ -49,12 +47,10 @@ public class DiscordLog {
         log(msg.build());
     }
 
-    public void operation(ClientEntity client, int change, User actor) {
-        EmbedBuilder msg;
-        if (change < 0) msg = embed("(-) Subtract " + -change, actor).setColor(0xfc5603);
-        else msg = embed("(+) Add " + change, actor).setColor(0x9dfc03);
+    public void operation(ClientEntity client, OperationEntity operation, User actor) {
+        EmbedBuilder msg = embed(operation.display(), actor).setColor(operation.changeAmount < 0 ? 0xfc5603 : 0x9dfc03);
 
-        client(msg, client);
+        client(msg, client).addBlankField(true).addField(String.format("Id: #%d", operation.id), "", true);
         log(msg.build());
     }
 
@@ -65,7 +61,7 @@ public class DiscordLog {
 
     private EmbedBuilder client(EmbedBuilder msg, ClientEntity client) {
         msg.setAuthor(String.format("%s (#%d)", client.displayName, client.uuid));
-        msg.addField("Credits", Pretty.commas(client.credits), false);
+        msg.addField("Credits", Pretty.commas(client.credits), true);
         return msg;
     }
 

@@ -1,5 +1,6 @@
 package com.ambrosia.add.database.operation;
 
+import com.ambrosia.add.discord.util.Emeralds;
 import io.ebean.annotation.Aggregation;
 import java.sql.Date;
 import javax.persistence.Column;
@@ -42,6 +43,10 @@ public class OperationEntity {
     }
 
     public OperationEntity() {
+    }
+
+    public String display() {
+        return String.format("(%s) %s", Emeralds.message(changeAmount, Integer.MAX_VALUE, false), operationType.displayName());
     }
 
 }

@@ -16,14 +16,14 @@ public class OperationStorage {
         return instance;
     }
 
-    public ClientEntity saveOperation(long conductorId, ClientEntity client, int amount, OperationReason operationReason) {
+    public OperationEntity saveOperation(long conductorId, ClientEntity client, int amount, OperationReason operationReason) {
         try (Transaction transaction = DB.getDefault().beginTransaction()) {
             OperationEntity operation = new OperationEntity(conductorId, client.uuid, amount, operationReason);
             client.addCredits(operationReason, amount);
             DB.getDefault().save(operation, transaction);
             DB.getDefault().update(client, transaction);
             transaction.commit();
-            return client;
+            return operation;
         }
     }
 }
