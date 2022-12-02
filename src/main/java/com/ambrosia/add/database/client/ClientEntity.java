@@ -1,6 +1,7 @@
 package com.ambrosia.add.database.client;
 
 import com.ambrosia.add.database.operation.OperationReason;
+import com.ambrosia.add.database.operation.OperationStorage;
 import io.ebean.DB;
 import io.ebean.Model;
 import io.ebean.Transaction;
@@ -77,5 +78,9 @@ public class ClientEntity extends Model {
 
     public long total(OperationReason operationType) {
         return Math.abs(this.totals.getOrDefault(operationType, 0L));
+    }
+
+    public boolean hasAnyTransactions() {
+        return !OperationStorage.get().findTransactions(this.uuid).isEmpty();
     }
 }

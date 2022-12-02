@@ -2,10 +2,11 @@ package com.ambrosia.add.discord;
 
 import apple.lib.modules.AppleModule;
 import apple.lib.modules.configs.factory.AppleConfigLike;
-import com.ambrosia.add.discord.create.CreateProfileCommand;
+import com.ambrosia.add.discord.delete.CommandDelete;
 import com.ambrosia.add.discord.log.DiscordLog;
 import com.ambrosia.add.discord.operation.CommandCash;
 import com.ambrosia.add.discord.profile.CommandLink;
+import com.ambrosia.add.discord.profile.CreateProfileCommand;
 import com.ambrosia.add.discord.profile.ViewProfileCommand;
 import discord.util.dcf.DCF;
 import discord.util.dcf.DCFCommandManager;
@@ -42,9 +43,9 @@ public class DiscordModule extends AppleModule {
         DCF dcf = new DCF(jda);
 
         DCFCommandManager dcfCommands = dcf.commands();
-        dcfCommands.addCommand(new CreateProfileCommand(), new CommandLink());
+        dcfCommands.addCommand(new CreateProfileCommand(), new ViewProfileCommand(), new CommandLink());
         dcfCommands.addCommand(new CommandCash());
-        dcfCommands.addCommand(new ViewProfileCommand());
+        dcfCommands.addCommand(new CommandDelete());
         new DiscordLog(dcf);
         dcfCommands.updateCommands();
     }

@@ -1,8 +1,10 @@
 package com.ambrosia.add.database.operation;
 
 import com.ambrosia.add.database.client.ClientEntity;
+import com.ambrosia.add.database.operation.query.QOperationEntity;
 import io.ebean.DB;
 import io.ebean.Transaction;
+import java.util.List;
 
 public class OperationStorage {
 
@@ -25,5 +27,15 @@ public class OperationStorage {
             transaction.commit();
             return operation;
         }
+    }
+
+    public OperationEntity delete(Long id) {
+        OperationEntity operation = DB.getDefault().find(OperationEntity.class, id);
+        int delete = DB.getDefault().delete(OperationEntity.class, id);
+        return operation;
+    }
+
+    public List<OperationEntity> findTransactions(long clientId) {
+        return new QOperationEntity().where().clientId.eq(clientId).findList();
     }
 }

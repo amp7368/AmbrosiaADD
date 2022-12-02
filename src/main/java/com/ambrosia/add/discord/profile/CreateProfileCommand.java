@@ -1,4 +1,4 @@
-package com.ambrosia.add.discord.create;
+package com.ambrosia.add.discord.profile;
 
 import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.client.ClientStorage;
