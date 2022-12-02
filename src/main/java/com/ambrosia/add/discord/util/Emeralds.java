@@ -9,6 +9,10 @@ public class Emeralds {
     private static final int BLOCK = 64;
 
     public static String longMessage(long credits) {
+        return message(credits, Integer.MAX_VALUE, true) + String.format("\n(%s total)", Pretty.commas(credits));
+    }
+
+    public static String message(long credits, int truncate, boolean isBold) {
         long creditsLeft = credits;
         long stx = creditsLeft / STACK;
         creditsLeft -= stx * STACK;
@@ -19,17 +23,21 @@ public class Emeralds {
         long e = creditsLeft;
 
         StringBuilder message = new StringBuilder();
-        if (stx != 0) append(message, stx, "stx");
-        if (le != 0) append(message, le, "le");
-        if (eb != 0) append(message, eb, "eb");
-        if (e != 0) append(message, e, "e");
-        return message.append(String.format("\n(%s total)", Pretty.commas(credits))).toString();
+        if (stx != 0) truncate -= append(message, stx, "stx", truncate, isBold);
+        if (le != 0) truncate -= append(message, le, "le", truncate, isBold);
+        if (eb != 0) truncate -= append(message, eb, "eb", truncate, isBold);
+        if (e != 0) append(message, e, "e", truncate, isBold);
+        return message.toString();
     }
 
-    private static void append(StringBuilder message, long count, String unit) {
-        if (count == 0) return;
+    private static int append(StringBuilder message, long amount, String unit, int fieldsLeft, boolean isBold) {
+        if (amount == 0 || fieldsLeft == 0) return 0;
         if (!message.isEmpty())
             message.append(", ");
-        message.append(String.format("**%s** ", Pretty.commas(count))).append(unit);
+        String format = isBold ? "**%s** " : "%s ";
+        message.append(String.format(format, Pretty.commas(amount))).append(unit);
+        return 1;
     }
+
+
 }

@@ -1,5 +1,6 @@
 package com.ambrosia.add.database.operation;
 
+import apple.utilities.util.Pretty;
 import io.ebean.annotation.DbEnumValue;
 
 public enum OperationReason {
@@ -17,5 +18,9 @@ public enum OperationReason {
     @DbEnumValue
     public int getId() {
         return id;
+    }
+
+    public String displayName() {
+        return Pretty.upperCaseFirst(this.name());
     }
 }

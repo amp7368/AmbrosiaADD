@@ -7,6 +7,7 @@ import java.awt.Color;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import org.jetbrains.annotations.Nullable;
 
 public interface SendMessage {
 
@@ -39,16 +40,36 @@ public interface SendMessage {
     }
 
     default MessageEmbed embedClientProfile(ClientEntity client) {
+        return embedClientProfile(client, null);
+    }
+
+    default MessageEmbed embedClientProfile(ClientEntity client, @Nullable String titleExtra) {
         EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle(client.displayName);
+        String authorIcon;
+        String authorName;
         if (client.discord != null) {
-            embed.setAuthor(client.discord.fullName(), null, client.discord.avatarUrl);
+            authorName = client.discord.fullName();
+            authorIcon = client.discord.avatarUrl;
+        } else {
+            authorName = null;
+            authorIcon = DiscordModule.AMBROSIA_ICON;
+        }
+        if (titleExtra != null) {
+            embed.setAuthor(titleExtra, null, authorIcon);
+            embed.setDescription(authorName);
+        } else {
+            embed.setAuthor(authorName, null, authorIcon);
         }
         if (client.minecraft != null) {
-            embed.setFooter(client.minecraft.name, DiscordModule.AMBROSIA_ICON);
+            embed.setTitle(client.minecraft.name);
+            embed.setFooter(client.displayName + " | Created", DiscordModule.AMBROSIA_ICON);
             embed.setThumbnail(client.minecraft.skinUrl());
-        } else embed.setFooter(null, DiscordModule.AMBROSIA_ICON);
+        } else {
+            embed.setTitle(client.displayName);
+            embed.setFooter(" - | Created", DiscordModule.AMBROSIA_ICON);
+        }
         embed.setTimestamp(client.dateCreated.toInstant());
+        embed.addBlankField(false);
         embed.addField("Credits", Emeralds.longMessage(client.credits), false);
         embed.addField("Winnings", Emeralds.longMessage(client.total(OperationReason.WIN)), true);
         embed.addBlankField(true);

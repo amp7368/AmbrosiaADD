@@ -4,6 +4,7 @@ import com.ambrosia.add.database.operation.OperationReason;
 import io.ebean.DB;
 import io.ebean.Model;
 import io.ebean.Transaction;
+import io.ebean.annotation.Identity;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ public class ClientEntity extends Model {
 
     @Id
     @Column
+    @Identity(start = 1000)
     public long uuid;
 
     @Column
@@ -50,8 +52,9 @@ public class ClientEntity extends Model {
 
     }
 
-    public void setCredits(long credits) {
-        this.credits = credits;
+    public void addCredits(OperationReason operationReason, long add) {
+        this.totals.compute(operationReason, (k, a) -> a == null ? add : add + a);
+        this.credits += add;
     }
 
     public void setDiscord(ClientDiscordDetails discord) {
@@ -73,6 +76,6 @@ public class ClientEntity extends Model {
     }
 
     public long total(OperationReason operationType) {
-        return this.totals.getOrDefault(operationType, 0L);
+        return Math.abs(this.totals.getOrDefault(operationType, 0L));
     }
 }

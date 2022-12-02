@@ -31,6 +31,6 @@ public class ClientDiscordDetails {
     }
 
     public String fullName() {
-        return this.username + this.discriminator;
+        return this.username + "#" + this.discriminator;
     }
 }

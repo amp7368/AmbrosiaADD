@@ -2,9 +2,10 @@ package com.ambrosia.add.discord.create;
 
 import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.client.ClientStorage;
+import com.ambrosia.add.discord.log.DiscordLog;
 import com.ambrosia.add.discord.util.CommandBuilder;
 import com.ambrosia.add.discord.util.SendMessage;
-import lib.slash.DCFSlashCommand;
+import discord.util.dcf.slash.DCFSlashCommand;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -19,12 +20,13 @@ public class CreateProfileCommand extends DCFSlashCommand implements CommandBuil
         @Nullable String clientName = findOptionProfileName(event);
         if (clientName == null) return;
         long conductorId = event.getUser().getIdLong();
-        ClientEntity client = ClientStorage.get().saveClient(conductorId, clientName);
+        ClientEntity client = ClientStorage.get().createClient(conductorId, clientName);
         if (client == null) {
             event.replyEmbeds(this.error(String.format("'%s' is already a user", clientName))).queue();
             return;
         }
         event.replyEmbeds(this.success(String.format("Successfully created %s", client.displayName))).queue();
+        DiscordLog.log().createAccount(client, event.getUser());
     }
 
 
