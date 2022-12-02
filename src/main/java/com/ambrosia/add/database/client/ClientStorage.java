@@ -3,7 +3,6 @@ package com.ambrosia.add.database.client;
 import com.ambrosia.add.database.client.query.QClientEntity;
 import com.ambrosia.add.database.operation.OperationEntity;
 import com.ambrosia.add.database.operation.query.QOperationEntity;
-import com.google.gson.Gson;
 import io.ebean.DB;
 import io.ebean.Transaction;
 import java.util.List;
@@ -37,8 +36,9 @@ public class ClientStorage {
     }
 
     @Nullable
-    public ClientEntity saveClient(long conductorId, String clientName) {
+    public ClientEntity createClient(long conductorId, String clientName) {
         ClientEntity client = new ClientEntity(conductorId, clientName);
+        client.setMinecraft(ClientMinecraftDetails.fromUsername(clientName));
         try (Transaction transaction = DB.getDefault().beginTransaction()) {
             boolean isUnique = DB.getDefault().checkUniqueness(client, transaction).isEmpty();
             if (!isUnique) return null;

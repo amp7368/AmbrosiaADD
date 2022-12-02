@@ -4,6 +4,7 @@ public class DiscordConfig {
 
     private static DiscordConfig instance;
     public String token;
+    public long logChannel;
 
     public DiscordConfig() {
         instance = this;

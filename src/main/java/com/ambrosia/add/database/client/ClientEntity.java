@@ -50,8 +50,9 @@ public class ClientEntity extends Model {
 
     }
 
-    public void setCredits(long credits) {
-        this.credits = credits;
+    public void addCredits(OperationReason operationReason, long add) {
+        this.totals.compute(operationReason, (k, a) -> a == null ? add : add + a);
+        this.credits += add;
     }
 
     public void setDiscord(ClientDiscordDetails discord) {

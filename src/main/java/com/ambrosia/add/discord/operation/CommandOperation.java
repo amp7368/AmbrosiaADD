@@ -3,6 +3,7 @@ package com.ambrosia.add.discord.operation;
 import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.operation.OperationReason;
 import com.ambrosia.add.database.operation.OperationStorage;
+import com.ambrosia.add.discord.log.DiscordLog;
 import com.ambrosia.add.discord.util.CommandBuilder;
 import lib.slash.DCFSlashSubCommand;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -25,8 +26,10 @@ public abstract class CommandOperation extends DCFSlashSubCommand implements Com
             event.replyEmbeds(error(msg)).queue();
             return;
         }
-        client = OperationStorage.get().saveOperation(conductorId, client, sign() * amount, operationReason());
+        int change = sign() * amount;
+        client = OperationStorage.get().saveOperation(conductorId, client, change, operationReason());
         event.replyEmbeds(successMessage(client, amount)).queue();
+        DiscordLog.log().operation(client, change, event.getUser());
     }
 
 

@@ -2,6 +2,7 @@ package com.ambrosia.add.discord.profile;
 
 import com.ambrosia.add.database.client.ClientDiscordDetails;
 import com.ambrosia.add.database.client.ClientEntity;
+import com.ambrosia.add.discord.log.DiscordLog;
 import com.ambrosia.add.discord.util.CommandBuilder;
 import lib.slash.DCFSlashSubCommand;
 import net.dv8tion.jda.api.entities.Member;
@@ -22,8 +23,10 @@ public class CommandLinkDiscord extends DCFSlashSubCommand implements CommandBui
         Member option = this.findOption(event, DISCORD_OPTION, OptionMapping::getAsMember);
         if (option == null) return;
         client.setDiscord(new ClientDiscordDetails(option));
-        if (client.trySave()) event.replyEmbeds(this.embedClientProfile(client)).queue();
-        else event.replyEmbeds(this.error("Discord was already assigned")).queue();
+        if (client.trySave()) {
+            event.replyEmbeds(this.embedClientProfile(client)).queue();
+            DiscordLog.log().modifyDiscord(client, event.getUser());
+        } else event.replyEmbeds(this.error("Discord was already assigned")).queue();
     }
 
     @Override

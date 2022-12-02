@@ -19,7 +19,7 @@ public class OperationStorage {
     public ClientEntity saveOperation(long conductorId, ClientEntity client, int amount, OperationReason operationReason) {
         try (Transaction transaction = DB.getDefault().beginTransaction()) {
             OperationEntity operation = new OperationEntity(conductorId, client.uuid, amount, operationReason);
-            client.setCredits(client.credits + amount);
+            client.addCredits(operationReason, amount);
             DB.getDefault().save(operation, transaction);
             DB.getDefault().update(client, transaction);
             transaction.commit();
