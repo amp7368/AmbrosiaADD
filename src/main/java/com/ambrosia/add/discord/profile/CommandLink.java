@@ -1,8 +1,8 @@
 package com.ambrosia.add.discord.profile;
 
 import java.util.List;
-import lib.slash.DCFSlashCommand;
-import lib.slash.DCFSlashSubCommand;
+import discord.util.dcf.slash.DCFSlashCommand;
+import discord.util.dcf.slash.DCFSlashSubCommand;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;

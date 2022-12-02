@@ -2,7 +2,7 @@ package com.ambrosia.add.discord.profile;
 
 import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.discord.util.CommandBuilder;
-import lib.slash.DCFSlashCommand;
+import discord.util.dcf.slash.DCFSlashCommand;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;

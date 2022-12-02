@@ -7,7 +7,7 @@ import com.ambrosia.add.discord.DiscordConfig;
 import com.ambrosia.add.discord.DiscordModule;
 import java.awt.Color;
 import java.time.Instant;
-import lib.DCF;
+import discord.util.dcf.DCF;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;

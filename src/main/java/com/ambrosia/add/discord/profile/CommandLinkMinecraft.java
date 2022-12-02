@@ -4,7 +4,7 @@ import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.client.ClientMinecraftDetails;
 import com.ambrosia.add.discord.log.DiscordLog;
 import com.ambrosia.add.discord.util.CommandBuilder;
-import lib.slash.DCFSlashSubCommand;
+import discord.util.dcf.slash.DCFSlashSubCommand;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;

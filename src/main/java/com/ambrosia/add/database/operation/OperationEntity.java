@@ -2,11 +2,9 @@ package com.ambrosia.add.database.operation;
 
 import com.ambrosia.add.discord.util.Emeralds;
 import io.ebean.annotation.Aggregation;
-import java.sql.Date;
+import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
@@ -22,12 +20,11 @@ public class OperationEntity {
     public long clientId;
 
     @Column(nullable = false)
-    public Date dateCreated;
+    public Timestamp dateCreated;
     @Column(nullable = false)
     public int changeAmount;
     @Column(nullable = false)
     public long conductorId;
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     public OperationReason operationType;
 
@@ -38,11 +35,8 @@ public class OperationEntity {
         this.conductorId = conductorId;
         this.clientId = clientId;
         this.changeAmount = changeAmount;
-        this.dateCreated = new Date(System.currentTimeMillis());
+        this.dateCreated = new Timestamp(System.currentTimeMillis());
         this.operationType = reason;
-    }
-
-    public OperationEntity() {
     }
 
     public String display() {
