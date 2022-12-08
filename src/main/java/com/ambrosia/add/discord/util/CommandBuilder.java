@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.jetbrains.annotations.Nullable;
@@ -15,7 +16,9 @@ import org.jetbrains.annotations.Nullable;
 public interface CommandBuilder extends SendMessage {
 
     String PROFILE_NAME_OPTION = "profile_name";
-    String AMOUNT_OPTION = "amount";
+    String EMERALD_OPTION = "emeralds";
+    String EMERALD_BLOCK_OPTION = "blocks";
+    String LIQUID_EMERALD_OPTION = "liquids";
 
     default boolean isBadPermission(SlashCommandInteractionEvent event) {
         Member sender = event.getMember();
@@ -65,15 +68,33 @@ public interface CommandBuilder extends SendMessage {
     }
 
     default Integer findOptionAmount(SlashCommandInteractionEvent event) {
-        Integer amount = findOption(event, AMOUNT_OPTION, OptionMapping::getAsInt);
-        if (amount == null) return null;
-        if (amount >= 0) return amount;
-        event.replyEmbeds(error(String.format("%s must be positive!", AMOUNT_OPTION))).queue();
-        return null;
+        Integer e = findOption(event, EMERALD_OPTION, OptionMapping::getAsInt);
+        Integer eb = findOption(event, EMERALD_BLOCK_OPTION, OptionMapping::getAsInt);
+        Integer le = findOption(event, LIQUID_EMERALD_OPTION, OptionMapping::getAsInt);
+        if (e == null) e = 0;
+        if (eb == null) eb = 0;
+        if (le == null) le = 0;
+        int total = e + eb * 64 + le * 64 * 64;
+        if (total < 0) {
+            event.replyEmbeds(error("Total must be positive!")).queue();
+            return null;
+        }
+        if (total == 0) {
+            event.replyEmbeds(error("At least one option must be supplied")).setEphemeral(true).queue();
+            return null;
+        }
+        return total;
     }
 
+    default void addOptionAmount(SlashCommandData command) {
+        command.addOption(OptionType.INTEGER, LIQUID_EMERALD_OPTION, "The amount in liquid emeralds", false);
+        command.addOption(OptionType.INTEGER, EMERALD_BLOCK_OPTION, "The amount in emerald blocks", false);
+        command.addOption(OptionType.INTEGER, EMERALD_OPTION, "The amount in emeralds", false);
+    }
     default void addOptionAmount(SubcommandData command) {
-        command.addOption(OptionType.STRING, AMOUNT_OPTION, "The amount to change", true);
+        command.addOption(OptionType.INTEGER, LIQUID_EMERALD_OPTION, "The amount in liquid emeralds", false);
+        command.addOption(OptionType.INTEGER, EMERALD_BLOCK_OPTION, "The amount in emerald blocks", false);
+        command.addOption(OptionType.INTEGER, EMERALD_OPTION, "The amount in emeralds", false);
     }
 
     default void errorRegisterWithStaff(SlashCommandInteractionEvent event) {

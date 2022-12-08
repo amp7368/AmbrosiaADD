@@ -9,8 +9,6 @@ import discord.util.dcf.gui.base.gui.DCFGui;
 import discord.util.dcf.slash.DCFSlashCommand;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
@@ -22,8 +20,9 @@ public class BlackjackCommand extends DCFSlashCommand implements CommandBuilder 
 
     @Override
     public SlashCommandData getData() {
-        return Commands.slash("blackjack", "Plays a game of Blackjack that you can bet credits on")
-            .addOption(OptionType.INTEGER, "bet", "Amount of credits you wish to bet", true);
+        SlashCommandData command = Commands.slash("blackjack", "Plays a game of Blackjack with the credits you bet");
+        addOptionAmount(command);
+        return command;
     }
 
     /**
@@ -35,13 +34,8 @@ public class BlackjackCommand extends DCFSlashCommand implements CommandBuilder 
     public void onCommand(SlashCommandInteractionEvent event) {
         User user = event.getUser();
 
-        OptionMapping betOption = event.getOption("bet");
-        if (betOption == null || betOption.getAsInt() <= 0) {
-            event.reply("Please provide a valid bet.").queue();
-            return;
-        }
-
-        int bet = betOption.getAsInt();
+        Integer bet = findOptionAmount(event);
+        if (bet == null) return;
         // try to reserve with double-down
         CreditReservation reservation = AmbrosiaAPI.get().reserve(Blackjack.GAME_NAME, user.getIdLong(), bet);
         if (reservation.noPlayer()) {

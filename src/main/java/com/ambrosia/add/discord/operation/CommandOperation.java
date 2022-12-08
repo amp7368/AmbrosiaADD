@@ -6,6 +6,7 @@ import com.ambrosia.add.database.operation.TransactionStorage;
 import com.ambrosia.add.database.operation.TransactionType;
 import com.ambrosia.add.discord.log.DiscordLog;
 import com.ambrosia.add.discord.util.CommandBuilder;
+import com.ambrosia.add.discord.util.Emeralds;
 import discord.util.dcf.slash.DCFSlashSubCommand;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -23,7 +24,8 @@ public abstract class CommandOperation extends DCFSlashSubCommand implements Com
         if (client == null) return;
         long conductorId = event.getUser().getIdLong();
         if (sign() < 0 && amount > client.credits) {
-            String msg = String.format("%s cannot afford losing %d credits.\nBalance: %d", client.displayName, amount, client.credits);
+            String msg = String.format("%s cannot afford losing %s credits.\nBalance: %d", client.displayName,
+                Emeralds.longMessage(amount), client.credits);
             event.replyEmbeds(error(msg)).queue();
             return;
         }
