@@ -1,8 +1,8 @@
 package com.ambrosia.add.database.client;
 
 import com.ambrosia.add.database.client.query.QClientEntity;
-import com.ambrosia.add.database.operation.OperationEntity;
-import com.ambrosia.add.database.operation.query.QOperationEntity;
+import com.ambrosia.add.database.operation.TransactionEntity;
+import com.ambrosia.add.database.operation.TransactionStorage;
 import io.ebean.DB;
 import io.ebean.Transaction;
 import java.util.List;
@@ -20,19 +20,25 @@ public class ClientStorage {
         return instance;
     }
 
-    public ClientEntity find(String clientName) {
-
+    public ClientEntity findByName(String clientName) {
         ClientEntity client = new QClientEntity().where().displayName.ieq(clientName).findOne();
         if (client == null) return null;
-        QOperationEntity o = QOperationEntity.alias();
-        List<OperationEntity> byOperationType = new QOperationEntity().select(o.operationType, o.sumAmount).clientId.eq(client.uuid)
-            .findList();
+        return sumClientTotal(client);
+    }
 
-        for (OperationEntity aggregation : byOperationType) {
+    private ClientEntity sumClientTotal(ClientEntity client) {
+        List<TransactionEntity> byOperationType = TransactionStorage.get().aggregateByType(client);
+
+        for (TransactionEntity aggregation : byOperationType) {
             client.totals.put(aggregation.operationType, aggregation.sumAmount);
         }
         return client;
+    }
 
+    public ClientEntity findByDiscord(long discordId) {
+        ClientEntity client = new QClientEntity().where().discord.discordId.eq(discordId).findOne();
+        if (client == null) return null;
+        return sumClientTotal(client);
     }
 
     @Nullable
@@ -45,6 +51,13 @@ public class ClientStorage {
             client.save(transaction);
             transaction.commit();
         }
-        return client;
+        return sumClientTotal(client);
+    }
+
+    @Nullable
+    public ClientEntity findByUUID(long uuid) {
+        ClientEntity client = new QClientEntity().where().uuid.eq(uuid).findOne();
+        if (client == null) return null;
+        return sumClientTotal(client);
     }
 }

@@ -7,8 +7,10 @@ import com.ambrosia.add.database.client.ClientDiscordDetails;
 import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.client.ClientMinecraftDetails;
 import com.ambrosia.add.database.client.ClientStorage;
-import com.ambrosia.add.database.operation.OperationEntity;
-import com.ambrosia.add.database.operation.OperationStorage;
+import com.ambrosia.add.database.game.GameResultEntity;
+import com.ambrosia.add.database.game.GameStorage;
+import com.ambrosia.add.database.operation.TransactionEntity;
+import com.ambrosia.add.database.operation.TransactionStorage;
 import io.ebean.DatabaseFactory;
 import io.ebean.annotation.Platform;
 import io.ebean.config.DatabaseConfig;
@@ -34,7 +36,8 @@ public class AmbrosiaDatabase extends AppleModule {
         DatabaseFactory.createWithContextClassLoader(dbConfig, Ambrosia.class.getClassLoader());
         logger().info("Successfully created database");
         new ClientStorage();
-        new OperationStorage();
+        new TransactionStorage();
+        new GameStorage();
     }
 
     @NotNull
@@ -43,7 +46,9 @@ public class AmbrosiaDatabase extends AppleModule {
         dbConfig.setDataSourceConfig(dataSourceConfig);
         dbConfig.setDdlGenerate(true);
 //        dbConfig.setDdlRun(true);
-        dbConfig.addAll(List.of(OperationEntity.class, ClientEntity.class, ClientMinecraftDetails.class, ClientDiscordDetails.class));
+        dbConfig.addAll(
+            List.of(TransactionEntity.class, GameResultEntity.class, ClientEntity.class, ClientMinecraftDetails.class,
+                ClientDiscordDetails.class));
         return dbConfig;
     }
 

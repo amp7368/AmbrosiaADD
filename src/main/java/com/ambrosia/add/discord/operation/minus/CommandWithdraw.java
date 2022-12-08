@@ -1,7 +1,7 @@
 package com.ambrosia.add.discord.operation.minus;
 
 import com.ambrosia.add.database.client.ClientEntity;
-import com.ambrosia.add.database.operation.OperationReason;
+import com.ambrosia.add.database.operation.TransactionType;
 import com.ambrosia.add.discord.operation.CommandOperation;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.jetbrains.annotations.NotNull;
@@ -15,8 +15,8 @@ public class CommandWithdraw extends CommandOperation {
     }
 
     @Override
-    protected OperationReason operationReason() {
-        return OperationReason.WITHDRAW;
+    protected TransactionType operationReason() {
+        return TransactionType.WITHDRAW;
     }
 
     @NotNull

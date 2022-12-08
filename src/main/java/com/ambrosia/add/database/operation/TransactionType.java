@@ -3,7 +3,7 @@ package com.ambrosia.add.database.operation;
 import apple.utilities.util.Pretty;
 import io.ebean.annotation.DbEnumValue;
 
-public enum OperationReason {
+public enum TransactionType {
     WITHDRAW(0),
     DEPOSIT(1),
     WIN(2),
@@ -11,7 +11,7 @@ public enum OperationReason {
 
     private final int id;
 
-    OperationReason(int id) {
+    TransactionType(int id) {
         this.id = id;
     }
 
