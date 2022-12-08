@@ -4,6 +4,7 @@ import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.discord.util.CommandBuilder;
 import discord.util.dcf.slash.DCFSlashCommand;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
@@ -22,6 +23,6 @@ public class ViewProfileCommand extends DCFSlashCommand implements CommandBuilde
     public SlashCommandData getData() {
         SlashCommandData command = Commands.slash("profile_view", "View a client's profile");
         addOptionProfileName(command);
-        return command.setGuildOnly(true);
+        return command.setDefaultPermissions(DefaultMemberPermissions.DISABLED).setGuildOnly(true);
     }
 }

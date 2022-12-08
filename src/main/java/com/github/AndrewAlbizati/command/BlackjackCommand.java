@@ -3,6 +3,7 @@ package com.github.AndrewAlbizati.command;
 import com.ambrosia.add.api.AmbrosiaAPI;
 import com.ambrosia.add.api.CreditReservation;
 import com.ambrosia.add.discord.util.CommandBuilder;
+import com.ambrosia.add.discord.util.Emeralds;
 import com.github.AndrewAlbizati.Blackjack;
 import com.github.AndrewAlbizati.game.BlackjackGame;
 import discord.util.dcf.gui.base.gui.DCFGui;
@@ -36,6 +37,10 @@ public class BlackjackCommand extends DCFSlashCommand implements CommandBuilder 
 
         Integer bet = findOptionAmount(event);
         if (bet == null) return;
+        if (isBetTooMuch(bet)) {
+            event.reply("16 le limit").setEphemeral(true).queue();
+            return;
+        }
         // try to reserve with double-down
         CreditReservation reservation = AmbrosiaAPI.get().reserve(Blackjack.GAME_NAME, user.getIdLong(), bet);
         if (reservation.noPlayer()) {
@@ -55,5 +60,9 @@ public class BlackjackCommand extends DCFSlashCommand implements CommandBuilder 
 
         DCFGui gui = new DCFGui(dcf, event::reply);
         gui.addPage(new BlackjackGameGui(gui, user, game)).send();
+    }
+
+    private boolean isBetTooMuch(Integer bet) {
+        return bet > Emeralds.leToEmeralds(16);
     }
 }

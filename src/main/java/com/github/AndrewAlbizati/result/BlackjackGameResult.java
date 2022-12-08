@@ -2,12 +2,12 @@ package com.github.AndrewAlbizati.result;
 
 import com.ambrosia.add.database.game.GameResult;
 import com.ambrosia.add.database.game.GameResultEntity;
+import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BlackjackGameResult extends GameResult {
 
-    private String tie;
     private List<String> hands = null;
 
     public BlackjackGameResult(GameResultEntity data) {
@@ -29,5 +29,13 @@ public class BlackjackGameResult extends GameResult {
 
     public BlackjackGameResult(int originalBet) {
         super("blackjack", originalBet);
+    }
+
+    @Override
+    public GameResultEntity toEntity() {
+        String extraResults = new Gson().toJson(hands);
+        GameResultEntity entity = super.toEntity();
+        entity.extraResults = extraResults;
+        return entity;
     }
 }

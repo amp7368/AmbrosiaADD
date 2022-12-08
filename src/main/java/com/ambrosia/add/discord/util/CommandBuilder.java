@@ -81,7 +81,7 @@ public interface CommandBuilder extends SendMessage {
         if (le == null) le = 0;
         int total = e + eb * 64 + le * 64 * 64;
         if (total < 0) {
-            event.replyEmbeds(error("Total must be positive!")).queue();
+            event.replyEmbeds(error("Total must be positive!")).setEphemeral(true).queue();
             return null;
         }
         if (total == 0) {

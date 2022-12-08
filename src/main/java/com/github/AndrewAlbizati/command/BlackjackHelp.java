@@ -1,16 +1,20 @@
 package com.github.AndrewAlbizati.command;
 
 import com.ambrosia.add.discord.DiscordBot;
+import com.ambrosia.add.discord.util.SendMessage;
 import discord.util.dcf.slash.DCFSlashSubCommand;
 import java.awt.Color;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 
 /**
  * Handles when a user executes the /help command
  */
-public class BlackjackHelp extends DCFSlashSubCommand {
+public class BlackjackHelp extends DCFSlashSubCommand implements SendMessage {
 
     @Override
     public SubcommandData getData() {
@@ -30,16 +34,13 @@ public class BlackjackHelp extends DCFSlashSubCommand {
             "When a game is started, you can hit (draw a card) or stand (stop drawing cards). If you have enough credits, you can "
                 + "also double down (doubles your bet but you are only given 1 more card). If both of the cards are the same number,"
                 + " they can also be split (starts 2 Blackjack hands in the same game with each of the cards).", false);
-        eb.addField("Strategy",
-            "A good strategy for Blackjack is to hit until your total is 17 or above, and then stand. Doubling down on totals of 10 "
-                + "and 11 are also generally favorable for the player.", false);
-        eb.addField("About",
-            "For more information about the original variation of the blackjack bot, click [here](https://github"
-                + ".com/AndrewAlbizati/blackjack-discord-bot).",
-            false);
+        eb.addField("Rules",
+            "Dealer must stand on all 17s\n"
+                + "Blackjack pays 3 to 2", false);
         eb.setThumbnail(DiscordBot.SELF_USER_AVATAR);
         eb.setColor(new Color(184, 0, 9));
-
-        event.replyEmbeds(eb.build()).queue();
+        MessageCreateBuilder message = new MessageCreateBuilder().setEmbeds(eb.build())
+            .setComponents(ActionRow.of(Button.link("https://github.com/amp7368/AmbrosiaADD", "More information")));
+        event.reply(message.build()).queue();
     }
 }

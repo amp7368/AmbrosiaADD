@@ -9,7 +9,7 @@ public class Emeralds {
     private static final int BLOCK = 64;
 
     public static String longMessage(long credits) {
-        return message(credits, Integer.MAX_VALUE, true) + String.format("\n(%s total)", Pretty.commas(credits));
+        return message(credits, Integer.MAX_VALUE, true) + String.format("\n(**%s** total)", Pretty.commas(credits));
     }
 
     public static String message(long credits, int truncate, boolean isBold) {
@@ -32,12 +32,14 @@ public class Emeralds {
 
     private static int append(StringBuilder message, long amount, String unit, int fieldsLeft, boolean isBold) {
         if (amount == 0 || fieldsLeft == 0) return 0;
-        if (!message.isEmpty())
-            message.append(", ");
+        if (!message.isEmpty()) message.append(", ");
         String format = isBold ? "**%s** " : "%s ";
         message.append(String.format(format, Pretty.commas(amount))).append(unit);
         return 1;
     }
 
 
+    public static int leToEmeralds(int le) {
+        return LIQUID * le;
+    }
 }

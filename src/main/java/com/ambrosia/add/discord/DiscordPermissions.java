@@ -15,12 +15,18 @@ public class DiscordPermissions {
         return instance;
     }
 
-    private long dealerRole = 0;
-    private long managerRole = 0;
+    private final List<Long> dealerRole = List.of();
+    private final List<Long> managerRole = List.of();
 
     public boolean isDealer(List<Role> roles) {
         for (Role role : roles) {
-            if (role.getIdLong() == dealerRole) return true;
+            if (dealerRole.contains(role.getIdLong())) return true;
+        }
+        return false;
+    }
+    public boolean isManager(List<Role> roles) {
+        for (Role role : roles) {
+            if (managerRole.contains(role.getIdLong())) return true;
         }
         return false;
     }
