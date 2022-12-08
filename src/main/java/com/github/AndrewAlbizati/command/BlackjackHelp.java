@@ -1,22 +1,20 @@
 package com.github.AndrewAlbizati.command;
 
 import com.ambrosia.add.discord.DiscordBot;
-import com.ambrosia.add.discord.DiscordModule;
-import discord.util.dcf.slash.DCFSlashCommand;
+import discord.util.dcf.slash.DCFSlashSubCommand;
 import java.awt.Color;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 /**
  * Handles when a user executes the /help command
  */
-public class HelpCommand extends DCFSlashCommand {
+public class BlackjackHelp extends DCFSlashSubCommand {
 
     @Override
-    public SlashCommandData getData() {
-        return Commands.slash("help", "Gives instructions on how to play");
+    public SubcommandData getData() {
+        return new SubcommandData("blackjack", "Gives instructions on how to play");
     }
 
     @Override
@@ -36,7 +34,9 @@ public class HelpCommand extends DCFSlashCommand {
             "A good strategy for Blackjack is to hit until your total is 17 or above, and then stand. Doubling down on totals of 10 "
                 + "and 11 are also generally favorable for the player.", false);
         eb.addField("About",
-            "For more information about the bot, click [here](https://github.com/AndrewAlbizati/blackjack-discord-bot).", false);
+            "For more information about the original variation of the blackjack bot, click [here](https://github"
+                + ".com/AndrewAlbizati/blackjack-discord-bot).",
+            false);
         eb.setThumbnail(DiscordBot.SELF_USER_AVATAR);
         eb.setColor(new Color(184, 0, 9));
 

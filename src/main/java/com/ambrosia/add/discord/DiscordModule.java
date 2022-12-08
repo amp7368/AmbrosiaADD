@@ -50,6 +50,7 @@ public class DiscordModule extends AppleModule {
         dcfCommands.addCommand(new CreateProfileCommand(), new ProfileCommand(), new ViewProfileCommand(), new CommandLink());
         dcfCommands.addCommand(new CommandCash());
         dcfCommands.addCommand(new CommandDelete());
+        dcfCommands.addCommand(new CommandHelp());
         new DiscordLog(dcf);
     }
 

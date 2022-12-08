@@ -87,8 +87,8 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
         // Create new embed with all current game information
         EmbedBuilder eb = new EmbedBuilder();
         eb.setTitle("Blackjack");
-        eb.setDescription("You bet **" + game.getBet() + "** point" + (game.getBet() != 1 ? "s" : "") + "\n" + "You have **"
-            + game.getPlayerTotalCredits() + "** point" + (game.getPlayerTotalCredits() != 1 ? "s" : "") + "\n\n" + "**Rules**\n"
+        eb.setDescription("You bet **" + game.getBet() + "** credit" + (game.getBet() != 1 ? "s" : "") + "\n" + "You have **"
+            + game.getPlayerTotalCredits() + "** credit" + (game.getPlayerTotalCredits() != 1 ? "s" : "") + "\n\n" + "**Rules**\n"
             + "Dealer must stand on all 17s\n" + "Blackjack pays 3 to 2");
         eb.setColor(new Color(184, 0, 9));
         eb.setFooter("Game with " + user.getAsTag(), user.getAvatarUrl());

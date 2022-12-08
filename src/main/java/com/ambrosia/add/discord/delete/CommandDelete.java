@@ -14,7 +14,7 @@ public class CommandDelete extends DCFSlashCommand implements CommandBuilder {
     @Override
     public SlashCommandData getData() {
         SlashCommandData command = Commands.slash("delete", "Delete a log entry or profile");
-        return command.setDefaultPermissions(DefaultMemberPermissions.ENABLED).setGuildOnly(true);
+        return command.setDefaultPermissions(DefaultMemberPermissions.DISABLED).setGuildOnly(true);
     }
 
     @Override

@@ -25,7 +25,7 @@ public class ProfileCommand extends DCFSlashCommand implements CommandBuilder {
 
     @Override
     public SlashCommandData getData() {
-        SlashCommandData command = Commands.slash("profile_view", "View a client's profile");
+        SlashCommandData command = Commands.slash("profile", "View your profile");
         return command.setDefaultPermissions(DefaultMemberPermissions.DISABLED).setGuildOnly(true);
     }
 

@@ -42,7 +42,7 @@ public interface BlackjackMessages extends MessageBuilder {
             false);
         eb.addField("Your Hand (" + (playerHand.isSoft() ? "Soft " : "") + playerHand.getScore() + ")", playerHand.toString(), false);
         eb.setDescription(
-            "**Dealer has a blackjack! You lose " + getGame().getBet() + " point" + (getGame().getBet() == 1 ? "" : "s") + "**");
+            "**Dealer has a blackjack! You lose " + getGame().getBet() + " credit" + (getGame().getBet() == 1 ? "" : "s") + "**");
         eb.setFooter(getAsTag() + " lost!", getAvatarUrl());
 
         return buildCreate(eb.build());
@@ -104,7 +104,7 @@ public interface BlackjackMessages extends MessageBuilder {
         // Player busts
         Hand dealerHand = getGame().getDealerHand();
         if (hand.getScore() > 21) {
-            eb.setDescription("**You busted! You lose " + getGame().getBet() + " point" + (getGame().getBet() != 1 ? "s" : "") + "**");
+            eb.setDescription("**You busted! You lose " + getGame().getBet() + " credit" + (getGame().getBet() != 1 ? "s" : "") + "**");
 
             eb.addField("Dealer's Hand (" + (dealerHand.isSoft() ? "Soft " : "") + dealerHand.getScore() + ")", dealerHand.toString(),
                 false);
@@ -129,19 +129,19 @@ public interface BlackjackMessages extends MessageBuilder {
         // Dealer busts
         if (dealerHand.getScore() > 21) {
             eb.setDescription(
-                "**Dealer busted! You win " + getGame().getBet() + " point" + (getGame().getBet() != 1 ? "s" : "") + "**");
+                "**Dealer busted! You win " + getGame().getBet() + " credit" + (getGame().getBet() != 1 ? "s" : "") + "**");
             eb.setFooter(getUser().getAsTag() + " won!", getUser().getAvatarUrl());
             getGame().result(BlackjackHandResult.WIN);
         } else if (dealerHand.getScore() > hand.getScore()) {
             // Dealer wins
             eb.setDescription(
-                "**The dealer beat you! You lose " + getGame().getBet() + " point" + (getGame().getBet() != 1 ? "s" : "") + "**");
+                "**The dealer beat you! You lose " + getGame().getBet() + " credit" + (getGame().getBet() != 1 ? "s" : "") + "**");
             eb.setFooter(getUser().getAsTag() + " lost!", getUser().getAvatarUrl());
             getGame().result(BlackjackHandResult.LOSE);
         } else if (hand.getScore() > dealerHand.getScore()) {
             // Player wins
             eb.setDescription(
-                "**You beat the dealer! You win " + getGame().getBet() + " point" + (getGame().getBet() != 1 ? "s" : "") + "**");
+                "**You beat the dealer! You win " + getGame().getBet() + " credit" + (getGame().getBet() != 1 ? "s" : "") + "**");
             eb.setFooter(getUser().getAsTag() + " won!", getUser().getAvatarUrl());
             getGame().result(BlackjackHandResult.WIN);
         } else {

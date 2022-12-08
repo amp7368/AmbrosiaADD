@@ -23,6 +23,10 @@ public class ClientStorage {
     public ClientEntity findByName(String clientName) {
         ClientEntity client = new QClientEntity().where().displayName.ieq(clientName).findOne();
         if (client == null) return null;
+        return sumClientTotal(client);
+    }
+
+    private ClientEntity sumClientTotal(ClientEntity client) {
         List<TransactionEntity> byOperationType = TransactionStorage.get().aggregateByType(client);
 
         for (TransactionEntity aggregation : byOperationType) {
@@ -32,7 +36,9 @@ public class ClientStorage {
     }
 
     public ClientEntity findByDiscord(long discordId) {
-        return new QClientEntity().where().discord.discordId.eq(discordId).findOne();
+        ClientEntity client = new QClientEntity().where().discord.discordId.eq(discordId).findOne();
+        if (client == null) return null;
+        return sumClientTotal(client);
     }
 
     @Nullable
@@ -45,12 +51,13 @@ public class ClientStorage {
             client.save(transaction);
             transaction.commit();
         }
-        return client;
+        return sumClientTotal(client);
     }
 
     @Nullable
     public ClientEntity findByUUID(long uuid) {
-        return new QClientEntity().where().uuid.eq(uuid).findOne();
-
+        ClientEntity client = new QClientEntity().where().uuid.eq(uuid).findOne();
+        if (client == null) return null;
+        return sumClientTotal(client);
     }
 }

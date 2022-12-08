@@ -1,6 +1,7 @@
 package com.ambrosia.add.discord.operation;
 
 import com.ambrosia.add.database.client.ClientEntity;
+import com.ambrosia.add.database.client.ClientStorage;
 import com.ambrosia.add.database.operation.TransactionEntity;
 import com.ambrosia.add.database.operation.TransactionStorage;
 import com.ambrosia.add.database.operation.TransactionType;
@@ -30,7 +31,10 @@ public abstract class CommandOperation extends DCFSlashSubCommand implements Com
             return;
         }
         int change = sign() * amount;
-        TransactionEntity operation = TransactionStorage.get().createOperation(conductorId, client.uuid, change, operationReason());
+        long clientUUID = client.uuid;
+        TransactionEntity operation = TransactionStorage.get().createOperation(conductorId, clientUUID, change, operationReason());
+        client = ClientStorage.get().findByUUID(clientUUID);
+        if (client == null) throw new IllegalStateException(clientUUID + " is not a valid client!");
         event.replyEmbeds(embedClientProfile(client, operation.display())).queue();
         DiscordLog.log().operation(client, operation, event.getUser());
     }

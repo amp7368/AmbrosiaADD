@@ -22,6 +22,6 @@ public class ViewTransactionsCommand extends DCFSlashSubCommand implements Comma
         OptionMapping option = event.getOption("entry");
         long startAt = option == null ? 0 : option.getAsLong();
         DCFGui gui = new DCFGui(dcf, event::reply);
-        gui.addPage(new TransactionTableMessage(gui,startAt)).send();
+        gui.addPage(new TransactionTableMessage(gui, startAt)).send();
     }
 }

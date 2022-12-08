@@ -48,7 +48,7 @@ public class BlackjackCommand extends DCFSlashCommand implements CommandBuilder 
         }
         if (reservation.notEnoughCredits()) {
             long difference = reservation.getReserved() - reservation.getClientCredits();
-            event.reply("Sorry, you need " + difference + " more " + "point" + (difference == 1 ? "." : "s.")).queue();
+            event.reply("Sorry, you need " + difference + " more " + "credit" + (difference == 1 ? "." : "s.")).queue();
             return;
         }
         BlackjackGame game = new BlackjackGame(bet, reservation);
