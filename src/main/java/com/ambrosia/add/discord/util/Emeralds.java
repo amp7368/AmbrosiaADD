@@ -32,12 +32,14 @@ public class Emeralds {
 
     private static int append(StringBuilder message, long amount, String unit, int fieldsLeft, boolean isBold) {
         if (amount == 0 || fieldsLeft == 0) return 0;
-        if (!message.isEmpty())
-            message.append(", ");
+        if (!message.isEmpty()) message.append(", ");
         String format = isBold ? "**%s** " : "%s ";
         message.append(String.format(format, Pretty.commas(amount))).append(unit);
         return 1;
     }
 
 
+    public static int leToEmeralds(int le) {
+        return LIQUID * le;
+    }
 }

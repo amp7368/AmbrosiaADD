@@ -42,7 +42,7 @@ public interface BlackjackMessages extends MessageBuilder {
         eb.addField("Dealer's Hand (" + (dealerHand.isSoft() ? "Soft " : "") + dealerHand.getScore() + ")", dealerHand.toString(),
             false);
         eb.addField("Your Hand (" + (playerHand.isSoft() ? "Soft " : "") + playerHand.getScore() + ")", playerHand.toString(), false);
-        eb.setDescription("Dealer has a blackjack!\nYou lose " + getFinalWinningsMessage());
+        eb.setDescription("Dealer has a blackjack!");
         eb.setFooter(getAsTag() + " lost!", getAvatarUrl());
 
         return buildCreate(eb.build());
@@ -99,14 +99,12 @@ public interface BlackjackMessages extends MessageBuilder {
         }
         eb.addField("Your Hands", sb.toString(), false);
         int winnings = getAbsFinalWinnings();
+        eb.setDescription("Split hands");
         if (winnings > 0) {
-            eb.setDescription("You win " + getFinalWinningsMessage());
             eb.setFooter(getUser().getAsTag() + " won!", getUser().getAvatarUrl());
         } else if (winnings < 0) {
-            eb.setDescription("You lose " + getFinalWinningsMessage());
             eb.setFooter(getUser().getAsTag() + " lost!", getUser().getAvatarUrl());
         } else {
-            eb.setDescription("You don't win or lose any credits**");
             eb.setFooter(getUser().getAsTag() + " tied!", getUser().getAvatarUrl());
         }
         getGame().end();
@@ -124,8 +122,7 @@ public interface BlackjackMessages extends MessageBuilder {
         if (hand.getScore() > 21) {
             getGame().result(BlackjackHandResult.LOSE);
             getGame().end();
-            eb.setDescription(
-                "You busted!\n You lose " + getFinalWinningsMessage());
+            eb.setDescription("You busted!");
 
             eb.addField("Dealer's Hand (" + (dealerHand.isSoft() ? "Soft " : "") + dealerHand.getScore() + ")", dealerHand.toString(),
                 false);
@@ -148,20 +145,17 @@ public interface BlackjackMessages extends MessageBuilder {
         // Dealer busts
         if (dealerHand.getScore() > 21) {
             getGame().result(BlackjackHandResult.WIN);
-            eb.setDescription(
-                "Dealer busted!\n You win " + getFinalWinningsMessage());
+            eb.setDescription("Dealer busted!");
             eb.setFooter(getUser().getAsTag() + " won!", getUser().getAvatarUrl());
         } else if (dealerHand.getScore() > hand.getScore()) {
             // Dealer wins
             getGame().result(BlackjackHandResult.LOSE);
-            eb.setDescription(
-                "The dealer beat you!\n You lose " + getFinalWinningsMessage());
+            eb.setDescription("The dealer beat you!");
             eb.setFooter(getUser().getAsTag() + " lost!", getUser().getAvatarUrl());
         } else if (hand.getScore() > dealerHand.getScore()) {
             // Player wins
             getGame().result(BlackjackHandResult.WIN);
-            eb.setDescription(
-                "You beat the dealer!\n You win " + getFinalWinningsMessage());
+            eb.setDescription("You beat the dealer!");
             eb.setFooter(getUser().getAsTag() + " won!", getUser().getAvatarUrl());
         } else {
             // Tie

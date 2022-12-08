@@ -45,12 +45,14 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
     }
 
     private void doubleDown(ButtonInteractionEvent event) {
+        if (isWrongUser(event)) return;
         game.doubleDown();
         this.hit(event);
         getGame().setGameComplete();
     }
 
     private void hit(ButtonInteractionEvent event) {
+        if (isWrongUser(event)) return;
         Hand playerHand = game.getSelectedHand();
         playerHand.add(game.getDeck().deal());
 
@@ -61,10 +63,16 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
     }
 
     private void stand(ButtonInteractionEvent event) {
+        if (isWrongUser(event)) return;
         game.getSelectedHand().setCompleted();
     }
 
+    private boolean isWrongUser(ButtonInteractionEvent event) {
+        return event.getUser().getIdLong() != getUser().getIdLong();
+    }
+
     private void split(ButtonInteractionEvent event) {
+        if (isWrongUser(event)) return;
         Hand hand1 = game.getSelectedHand();
 
         Card card1 = hand1.get(0);
@@ -87,9 +95,10 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
         // Create new embed with all current game information
         EmbedBuilder eb = new EmbedBuilder();
         eb.setTitle("Blackjack");
-        eb.setDescription("You bet **" + game.getCurrentBet() + "** credit" + (game.getCurrentBet() != 1 ? "s" : "") + "\n" + "You have **"
-            + game.getPlayerTotalCredits() + "** credit" + (game.getPlayerTotalCredits() != 1 ? "s" : "") + "\n\n" + "**Rules**\n"
-            + "Dealer must stand on all 17s\n" + "Blackjack pays 3 to 2");
+        eb.setDescription(
+            "You bet **" + game.getCurrentBet() + "** credit" + (game.getCurrentBet() != 1 ? "s" : "") + "\n" + "You have **"
+                + game.getPlayerTotalCredits() + "** credit" + (game.getPlayerTotalCredits() != 1 ? "s" : "") + "\n\n" + "**Rules**\n"
+                + "Dealer must stand on all 17s\n" + "Blackjack pays 3 to 2");
         eb.setColor(new Color(184, 0, 9));
         eb.setFooter("Game with " + user.getAsTag(), user.getAvatarUrl());
         eb.setThumbnail("https://the-datascientist.com/wp-content/uploads/2020/05/counting-cards-black-jack.png");
@@ -126,14 +135,14 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
         Hand playerHand = game.getPlayerHands().get(0);
 
         // Player is dealt a Blackjack
-        if (playerHand.getScore() == 21) {
+        if (playerHand.getScore() == 21 && playerHand.size() == 2) {
             getGame().result(BlackjackHandResult.BLACKJACK);
             getGame().end();
             return this.playerBlackJack(eb);
         }
 
         // Dealer is dealt a Blackjack
-        if (game.getDealerHand().get(0).getValue() == 1 && game.getDealerHand().getScore() == 21) {
+        if (game.getDealerHand().getScore() == 21 && game.getDealerHand().size() == 2) {
             getGame().result(BlackjackHandResult.LOSE);
             getGame().end();
             return dealerBlackjack(eb);

@@ -12,7 +12,7 @@ public class ProfileCommand extends DCFSlashCommand implements CommandBuilder {
 
     @Override
     public void onCommand(SlashCommandInteractionEvent event) {
-        if (this.isBadPermission(event)) return;
+//        if (this.isBadPermission(event)) return;
         ClientEntity client = ClientStorage.get().findByDiscord(event.getUser().getIdLong());
         if (client == null) {
             this.errorRegisterWithStaff(event);
