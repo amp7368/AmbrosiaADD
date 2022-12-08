@@ -78,7 +78,7 @@ public class BlackjackGame {
         return playerHand;
     }
 
-    public long getBet() {
+    public long getCurrentBet() {
         return results.getCurrentBet();
     }
 

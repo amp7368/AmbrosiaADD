@@ -9,7 +9,7 @@ public class Emeralds {
     private static final int BLOCK = 64;
 
     public static String longMessage(long credits) {
-        return message(credits, Integer.MAX_VALUE, true) + String.format("\n(%s total)", Pretty.commas(credits));
+        return message(credits, Integer.MAX_VALUE, true) + String.format("\n(**%s** total)", Pretty.commas(credits));
     }
 
     public static String message(long credits, int truncate, boolean isBold) {
