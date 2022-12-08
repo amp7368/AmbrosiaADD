@@ -45,7 +45,7 @@ public class BlackjackCommand extends DCFSlashCommand implements CommandBuilder 
         // try to reserve with double-down
         CreditReservation reservation = AmbrosiaAPI.get().reserve(Blackjack.GAME_NAME, user.getIdLong(), bet);
         if (reservation.noPlayer()) {
-            event.reply("Register your discord and/or minecraft with staff").queue();
+            this.errorRegisterWithStaff(event);
             return;
         }
         if (reservation.alreadyPlaying()) {

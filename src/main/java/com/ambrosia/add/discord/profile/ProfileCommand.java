@@ -1,6 +1,7 @@
 package com.ambrosia.add.discord.profile;
 
 import com.ambrosia.add.database.client.ClientEntity;
+import com.ambrosia.add.database.client.ClientStorage;
 import com.ambrosia.add.discord.util.CommandBuilder;
 import discord.util.dcf.slash.DCFSlashCommand;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -8,13 +9,16 @@ import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
-public class ViewProfileCommand extends DCFSlashCommand implements CommandBuilder {
+public class ProfileCommand extends DCFSlashCommand implements CommandBuilder {
 
     @Override
     public void onCommand(SlashCommandInteractionEvent event) {
         if (this.isBadPermission(event)) return;
-        ClientEntity client = this.findClient(event);
-        if (client == null) return;
+        ClientEntity client = ClientStorage.get().findByDiscord(event.getUser().getIdLong());
+        if (client == null) {
+            this.errorRegisterWithStaff(event);
+            return;
+        }
         event.replyEmbeds(embedClientProfile(client)).queue();
     }
 
@@ -22,7 +26,7 @@ public class ViewProfileCommand extends DCFSlashCommand implements CommandBuilde
     @Override
     public SlashCommandData getData() {
         SlashCommandData command = Commands.slash("profile_view", "View a client's profile");
-        addOptionProfileName(command);
-        return command.setDefaultPermissions(DefaultMemberPermissions.ENABLED).setGuildOnly(true);
+        return command.setDefaultPermissions(DefaultMemberPermissions.DISABLED).setGuildOnly(true);
     }
+
 }

@@ -7,6 +7,7 @@ import com.ambrosia.add.discord.log.DiscordLog;
 import com.ambrosia.add.discord.operation.CommandCash;
 import com.ambrosia.add.discord.profile.CommandLink;
 import com.ambrosia.add.discord.profile.CreateProfileCommand;
+import com.ambrosia.add.discord.profile.ProfileCommand;
 import com.ambrosia.add.discord.profile.ViewProfileCommand;
 import com.github.AndrewAlbizati.Blackjack;
 import discord.util.dcf.DCF;
@@ -46,7 +47,7 @@ public class DiscordModule extends AppleModule {
         DiscordBot.dcf = dcf;
 
         DCFCommandManager dcfCommands = dcf.commands();
-        dcfCommands.addCommand(new CreateProfileCommand(), new ViewProfileCommand(), new CommandLink());
+        dcfCommands.addCommand(new CreateProfileCommand(), new ProfileCommand(), new ViewProfileCommand(), new CommandLink());
         dcfCommands.addCommand(new CommandCash());
         dcfCommands.addCommand(new CommandDelete());
         new DiscordLog(dcf);

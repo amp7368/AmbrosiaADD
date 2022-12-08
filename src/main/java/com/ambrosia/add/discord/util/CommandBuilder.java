@@ -75,4 +75,8 @@ public interface CommandBuilder extends SendMessage {
     default void addOptionAmount(SubcommandData command) {
         command.addOption(OptionType.STRING, AMOUNT_OPTION, "The amount to change", true);
     }
+
+    default void errorRegisterWithStaff(SlashCommandInteractionEvent event) {
+        event.reply("Register your discord and/or minecraft with staff").queue();
+    }
 }
