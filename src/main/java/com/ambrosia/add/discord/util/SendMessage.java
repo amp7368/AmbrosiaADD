@@ -1,7 +1,7 @@
 package com.ambrosia.add.discord.util;
 
 import com.ambrosia.add.database.client.ClientEntity;
-import com.ambrosia.add.database.operation.OperationReason;
+import com.ambrosia.add.database.operation.TransactionType;
 import com.ambrosia.add.discord.DiscordModule;
 import java.awt.Color;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -71,9 +71,9 @@ public interface SendMessage {
         embed.setTimestamp(client.dateCreated.toInstant());
         embed.addBlankField(false);
         embed.addField("Credits", Emeralds.longMessage(client.credits), false);
-        embed.addField("Winnings", Emeralds.longMessage(client.total(OperationReason.WIN)), true);
+        embed.addField("Winnings", Emeralds.longMessage(client.total(TransactionType.WIN)), true);
         embed.addBlankField(true);
-        embed.addField("Losses", Emeralds.longMessage(client.total(OperationReason.LOSS)), true);
+        embed.addField("Losses", Emeralds.longMessage(client.total(TransactionType.LOSS)), true);
         return embed.build();
     }
 }

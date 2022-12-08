@@ -8,6 +8,7 @@ import com.ambrosia.add.discord.operation.CommandCash;
 import com.ambrosia.add.discord.profile.CommandLink;
 import com.ambrosia.add.discord.profile.CreateProfileCommand;
 import com.ambrosia.add.discord.profile.ViewProfileCommand;
+import com.github.AndrewAlbizati.Blackjack;
 import discord.util.dcf.DCF;
 import discord.util.dcf.DCFCommandManager;
 import java.util.List;
@@ -31,7 +32,7 @@ public class DiscordModule extends AppleModule {
 
     @Override
     public void onEnable() {
-        JDABuilder builder = JDABuilder.createLight(DiscordConfig.get().token);
+        JDABuilder builder = JDABuilder.createDefault(DiscordConfig.get().token);
         JDA jda = builder.build();
         try {
             jda.awaitReady();
@@ -41,15 +42,25 @@ public class DiscordModule extends AppleModule {
         jda.getPresence().setPresence(Activity.playing("!"), false);
 
         DCF dcf = new DCF(jda);
+        DiscordBot.SELF_USER_AVATAR = jda.getSelfUser().getAvatarUrl();
+        DiscordBot.dcf = dcf;
 
         DCFCommandManager dcfCommands = dcf.commands();
         dcfCommands.addCommand(new CreateProfileCommand(), new ViewProfileCommand(), new CommandLink());
         dcfCommands.addCommand(new CommandCash());
         dcfCommands.addCommand(new CommandDelete());
         new DiscordLog(dcf);
-        dcfCommands.updateCommands();
     }
 
+    @Override
+    public void onEnablePost() {
+        DiscordBot.dcf.commands().updateCommands();
+    }
+
+    @Override
+    public List<AppleModule> createModules() {
+        return List.of(new Blackjack());
+    }
 
     @Override
     public List<AppleConfigLike> getConfigs() {

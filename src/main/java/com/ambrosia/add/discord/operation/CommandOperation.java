@@ -1,9 +1,9 @@
 package com.ambrosia.add.discord.operation;
 
 import com.ambrosia.add.database.client.ClientEntity;
-import com.ambrosia.add.database.operation.OperationEntity;
-import com.ambrosia.add.database.operation.OperationReason;
-import com.ambrosia.add.database.operation.OperationStorage;
+import com.ambrosia.add.database.operation.TransactionEntity;
+import com.ambrosia.add.database.operation.TransactionStorage;
+import com.ambrosia.add.database.operation.TransactionType;
 import com.ambrosia.add.discord.log.DiscordLog;
 import com.ambrosia.add.discord.util.CommandBuilder;
 import discord.util.dcf.slash.DCFSlashSubCommand;
@@ -28,7 +28,7 @@ public abstract class CommandOperation extends DCFSlashSubCommand implements Com
             return;
         }
         int change = sign() * amount;
-        OperationEntity operation = OperationStorage.get().saveOperation(conductorId, client, change, operationReason());
+        TransactionEntity operation = TransactionStorage.get().createOperation(conductorId, client.uuid, change, operationReason());
         event.replyEmbeds(embedClientProfile(client, operation.display())).queue();
         DiscordLog.log().operation(client, operation, event.getUser());
     }
@@ -46,7 +46,7 @@ public abstract class CommandOperation extends DCFSlashSubCommand implements Com
 
     protected abstract MessageEmbed successMessage(ClientEntity client, int amount);
 
-    protected abstract OperationReason operationReason();
+    protected abstract TransactionType operationReason();
 
     protected abstract String commandName();
 

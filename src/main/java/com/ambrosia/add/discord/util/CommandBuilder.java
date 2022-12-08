@@ -35,7 +35,7 @@ public interface CommandBuilder extends SendMessage {
     default ClientEntity findClient(SlashCommandInteractionEvent event) {
         @Nullable String clientName = findOptionProfileName(event);
         if (clientName == null) return null;
-        ClientEntity client = ClientStorage.get().find(clientName);
+        ClientEntity client = ClientStorage.get().findByName(clientName);
         if (client != null) return client;
         event.replyEmbeds(this.error(String.format("User: '%s' is not in the database", clientName))).queue();
         return null;

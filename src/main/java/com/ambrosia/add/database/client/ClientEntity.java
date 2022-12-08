@@ -1,7 +1,7 @@
 package com.ambrosia.add.database.client;
 
-import com.ambrosia.add.database.operation.OperationReason;
-import com.ambrosia.add.database.operation.OperationStorage;
+import com.ambrosia.add.database.operation.TransactionType;
+import com.ambrosia.add.database.operation.TransactionStorage;
 import io.ebean.DB;
 import io.ebean.Model;
 import io.ebean.Transaction;
@@ -40,7 +40,7 @@ public class ClientEntity extends Model {
     @Column(nullable = false)
     public long creator;
 
-    public transient Map<OperationReason, Long> totals = new HashMap<>();
+    public transient Map<TransactionType, Long> totals = new HashMap<>();
 
     public ClientEntity(long creator, String displayName) {
         this.displayName = displayName;
@@ -53,14 +53,13 @@ public class ClientEntity extends Model {
 
     }
 
-    public void addCredits(OperationReason operationReason, long add) {
-        this.totals.compute(operationReason, (k, a) -> a == null ? add : add + a);
+    public void addCredits(TransactionType transactionType, long add) {
+        this.totals.compute(transactionType, (k, a) -> a == null ? add : add + a);
         this.credits += add;
     }
 
     public void setDiscord(ClientDiscordDetails discord) {
         this.discord = discord;
-        this.displayName = discord.guildName;
     }
 
     public void setMinecraft(ClientMinecraftDetails minecraft) {
@@ -76,11 +75,11 @@ public class ClientEntity extends Model {
         }
     }
 
-    public long total(OperationReason operationType) {
+    public long total(TransactionType operationType) {
         return Math.abs(this.totals.getOrDefault(operationType, 0L));
     }
 
     public boolean hasAnyTransactions() {
-        return !OperationStorage.get().findTransactions(this.uuid).isEmpty();
+        return !TransactionStorage.get().findTransactions(this.uuid).isEmpty();
     }
 }

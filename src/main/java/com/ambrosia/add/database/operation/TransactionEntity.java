@@ -1,6 +1,7 @@
 package com.ambrosia.add.database.operation;
 
 import com.ambrosia.add.discord.util.Emeralds;
+import io.ebean.Model;
 import io.ebean.annotation.Aggregation;
 import java.sql.Timestamp;
 import javax.persistence.Column;
@@ -11,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table
-public class OperationEntity {
+public class TransactionEntity extends Model {
 
     @Id
     public long id;
@@ -22,16 +23,16 @@ public class OperationEntity {
     @Column(nullable = false)
     public Timestamp dateCreated;
     @Column(nullable = false)
-    public int changeAmount;
+    public long changeAmount;
     @Column(nullable = false)
     public long conductorId;
     @Column(nullable = false)
-    public OperationReason operationType;
+    public TransactionType operationType;
 
     @Aggregation("sum(changeAmount)")
     public long sumAmount;
 
-    public OperationEntity(long conductorId, long clientId, int changeAmount, OperationReason reason) {
+    public TransactionEntity(long conductorId, long clientId, long changeAmount, TransactionType reason) {
         this.conductorId = conductorId;
         this.clientId = clientId;
         this.changeAmount = changeAmount;
