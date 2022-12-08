@@ -1,7 +1,6 @@
 package com.github.AndrewAlbizati.game;
 
 import com.ambrosia.add.api.CreditReservation;
-import com.github.AndrewAlbizati.Blackjack;
 import com.github.AndrewAlbizati.result.BlackjackGameResult;
 import com.github.AndrewAlbizati.result.BlackjackHandResult;
 import java.util.ArrayList;
@@ -16,6 +15,7 @@ public class BlackjackGame {
 
     private final Hand dealerHand;
     private final List<Hand> playerHand = new ArrayList<>();
+    private final Deck deck;
 
     private int selectedHandIndex = 0;
     private final BlackjackGameResult results;
@@ -25,6 +25,9 @@ public class BlackjackGame {
     public BlackjackGame(int bet, CreditReservation creditReservation) {
         this.creditReservation = creditReservation;
         this.results = new BlackjackGameResult(bet);
+
+        deck = new Deck(2);
+        deck.shuffleDeck();
 
         playerHand.add(new Hand());
         dealerHand = new Hand();
@@ -54,7 +57,7 @@ public class BlackjackGame {
      * @return A deck object.
      */
     public Deck getDeck() {
-        return Blackjack.get().getDeck();
+        return this.deck;
     }
 
     /**
