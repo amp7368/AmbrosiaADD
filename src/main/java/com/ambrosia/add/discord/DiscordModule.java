@@ -66,7 +66,8 @@ public class DiscordModule extends AppleModule {
 
     @Override
     public List<AppleConfigLike> getConfigs() {
-        return List.of(configJson(DiscordConfig.class, "Discord.config"), configJson(DiscordPermissions.class, "Permissions.config"));
+        return List.of(configFolder("Config", configJson(DiscordConfig.class, "Discord.config"),
+            configJson(DiscordPermissions.class, "Permissions.config")));
     }
 
     @Override

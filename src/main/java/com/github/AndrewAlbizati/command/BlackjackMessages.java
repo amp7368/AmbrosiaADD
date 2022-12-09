@@ -49,11 +49,11 @@ public interface BlackjackMessages extends MessageBuilder {
     }
 
     private String getFinalWinningsMessage() {
-        return Emeralds.longMessage(getGame().results().getAbsFinalWinnings());
+        return Emeralds.longMessage(Math.abs(getGame().results().getWinnings()));
     }
 
-    private int getAbsFinalWinnings() {
-        return getGame().results().getAbsFinalWinnings();
+    private int getWinnings() {
+        return getGame().results().getWinnings();
     }
 
     /**
@@ -98,7 +98,7 @@ public interface BlackjackMessages extends MessageBuilder {
             sb.append("**\n");
         }
         eb.addField("Your Hands", sb.toString(), false);
-        int winnings = getAbsFinalWinnings();
+        int winnings = getWinnings();
         eb.setDescription("Split hands");
         if (winnings > 0) {
             eb.setFooter(getUser().getAsTag() + " won!", getUser().getAvatarUrl());
