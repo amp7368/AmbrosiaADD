@@ -1,5 +1,6 @@
 package com.ambrosia.add.discord.commands.casino;
 
+import com.ambrosia.add.discord.commands.casino.game.CommandCasinoGames;
 import com.ambrosia.add.discord.util.BaseCommand;
 import discord.util.dcf.slash.DCFSlashSubCommand;
 import java.util.List;
@@ -20,7 +21,7 @@ public class CommandCasino extends BaseCommand {
 
     @Override
     public List<DCFSlashSubCommand> getSubCommands() {
-        return List.of(new CommandCasinoProfits());
+        return List.of(new CommandCasinoProfits(), new CommandCasinoGames(), new CommandCasinoRatio());
     }
 
     @Override

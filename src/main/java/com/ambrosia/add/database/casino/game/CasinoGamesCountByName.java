@@ -6,11 +6,11 @@ import java.util.Map;
 
 public final class CasinoGamesCountByName {
 
-    private String name;
-    private final Map<String, CasinoGameCountByConclusion> conclusionToGame = new HashMap<>();
+    public final String name;
+    public final Map<String, CasinoGameCountByConclusion> conclusionToGame = new HashMap<>();
 
-    private int count;
-    private int deltaWinnings;
+    public int count = 0;
+    public int deltaWinnings = 0;
 
     public CasinoGamesCountByName(String name) {
         this.name = name;

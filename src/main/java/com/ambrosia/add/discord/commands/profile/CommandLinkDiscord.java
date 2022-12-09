@@ -46,12 +46,12 @@ public class CommandLinkDiscord extends BaseSubCommand {
         if (user == null) return;
         MessageCreateBuilder message = new MessageCreateBuilder().setComponents(ActionRow.of(Ambrosia.inviteButton()))
             .setEmbeds(new EmbedBuilder().setDescription("""
-                    Thank you for registering with Ambrosia Casino. The following message will instruct you on how to operate the Ambrosia ADD Bot. If you believe you have gotten this message in error, please message @Tealy.
+                    Thank you for registering with Ambrosia Casino. The following message will instruct you on how to operate the Ambrosia ADD Bot. If you believe you have gotten this message in error, please message @Tealy#7401.
                     All commands listed below can only be performed in the Ambrosia Discord server, within the Ambrosia Casino channel category. If you have not yet joined, here's an invite link: https://discord.gg/tEAy2dGXWF
                                         
                     - In order to check your profile, use /profile. This will allow you to monitor your credits. Keep in mind that it may take a moment for newly cashed in credits to be applied to your account, as it must be entered into our database by an Ambrosia Casino employee.
                                         
-                    - To begin a game of blackjack, type /blackjack. You will also be asked to specify your bet in LE/EB/E. You can wager up to a maximum of 16 LE per hand.
+                    - To begin a game of blackjack, type /blackjack. You will also be asked to specify your bet in LE/EB/E. You can wager up to a maximum of 24 LE per hand.
                                         
                     - In order to view the rules and more information on how the bot functions, aswell as to get the links to view our source code, do /help blackjack.
                     Thank you for registering with Ambrosia Casino, best of luck!

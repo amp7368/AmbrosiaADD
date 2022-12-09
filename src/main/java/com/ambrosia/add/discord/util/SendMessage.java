@@ -2,6 +2,7 @@ package com.ambrosia.add.discord.util;
 
 import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.operation.TransactionType;
+import com.ambrosia.add.discord.DiscordBot;
 import com.ambrosia.add.discord.DiscordModule;
 import java.awt.Color;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -78,6 +79,6 @@ public interface SendMessage {
     }
 
     default EmbedBuilder embedCasino() {
-        return new EmbedBuilder().setColor(0xe3790b);
+        return new EmbedBuilder().setColor(DiscordBot.CASINO_COLOR);
     }
 }

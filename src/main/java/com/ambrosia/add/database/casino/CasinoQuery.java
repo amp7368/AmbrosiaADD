@@ -30,7 +30,9 @@ public class CasinoQuery {
     }
 
     private CasinoGamesCount totalGamesQuery() {
-        List<GameResultAggregate> query = new QGameResultAggregate().findList();
+        QGameResultAggregate alias = QGameResultAggregate.alias();
+        List<GameResultAggregate> query = new QGameResultAggregate().select(alias.count, alias.conclusion, alias.name,
+            alias.deltaWinnings).findList();
         Map<String, CasinoGamesCountByName> games = new HashMap<>();
         for (GameResultAggregate queryEntry : query) {
             CasinoGamesCountByName byGame = games.computeIfAbsent(queryEntry.name, CasinoGamesCountByName::new);
