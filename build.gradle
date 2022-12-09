@@ -31,7 +31,7 @@ dependencies {
     annotationProcessor "io.ebean:ebean-querybean:${ebean_version}"
     annotationProcessor "io.ebean:querybean-generator:${ebean_version}"
 
-    implementation 'mysql:mysql-connector-java:8.0.30'
+    implementation 'com.mysql:mysql-connector-j:8.0.31'
 
     implementation "io.ebean:ebean-ddl-generator:${ebean_version}"
     implementation "io.ebean:ebean-querybean:${ebean_version}"

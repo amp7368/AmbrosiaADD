@@ -26,6 +26,7 @@ public interface BlackjackMessages extends MessageBuilder {
 
     default MessageCreateData playerBlackJack(EmbedBuilder eb) {
         Hand dealerHand = getGame().getDealerHand();
+        eb.clearFields();
         eb.addField("Dealer's Hand (" + (dealerHand.isSoft() ? "Soft " : "") + dealerHand.getScore() + ")", dealerHand.toString(),
             false);
         Hand playerHand = getGame().getSelectedHand();
@@ -39,6 +40,7 @@ public interface BlackjackMessages extends MessageBuilder {
     default MessageCreateData dealerBlackjack(EmbedBuilder eb) {
         Hand playerHand = getGame().getSelectedHand();
         Hand dealerHand = getGame().getDealerHand();
+        eb.clearFields();
         eb.addField("Dealer's Hand (" + (dealerHand.isSoft() ? "Soft " : "") + dealerHand.getScore() + ")", dealerHand.toString(),
             false);
         eb.addField("Your Hand (" + (playerHand.isSoft() ? "Soft " : "") + playerHand.getScore() + ")", playerHand.toString(), false);
@@ -49,11 +51,11 @@ public interface BlackjackMessages extends MessageBuilder {
     }
 
     private String getFinalWinningsMessage() {
-        return Emeralds.longMessage(getGame().results().getAbsFinalWinnings());
+        return Emeralds.longMessage(Math.abs(getGame().results().getWinnings()));
     }
 
-    private int getAbsFinalWinnings() {
-        return getGame().results().getAbsFinalWinnings();
+    private int getWinnings() {
+        return getGame().results().getWinnings();
     }
 
     /**
@@ -98,7 +100,7 @@ public interface BlackjackMessages extends MessageBuilder {
             sb.append("**\n");
         }
         eb.addField("Your Hands", sb.toString(), false);
-        int winnings = getAbsFinalWinnings();
+        int winnings = getWinnings();
         eb.setDescription("Split hands");
         if (winnings > 0) {
             eb.setFooter(getUser().getAsTag() + " won!", getUser().getAvatarUrl());

@@ -59,7 +59,7 @@ public abstract class GameResult {
         return this.currentBet;
     }
 
-    public int getAbsFinalWinnings() {
-        return Math.abs(this.deltaWinnings);
+    public int getWinnings() {
+        return this.deltaWinnings;
     }
 }

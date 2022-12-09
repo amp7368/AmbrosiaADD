@@ -25,6 +25,10 @@ public interface CommandBuilder extends SendMessage {
             event.replyEmbeds(this.error("Guilds only")).queue(); // this is a guild only command
             return true;
         }
+        boolean wrongDiscord = DiscordPermissions.get().wrongServer(event.getGuild());
+        if (wrongDiscord) {
+            event.replyEmbeds(this.error("Wrong server >:(")).queue();
+        }
         boolean hasPermission = DiscordPermissions.get().isDealer(sender.getRoles());
         if (!hasPermission) {
             event.replyEmbeds(this.isNotDealer(event)).queue();

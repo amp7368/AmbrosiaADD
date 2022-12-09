@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  ambrosia-casino:
+    restart: unless-stopped
+    container_name: ${COMPOSE_NAME}.${IMAGE_NAME}
+    image: ${COMPOSE_NAME}/${IMAGE_NAME}
+    build:
+      context: .
+      args:
+        - JAVA_VERSION=${JAVA_VERSION}
+        - JAR_FILE=${JAR_FILE}
+        - WORKINGDIR=${WORKINGDIR}
+    environment:
+      - JAR_FILE=${JAR_FILE}
+      - WORKINGDIR=${WORKINGDIR}
+    depends_on:
+      - mysql
+    networks:
+      - 'ambrosia-casino'
+    volumes:
+      - '${MOUNT_DIR}/java:${WORKINGDIR}/data'
+      - '${SECRETS_DIR}/Database:${WORKINGDIR}/Database/Config'
+      - '${SECRETS_DIR}/Discord:${WORKINGDIR}/Discord/Config'
+  mysql:
+    image: ${MYSQL_VERSION}
+    container_name: ${COMPOSE_NAME}.${DATABASE_IMAGE}
+    env_file: '.env'
+    networks:
+      - 'ambrosia-casino'
+    ports:
+      - '3306:3306'
+    volumes:
+      - '${SECRETS_DIR}/Database:/secrets'
+      - '${MOUNT_DIR}/mysql:/var/lib/mysql'
+networks:
+  ambrosia-casino:
+    name: ambrosia-casino

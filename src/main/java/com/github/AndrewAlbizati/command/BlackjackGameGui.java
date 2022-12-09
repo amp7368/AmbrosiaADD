@@ -58,7 +58,7 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
 
         // End game if player busts
         if (playerHand.getScore() >= 21) {
-            getGame().setGameComplete();
+            playerHand.setCompleted();
         }
     }
 
@@ -135,19 +135,23 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
         Hand playerHand = game.getPlayerHands().get(0);
 
         // Player is dealt a Blackjack
-        if (playerHand.getScore() == 21 && playerHand.size() == 2) {
+        boolean playerBlackjack = playerHand.getScore() == 21 && playerHand.size() == 2 && !game.hasSplit();
+        boolean dealerBlackjack = game.getDealerHand().getScore() == 21 && game.getDealerHand().size() == 2 && !game.hasSplit();
+        if (playerBlackjack && !dealerBlackjack) {
             getGame().result(BlackjackHandResult.BLACKJACK);
             getGame().end();
             return this.playerBlackJack(eb);
         }
 
         // Dealer is dealt a Blackjack
-        if (game.getDealerHand().getScore() == 21 && game.getDealerHand().size() == 2) {
+        if (dealerBlackjack && !playerBlackjack) {
             getGame().result(BlackjackHandResult.LOSE);
             getGame().end();
             return dealerBlackjack(eb);
         }
-
+        if (dealerBlackjack) {
+            game.setGameComplete();
+        }
         // Game is completed
         if (game.isGameComplete()) {
             return this.endGameNormal(eb);
