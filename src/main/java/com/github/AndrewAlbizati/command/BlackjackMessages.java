@@ -26,6 +26,7 @@ public interface BlackjackMessages extends MessageBuilder {
 
     default MessageCreateData playerBlackJack(EmbedBuilder eb) {
         Hand dealerHand = getGame().getDealerHand();
+        eb.clearFields();
         eb.addField("Dealer's Hand (" + (dealerHand.isSoft() ? "Soft " : "") + dealerHand.getScore() + ")", dealerHand.toString(),
             false);
         Hand playerHand = getGame().getSelectedHand();
@@ -39,6 +40,7 @@ public interface BlackjackMessages extends MessageBuilder {
     default MessageCreateData dealerBlackjack(EmbedBuilder eb) {
         Hand playerHand = getGame().getSelectedHand();
         Hand dealerHand = getGame().getDealerHand();
+        eb.clearFields();
         eb.addField("Dealer's Hand (" + (dealerHand.isSoft() ? "Soft " : "") + dealerHand.getScore() + ")", dealerHand.toString(),
             false);
         eb.addField("Your Hand (" + (playerHand.isSoft() ? "Soft " : "") + playerHand.getScore() + ")", playerHand.toString(), false);
