@@ -38,6 +38,8 @@ public class ClientMinecraftDetails {
     }
 
     public String skinUrl() {
-        return "https://crafatar.com/renders/head/" + this.id;
+        String url = "https://mc-heads.net/head/" + this.id;
+        System.out.println(url);
+        return url;
     }
 }

@@ -27,8 +27,8 @@ public interface SendMessage {
         return error().setDescription(msg).build();
     }
 
-    default MessageEmbed isNotDealer(SlashCommandInteractionEvent event) {
-        return error(String.format("You must be a dealer to run '/%s'", event.getFullCommandName()));
+    default MessageEmbed badRole(String role, SlashCommandInteractionEvent event) {
+        return error(String.format("You must be a %s to run '/%s'", role, event.getFullCommandName()));
     }
 
     default MessageEmbed missingOption(String option) {
@@ -75,5 +75,9 @@ public interface SendMessage {
         embed.addBlankField(true);
         embed.addField("Losses", Emeralds.longMessage(client.total(TransactionType.LOSS)), true);
         return embed.build();
+    }
+
+    default EmbedBuilder embedCasino() {
+        return new EmbedBuilder().setColor(0xe3790b);
     }
 }
