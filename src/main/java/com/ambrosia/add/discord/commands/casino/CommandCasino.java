@@ -1,6 +1,7 @@
 package com.ambrosia.add.discord.commands.casino;
 
 import com.ambrosia.add.discord.commands.casino.game.CommandCasinoGames;
+import com.ambrosia.add.discord.commands.casino.ratio.CommandCasinoRatio;
 import com.ambrosia.add.discord.util.BaseCommand;
 import discord.util.dcf.slash.DCFSlashSubCommand;
 import java.util.List;

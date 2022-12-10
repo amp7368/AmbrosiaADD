@@ -3,6 +3,7 @@ package com.ambrosia.add.discord.commands.profile;
 import com.ambrosia.add.Ambrosia;
 import com.ambrosia.add.database.client.ClientDiscordDetails;
 import com.ambrosia.add.database.client.ClientEntity;
+import com.ambrosia.add.discord.DiscordBot;
 import com.ambrosia.add.discord.log.DiscordLog;
 import com.ambrosia.add.discord.util.BaseSubCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -28,7 +29,7 @@ public class CommandLinkDiscord extends BaseSubCommand {
         Member member = this.findOption(event, DISCORD_OPTION, OptionMapping::getAsMember);
         if (member == null) return;
         client.setDiscord(new ClientDiscordDetails(member));
-        member.getUser().openPrivateChannel().queue(this::sendRegisteredMessage);
+        sendRegistrationMessage(member);
         if (client.trySave()) {
             event.replyEmbeds(this.embedClientProfile(client)).queue();
             DiscordLog.log().modifyDiscord(client, event.getUser());
@@ -40,8 +41,12 @@ public class CommandLinkDiscord extends BaseSubCommand {
         return true;
     }
 
-    private void sendRegisteredMessage(PrivateChannel channel) {
-        SelfUser self = dcf.jda().getSelfUser();
+    public static void sendRegistrationMessage(Member member) {
+        member.getUser().openPrivateChannel().queue(CommandLinkDiscord::sendRegisteredMessage);
+    }
+
+    private static void sendRegisteredMessage(PrivateChannel channel) {
+        SelfUser self = DiscordBot.dcf.jda().getSelfUser();
         User user = channel.getUser();
         if (user == null) return;
         MessageCreateBuilder message = new MessageCreateBuilder().setComponents(ActionRow.of(Ambrosia.inviteButton()))

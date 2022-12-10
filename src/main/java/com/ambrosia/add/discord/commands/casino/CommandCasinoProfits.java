@@ -20,12 +20,14 @@ public class CommandCasinoProfits extends BaseSubCommand {
         CasinoQuery query = new CasinoQuery();
         CasinoTotalProfits totalProfits = query.totalProfits();
         EmbedBuilder embed = this.embedCasino();
-        embed.addField("Profits", longMessage(totalProfits.profits), false);
+        embed.addField("Profits", longMessage(totalProfits.profits), true);
+        embed.addField("Circulated", longMessage(totalProfits.circulated), true);
+        embed.addBlankField(true);
         embed.addField("Player holdings", longMessage(totalProfits.playerHoldings), false);
+        embed.addBlankField(false);
         for (TransactionType type : List.of(TransactionType.WIN, TransactionType.LOSS))
             embed.addField(getTotalByType(totalProfits, type));
         embed.addBlankField(false);
-
         for (TransactionType type : List.of(TransactionType.DEPOSIT, TransactionType.WITHDRAW))
             embed.addField(getTotalByType(totalProfits, type));
         event.replyEmbeds(embed.build()).queue();

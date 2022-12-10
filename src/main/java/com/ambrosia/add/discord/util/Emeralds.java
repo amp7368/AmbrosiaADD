@@ -27,15 +27,15 @@ public class Emeralds {
         long e = creditsLeft;
 
         StringBuilder message = new StringBuilder();
-        if (stx != 0) truncate -= append(message, stx, "stx", truncate, isBold);
-        if (le != 0) truncate -= append(message, le, "le", truncate, isBold);
-        if (eb != 0) truncate -= append(message, eb, "eb", truncate, isBold);
-        if (e != 0) append(message, e, "e", truncate, isBold);
+        if (stx != 0) truncate -= append(message, stx, "stx", truncate, isBold, false);
+        if (le != 0) truncate -= append(message, le, "le", truncate, isBold, false);
+        if (eb != 0) truncate -= append(message, eb, "eb", truncate, isBold, false);
+        if (e != 0) append(message, e, "e", truncate, isBold, true);
         return message.toString();
     }
 
-    private static int append(StringBuilder message, long amount, String unit, int fieldsLeft, boolean isBold) {
-        if (amount == 0 || fieldsLeft == 0) return 0;
+    private static int append(StringBuilder message, long amount, String unit, int fieldsLeft, boolean isBold, boolean forceAdd) {
+        if (!forceAdd &&(amount == 0 || fieldsLeft == 0)) return fieldsLeft;
         if (!message.isEmpty()) message.append(", ");
         String format = isBold ? "**%s** " : "%s ";
         message.append(String.format(format, Pretty.commas(amount))).append(unit);

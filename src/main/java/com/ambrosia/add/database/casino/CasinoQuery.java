@@ -1,14 +1,11 @@
 package com.ambrosia.add.database.casino;
 
 import com.ambrosia.add.database.casino.game.CasinoGamesCount;
-import com.ambrosia.add.database.casino.game.CasinoGamesCountByName;
 import com.ambrosia.add.database.casino.profits.CasinoTotalProfits;
 import com.ambrosia.add.database.casino.query.QGameResultAggregate;
 import com.ambrosia.add.database.operation.TransactionEntity;
 import com.ambrosia.add.database.operation.query.QTransactionEntity;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CasinoQuery {
 
@@ -33,12 +30,11 @@ public class CasinoQuery {
         QGameResultAggregate alias = QGameResultAggregate.alias();
         List<GameResultAggregate> query = new QGameResultAggregate().select(alias.count, alias.conclusion, alias.name,
             alias.deltaWinnings).findList();
-        Map<String, CasinoGamesCountByName> games = new HashMap<>();
+        CasinoGamesCount games = new CasinoGamesCount();
         for (GameResultAggregate queryEntry : query) {
-            CasinoGamesCountByName byGame = games.computeIfAbsent(queryEntry.name, CasinoGamesCountByName::new);
-            byGame.put(queryEntry);
+            games.put(queryEntry);
         }
-        return new CasinoGamesCount(games);
+        return games;
     }
 
     public CasinoGamesCount totalGames() {

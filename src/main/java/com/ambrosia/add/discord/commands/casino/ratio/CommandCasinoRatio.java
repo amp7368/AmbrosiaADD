@@ -1,4 +1,4 @@
-package com.ambrosia.add.discord.commands.casino.game;
+package com.ambrosia.add.discord.commands.casino.ratio;
 
 import com.ambrosia.add.database.casino.CasinoQuery;
 import com.ambrosia.add.database.casino.game.CasinoGamesCount;
@@ -8,14 +8,14 @@ import discord.util.dcf.gui.base.gui.DCFGui;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
-public class CommandCasinoGames extends BaseSubCommand {
+public class CommandCasinoRatio extends BaseSubCommand {
 
     @Override
     protected void onCheckedCommand(SlashCommandInteractionEvent event) {
         CasinoGamesCount games = new CasinoQuery().totalGames();
         DCFGui gui = new DCFGui(dcf, event::reply);
         for (CasinoGamesCountByName countForGame : games.gamesByName.values()) {
-            gui.addPage(new GuiCasinoGames(gui, countForGame));
+//            gui.addPage(new GuiCasinoRatio(gui, countForGame));
         }
         gui.send();
     }
@@ -27,6 +27,6 @@ public class CommandCasinoGames extends BaseSubCommand {
 
     @Override
     public SubcommandData getData() {
-        return new SubcommandData("games", "Display stats about many games have been played");
+        return new SubcommandData("ratio", "See the house edge");
     }
 }

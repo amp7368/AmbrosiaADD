@@ -11,6 +11,7 @@ public final class CasinoGamesCountByName {
 
     public int count = 0;
     public int deltaWinnings = 0;
+    public long totalExchanged = 0;
 
     public CasinoGamesCountByName(String name) {
         this.name = name;
@@ -19,6 +20,7 @@ public final class CasinoGamesCountByName {
     public void put(GameResultAggregate queryEntry) {
         count += queryEntry.count;
         deltaWinnings += queryEntry.deltaWinnings;
+        totalExchanged += Math.abs(queryEntry.deltaWinnings);
         conclusionToGame.put(queryEntry.conclusion, new CasinoGameCountByConclusion(queryEntry.count, queryEntry.deltaWinnings));
     }
 }
