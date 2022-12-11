@@ -120,6 +120,11 @@ public class BlackjackGame {
         selectedHandIndex = getPlayerHands().size() - 1;
     }
 
+    public void setHandComplete() {
+        getSelectedHand().setCompleted();
+        selectedHandIndex = Math.min(selectedHandIndex + 1, getPlayerHands().size() - 1);
+    }
+
     public void result(BlackjackHandResult handResult) {
         this.results.result(handResult);
     }

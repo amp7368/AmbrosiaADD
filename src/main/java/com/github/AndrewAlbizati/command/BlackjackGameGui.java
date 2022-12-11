@@ -56,15 +56,15 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
         Hand playerHand = game.getSelectedHand();
         playerHand.add(game.getDeck().deal());
 
-        // End game if player busts
+        // End hand if player busts
         if (playerHand.getScore() >= 21) {
-            playerHand.setCompleted();
+            game.setHandComplete();
         }
     }
 
     private void stand(ButtonInteractionEvent event) {
         if (isWrongUser(event)) return;
-        game.getSelectedHand().setCompleted();
+        game.setHandComplete();
     }
 
     private boolean isWrongUser(ButtonInteractionEvent event) {
@@ -89,6 +89,11 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
         game.getPlayerHands().get(game.getSelectedHandIndex() + 1).add(game.getDeck().deal());
     }
 
+    @Override
+    public void remove() {
+        getGame().setGameComplete();
+        editMessage();
+    }
 
     @Override
     public MessageCreateData makeMessage() {
@@ -107,7 +112,6 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
         eb.addField("Dealer's Hand", game.getDealerHand().get(0).toString(), false);
         eb.addField("Your Hand (" + (game.getSelectedHand().isSoft() ? "Soft " : "") + game.getSelectedHand().getScore() + ")",
             game.getSelectedHand().toString(), false);
-
         // Display multiple hands if user has split
         if (game.hasSplit()) {
             StringBuilder sb = new StringBuilder();
@@ -154,14 +158,20 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
         }
         // Game is completed
         if (game.isGameComplete()) {
-            return this.endGameNormal(eb);
+            eb.clearFields();
+            return game.hasSplit() ? this.endMultiHandGame(eb) : this.endOneHandGame(eb);
         }
         // Determine which buttons should be displayed
 
         ActionRow components;
-        if (game.canReserve(game.results().getCurrentBet() * 2) && playerHand.size() == 2) {
-            if (playerHand.get(0).equals(playerHand.get(1))) {
+        boolean canDoubleBet = game.canReserve(game.results().getCurrentBet() * 2);
+        boolean isFirstHand = playerHand.size() == 2;
+        if (canDoubleBet && isFirstHand) {
+            boolean canSplit = playerHand.get(0).equals(playerHand.get(1));
+            if (canSplit) {
                 components = ActionRow.of(HIT_BUTTON, STAND_BUTTON, DOUBLE_DOWN_BUTTON, SPLIT_BUTTON);
+            } else if (game.hasSplit()) {
+                components = ActionRow.of(HIT_BUTTON, STAND_BUTTON);
             } else {
                 components = ActionRow.of(HIT_BUTTON, STAND_BUTTON, DOUBLE_DOWN_BUTTON);
             }
@@ -169,11 +179,6 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
             components = ActionRow.of(HIT_BUTTON, STAND_BUTTON);
         }
         return buildCreate(eb.build(), components);
-    }
-
-    private MessageCreateData endGameNormal(EmbedBuilder eb) {
-        eb.clearFields();
-        return game.hasSplit() ? this.endMultiHandGame(eb) : this.endOneHandGame(eb);
     }
 
 

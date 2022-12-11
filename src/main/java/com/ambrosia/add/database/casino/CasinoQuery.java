@@ -30,11 +30,7 @@ public class CasinoQuery {
         QGameResultAggregate alias = QGameResultAggregate.alias();
         List<GameResultAggregate> query = new QGameResultAggregate().select(alias.count, alias.conclusion, alias.name,
             alias.deltaWinnings).findList();
-        CasinoGamesCount games = new CasinoGamesCount();
-        for (GameResultAggregate queryEntry : query) {
-            games.put(queryEntry);
-        }
-        return games;
+        return new CasinoGamesCount(query);
     }
 
     public CasinoGamesCount totalGames() {

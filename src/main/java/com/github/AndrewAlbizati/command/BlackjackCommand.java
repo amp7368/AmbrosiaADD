@@ -2,12 +2,12 @@ package com.github.AndrewAlbizati.command;
 
 import com.ambrosia.add.api.AmbrosiaAPI;
 import com.ambrosia.add.api.CreditReservation;
-import com.ambrosia.add.discord.util.CommandBuilder;
+import com.ambrosia.add.discord.util.BaseCommand;
 import com.ambrosia.add.discord.util.Emeralds;
 import com.github.AndrewAlbizati.Blackjack;
 import com.github.AndrewAlbizati.game.BlackjackGame;
 import discord.util.dcf.gui.base.gui.DCFGui;
-import discord.util.dcf.slash.DCFSlashCommand;
+import discord.util.dcf.util.TimeMillis;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -16,7 +16,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 /**
  * Handles when a user executes the /blackjack command
  */
-public class BlackjackCommand extends DCFSlashCommand implements CommandBuilder {
+public class BlackjackCommand extends BaseCommand {
 
 
     @Override
@@ -26,13 +26,8 @@ public class BlackjackCommand extends DCFSlashCommand implements CommandBuilder 
         return command;
     }
 
-    /**
-     * Creates and registers a Blackjack game.
-     *
-     * @param event The event.
-     */
     @Override
-    public void onCommand(SlashCommandInteractionEvent event) {
+    public void onCheckedCommand(SlashCommandInteractionEvent event) {
         User user = event.getUser();
 
         Integer bet = findOptionAmount(event);
@@ -58,7 +53,12 @@ public class BlackjackCommand extends DCFSlashCommand implements CommandBuilder 
         }
         BlackjackGame game = new BlackjackGame(bet, reservation);
 
-        DCFGui gui = new DCFGui(dcf, event::reply);
+        DCFGui gui = new DCFGui(dcf, event::reply) {
+            @Override
+            public long getMillisToOld() {
+                return TimeMillis.minToMillis(30);
+            }
+        };
         gui.addPage(new BlackjackGameGui(gui, user, game)).send();
     }
 

@@ -7,6 +7,7 @@ public enum BlackjackHandResult implements HandResult {
     WIN(1),
     PUSH(0),
     LOSE(-1),
+    SPLIT(0),
     BLACKJACK(1.5);
 
     private final double betMultiplier;
