@@ -1,15 +1,15 @@
 package com.ambrosia.add.api;
 
 import com.ambrosia.add.database.client.ClientEntity;
+import com.ambrosia.add.database.game.GameBase;
 import com.ambrosia.add.database.game.GameResultEntity;
 import com.ambrosia.add.database.game.GameStorage;
-import com.ambrosia.add.database.game.OngoingGame;
 
 public class CreditReservation {
 
     private final ClientEntity client;
     private final long reserved;
-    private OngoingGame ongoingGame;
+    private GameBase ongoingGame;
     private CreditReservationRejection rejection;
 
     public CreditReservation(ClientEntity client, long reserved) {
@@ -51,7 +51,11 @@ public class CreditReservation {
     }
 
 
-    public CreditReservation setOngoingGame(OngoingGame ongoingGame) {
+    public GameBase getOngoingGame() {
+        return this.ongoingGame;
+    }
+
+    public CreditReservation setOngoingGame(GameBase ongoingGame) {
         this.ongoingGame = ongoingGame;
         return this;
     }

@@ -4,7 +4,6 @@ import com.ambrosia.add.api.AmbrosiaAPI;
 import com.ambrosia.add.api.CreditReservation;
 import com.ambrosia.add.discord.util.BaseCommand;
 import com.ambrosia.add.discord.util.Emeralds;
-import com.github.AndrewAlbizati.Blackjack;
 import com.github.AndrewAlbizati.game.BlackjackGame;
 import discord.util.dcf.gui.base.gui.DCFGui;
 import discord.util.dcf.util.TimeMillis;
@@ -37,7 +36,7 @@ public class BlackjackCommand extends BaseCommand {
             return;
         }
         // try to reserve with double-down
-        CreditReservation reservation = AmbrosiaAPI.get().reserve(Blackjack.GAME_NAME, user.getIdLong(), bet);
+        CreditReservation reservation = AmbrosiaAPI.get().reserve(user.getIdLong(), bet);
         if (reservation.noPlayer()) {
             this.errorRegisterWithStaff(event);
             return;
