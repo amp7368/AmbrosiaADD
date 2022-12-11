@@ -1,7 +1,8 @@
 package com.ambrosia.add.database.client;
 
-import com.ambrosia.add.database.operation.TransactionType;
+import com.ambrosia.add.database.casino.game.CasinoGamesCount;
 import com.ambrosia.add.database.operation.TransactionStorage;
+import com.ambrosia.add.database.operation.TransactionType;
 import io.ebean.DB;
 import io.ebean.Model;
 import io.ebean.Transaction;
@@ -41,6 +42,7 @@ public class ClientEntity extends Model {
     public long creator;
 
     public transient Map<TransactionType, Long> totals = new HashMap<>();
+    public transient CasinoGamesCount games;
 
     public ClientEntity(long creator, String displayName) {
         this.displayName = displayName;

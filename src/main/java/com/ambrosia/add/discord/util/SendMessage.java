@@ -71,10 +71,15 @@ public interface SendMessage {
         }
         embed.setTimestamp(client.dateCreated.toInstant());
         embed.addBlankField(false);
-        embed.addField("Credits", Emeralds.longMessage(client.credits), false);
-        embed.addField("Winnings", Emeralds.longMessage(client.total(TransactionType.WIN)), true);
+        embed.addField("Credits", Emeralds.longMessage(client.credits), true);
+        long winnings = client.total(TransactionType.WIN);
+        long losses = client.total(TransactionType.LOSS);
         embed.addBlankField(true);
-        embed.addField("Losses", Emeralds.longMessage(client.total(TransactionType.LOSS)), true);
+        embed.addField("Winnings", Emeralds.longMessage(winnings), true);
+        long net = winnings - losses;
+        embed.addField("Net " + (net < 0 ? "Losses" : "Gains"), Emeralds.longMessage(Math.abs(net)), true);
+        embed.addBlankField(true);
+        embed.addField("Losses", Emeralds.longMessage(losses), true);
         return embed.build();
     }
 

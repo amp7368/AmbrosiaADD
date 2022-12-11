@@ -46,7 +46,7 @@ public class GameStorage {
         TransactionEntity transaction = TransactionStorage.get()
             .createOperation(0L, client, result.deltaWinnings, transactionType);
         DiscordLog.log().operation(ClientStorage.get().findByUUID(client), transaction);
-        result.transactionId = transaction.id;
+        result.transaction = transaction;
         synchronized (this.clientToGames) {
             this.clientToGames.remove(client);
         }

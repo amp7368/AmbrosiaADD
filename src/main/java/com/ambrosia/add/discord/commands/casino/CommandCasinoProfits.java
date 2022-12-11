@@ -4,6 +4,7 @@ import static com.ambrosia.add.discord.util.Emeralds.longMessage;
 
 import com.ambrosia.add.database.casino.CasinoQuery;
 import com.ambrosia.add.database.casino.profits.CasinoTotalProfits;
+import com.ambrosia.add.database.casino.profits.CasinoTotalProfitsByOperation;
 import com.ambrosia.add.database.operation.TransactionType;
 import com.ambrosia.add.discord.util.BaseSubCommand;
 import java.util.List;
@@ -35,7 +36,8 @@ public class CommandCasinoProfits extends BaseSubCommand {
 
     @NotNull
     private Field getTotalByType(CasinoTotalProfits totalProfits, TransactionType type) {
-        return new Field(type.displayName(), longMessage(totalProfits.totalByType.get(type).sumAmount()), true);
+        CasinoTotalProfitsByOperation totalByType = totalProfits.totalByType.get(type);
+        return new Field(type.displayName(), longMessage(totalByType == null ? 0 : totalByType.sumAmount()), true);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.ambrosia.add.database.operation;
 
+import com.ambrosia.add.database.game.GameResultEntity;
 import com.ambrosia.add.discord.util.Emeralds;
 import io.ebean.Model;
 import io.ebean.annotation.Aggregation;
@@ -8,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -17,7 +19,10 @@ public class TransactionEntity extends Model {
     @Id
     public long id;
 
-    @JoinColumn(nullable = false)
+    @JoinColumn
+    @OneToOne(mappedBy = "transaction", targetEntity = GameResultEntity.class)
+    public GameResultEntity gameResults;
+    @Column(nullable = false)
     public long clientId;
 
     @Column(nullable = false)

@@ -25,7 +25,7 @@ configurations {
     }
 }
 
-project.ext.ebean_version = '13.10.2'
+project.ext.ebean_version = '13.11.0'
 // https://search.maven.org/search?q=g:io.ebean
 dependencies {
     annotationProcessor "io.ebean:ebean-querybean:${ebean_version}"

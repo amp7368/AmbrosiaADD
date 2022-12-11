@@ -31,10 +31,9 @@ public interface BlackjackMessages extends IMessageBuilder {
             false);
         Hand playerHand = getGame().getSelectedHand();
         eb.addField("Your Hand (" + (playerHand.isSoft() ? "Soft " : "") + playerHand.getScore() + ")", playerHand.toString(), false);
-        eb.setDescription("You have a blackjack! You win " + getFinalWinningsMessage());
+        eb.setDescription("You have a blackjack!\n" + getFinalWinningsMessage());
         eb.setFooter(getAsTag() + " won!", getAvatarUrl());
         return buildCreate(eb.build());
-
     }
 
     default MessageCreateData dealerBlackjack(EmbedBuilder eb) {
@@ -44,14 +43,19 @@ public interface BlackjackMessages extends IMessageBuilder {
         eb.addField("Dealer's Hand (" + (dealerHand.isSoft() ? "Soft " : "") + dealerHand.getScore() + ")", dealerHand.toString(),
             false);
         eb.addField("Your Hand (" + (playerHand.isSoft() ? "Soft " : "") + playerHand.getScore() + ")", playerHand.toString(), false);
-        eb.setDescription("Dealer has a blackjack!");
+        eb.setDescription("Dealer has a blackjack!\n" + getFinalWinningsMessage());
         eb.setFooter(getAsTag() + " lost!", getAvatarUrl());
 
         return buildCreate(eb.build());
     }
 
     private String getFinalWinningsMessage() {
-        return Emeralds.longMessage(Math.abs(getGame().results().getWinnings()));
+        int winnings = getWinnings();
+        String nowHave = Emeralds.longMessage(getGame().getPlayerTotalCredits() + winnings);
+        if (winnings == 0) return String.format("You tied!\n You still have %s", nowHave);
+        String winLose = winnings < 0 ? "lose" : "win";
+        String winningsEmeralds = Emeralds.longMessage(Math.abs(winnings));
+        return String.format("You %s %s!\nYou now have %s", winLose, winningsEmeralds, nowHave);
     }
 
     private int getWinnings() {
@@ -100,8 +104,9 @@ public interface BlackjackMessages extends IMessageBuilder {
             sb.append("**\n");
         }
         eb.addField("Your Hands", sb.toString(), false);
+        getGame().end();
+        eb.setDescription("Split hands!\n" + getFinalWinningsMessage());
         int winnings = getWinnings();
-        eb.setDescription("Split hands");
         if (winnings > 0) {
             eb.setFooter(getUser().getAsTag() + " won!", getUser().getAvatarUrl());
         } else if (winnings < 0) {
@@ -109,7 +114,6 @@ public interface BlackjackMessages extends IMessageBuilder {
         } else {
             eb.setFooter(getUser().getAsTag() + " tied!", getUser().getAvatarUrl());
         }
-        getGame().end();
         return buildCreate(eb.build());
     }
 
@@ -124,12 +128,11 @@ public interface BlackjackMessages extends IMessageBuilder {
         if (hand.getScore() > 21) {
             getGame().result(BlackjackHandResult.LOSE);
             getGame().end();
-            eb.setDescription("You busted!");
+            eb.setDescription("You busted!\n" + getFinalWinningsMessage());
 
             eb.addField("Dealer's Hand (" + (dealerHand.isSoft() ? "Soft " : "") + dealerHand.getScore() + ")", dealerHand.toString(),
                 false);
             eb.addField("Your Hand (" + (hand.isSoft() ? "Soft " : "") + hand.getScore() + ")", hand.toString(), false);
-
             eb.setFooter(getUser().getAsTag() + " lost!", getUser().getAvatarUrl());
             return buildCreate(eb.build());
         }
@@ -147,26 +150,29 @@ public interface BlackjackMessages extends IMessageBuilder {
         // Dealer busts
         if (dealerHand.getScore() > 21) {
             getGame().result(BlackjackHandResult.WIN);
-            eb.setDescription("Dealer busted!");
+            getGame().end();
+            eb.setDescription("Dealer busted!\n" + getFinalWinningsMessage());
             eb.setFooter(getUser().getAsTag() + " won!", getUser().getAvatarUrl());
         } else if (dealerHand.getScore() > hand.getScore()) {
             // Dealer wins
             getGame().result(BlackjackHandResult.LOSE);
-            eb.setDescription("The dealer beat you!");
+            getGame().end();
+            eb.setDescription("The dealer beat you!\n" + getFinalWinningsMessage());
             eb.setFooter(getUser().getAsTag() + " lost!", getUser().getAvatarUrl());
         } else if (hand.getScore() > dealerHand.getScore()) {
             // Player wins
             getGame().result(BlackjackHandResult.WIN);
-            eb.setDescription("You beat the dealer!");
+            getGame().end();
+            eb.setDescription("You beat the dealer!\n" + getFinalWinningsMessage());
             eb.setFooter(getUser().getAsTag() + " won!", getUser().getAvatarUrl());
         } else {
             // Tie
             getGame().result(BlackjackHandResult.PUSH);
-            eb.setDescription("**You and the dealer tied!\n You don't win or lose any credits**");
+            getGame().end();
+            eb.setDescription("Push!\n" + getFinalWinningsMessage());
             eb.setFooter(getUser().getAsTag() + " tied!", getUser().getAvatarUrl());
         }
 
-        getGame().end();
         return buildCreate(eb.build());
     }
 
