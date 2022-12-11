@@ -4,12 +4,12 @@ import com.ambrosia.add.discord.util.Emeralds;
 import com.github.AndrewAlbizati.game.BlackjackGame;
 import com.github.AndrewAlbizati.game.Hand;
 import com.github.AndrewAlbizati.result.BlackjackHandResult;
-import discord.util.dcf.util.IMessageBuilder;
+import discord.util.dcf.util.MessageBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 
-public interface BlackjackMessages extends IMessageBuilder {
+public interface BlackjackMessages extends MessageBuilder {
 
     BlackjackGame getGame();
 
