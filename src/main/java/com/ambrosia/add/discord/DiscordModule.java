@@ -1,6 +1,7 @@
 package com.ambrosia.add.discord;
 
 import apple.lib.modules.AppleModule;
+import apple.lib.modules.configs.data.config.AppleConfig.Builder;
 import apple.lib.modules.configs.factory.AppleConfigLike;
 import com.ambrosia.add.discord.commands.CommandHelp;
 import com.ambrosia.add.discord.commands.casino.CommandCasino;
@@ -10,8 +11,10 @@ import com.ambrosia.add.discord.commands.profile.CommandLink;
 import com.ambrosia.add.discord.commands.profile.CreateProfileCommand;
 import com.ambrosia.add.discord.commands.profile.ProfileCommand;
 import com.ambrosia.add.discord.commands.profile.ViewProfileCommand;
+import com.ambrosia.add.discord.commands.restart.CommandRestart;
 import com.ambrosia.add.discord.commands.stats.CommandStats;
 import com.ambrosia.add.discord.log.DiscordLog;
+import com.ambrosia.add.discord.log.RestartingMessageManager;
 import com.github.AndrewAlbizati.Blackjack;
 import discord.util.dcf.DCF;
 import discord.util.dcf.DCFCommandManager;
@@ -65,13 +68,14 @@ public class DiscordModule extends AppleModule {
         dcfCommands.addCommand(new CommandCash());
         dcfCommands.addCommand(new CommandDelete(), new CommandCasino());
         dcfCommands.addCommand(new CommandHelp());
-        dcfCommands.addCommand(new CommandStats());
+        dcfCommands.addCommand(new CommandStats(), new CommandRestart());
         new DiscordLog(dcf);
     }
 
     @Override
     public void onEnablePost() {
         DiscordBot.dcf.commands().updateCommands();
+        RestartingMessageManager.get().load();
     }
 
     @Override
@@ -81,7 +85,9 @@ public class DiscordModule extends AppleModule {
 
     @Override
     public List<AppleConfigLike> getConfigs() {
-        return List.of(configFolder("Config", configJson(DiscordConfig.class, "Discord.config"),
+        Builder<RestartingMessageManager> restartingMessages = configJson(RestartingMessageManager.class, "Restarting", "Data");
+        RestartingMessageManager.setConfig(restartingMessages.getConfig());
+        return List.of(restartingMessages, configFolder("Config", configJson(DiscordConfig.class, "Discord.config"),
             configJson(DiscordPermissions.class, "Permissions.config")));
     }
 

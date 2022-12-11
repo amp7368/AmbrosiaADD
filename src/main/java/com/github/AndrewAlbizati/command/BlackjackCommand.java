@@ -51,12 +51,14 @@ public class BlackjackCommand extends BaseCommand {
             return;
         }
         BlackjackGame game = new BlackjackGame(bet, reservation);
-
+        game.setChannel(event.getMessageChannel());
+        game.start();
         DCFGui gui = new DCFGui(dcf, event::reply) {
             @Override
             public long getMillisToOld() {
                 return TimeMillis.minToMillis(30);
             }
+
         };
         gui.addPage(new BlackjackGameGui(gui, user, game)).send();
     }

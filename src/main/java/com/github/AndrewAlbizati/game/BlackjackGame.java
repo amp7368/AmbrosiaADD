@@ -2,6 +2,7 @@ package com.github.AndrewAlbizati.game;
 
 import com.ambrosia.add.api.CreditReservation;
 import com.ambrosia.add.database.game.GameBase;
+import com.github.AndrewAlbizati.Blackjack;
 import com.github.AndrewAlbizati.result.BlackjackGameResult;
 import com.github.AndrewAlbizati.result.BlackjackHandResult;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class BlackjackGame extends GameBase {
 
 
     public BlackjackGame(int bet, CreditReservation creditReservation) {
+        super(creditReservation);
         this.creditReservation = creditReservation;
         this.results = new BlackjackGameResult(bet);
 
@@ -38,6 +40,11 @@ public class BlackjackGame extends GameBase {
 
         playerHand.get(0).add(getDeck().deal());
         dealerHand.add(getDeck().deal());
+    }
+
+    @Override
+    public String getName() {
+        return Blackjack.GAME_NAME;
     }
 
     /**
@@ -131,6 +138,7 @@ public class BlackjackGame extends GameBase {
 
     public void end() {
         this.creditReservation.release(this.results.toEntity());
+        super.end();
     }
 
     public BlackjackGameResult results() {
