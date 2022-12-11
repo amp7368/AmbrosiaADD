@@ -91,8 +91,9 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
 
     @Override
     public void remove() {
+        if (!game.isGameComplete())
+            editMessage();
         getGame().setGameComplete();
-        editMessage();
     }
 
     @Override
@@ -159,7 +160,9 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
         // Game is completed
         if (game.isGameComplete()) {
             eb.clearFields();
-            return game.hasSplit() ? this.endMultiHandGame(eb) : this.endOneHandGame(eb);
+            if (game.hasSplit()) {
+                return this.endMultiHandGame(eb);
+            } else return this.endOneHandGame(eb);
         }
         // Determine which buttons should be displayed
 

@@ -2,6 +2,7 @@ package com.github.AndrewAlbizati.result;
 
 import com.ambrosia.add.database.game.GameResult;
 import com.ambrosia.add.database.game.GameResultEntity;
+import com.github.AndrewAlbizati.Blackjack;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class BlackjackGameResult extends GameResult {
     }
 
     public BlackjackGameResult(int originalBet) {
-        super("blackjack", originalBet);
+        super(Blackjack.GAME_NAME, originalBet);
     }
 
     @Override

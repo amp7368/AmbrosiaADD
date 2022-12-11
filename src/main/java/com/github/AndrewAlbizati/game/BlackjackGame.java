@@ -1,6 +1,8 @@
 package com.github.AndrewAlbizati.game;
 
 import com.ambrosia.add.api.CreditReservation;
+import com.ambrosia.add.database.game.GameBase;
+import com.github.AndrewAlbizati.Blackjack;
 import com.github.AndrewAlbizati.result.BlackjackGameResult;
 import com.github.AndrewAlbizati.result.BlackjackHandResult;
 import java.util.ArrayList;
@@ -9,7 +11,7 @@ import java.util.List;
 /**
  * Represents a game of Blackjack. Each user can only be playing 1 game.
  */
-public class BlackjackGame {
+public class BlackjackGame extends GameBase {
 
     private final CreditReservation creditReservation;
 
@@ -23,6 +25,7 @@ public class BlackjackGame {
 
 
     public BlackjackGame(int bet, CreditReservation creditReservation) {
+        super(creditReservation);
         this.creditReservation = creditReservation;
         this.results = new BlackjackGameResult(bet);
 
@@ -39,6 +42,10 @@ public class BlackjackGame {
         dealerHand.add(getDeck().deal());
     }
 
+    @Override
+    public String getName() {
+        return Blackjack.GAME_NAME;
+    }
 
     /**
      * Returns the index of the hand that the user is currently playing with. Only used if the user has split and has multiple active
@@ -102,7 +109,7 @@ public class BlackjackGame {
     }
 
     public boolean hasSplit() {
-        return this.playerHand.size() > 1;
+        return this.getPlayerHands().size() > 1;
     }
 
     public boolean isGameComplete() {
@@ -131,6 +138,7 @@ public class BlackjackGame {
 
     public void end() {
         this.creditReservation.release(this.results.toEntity());
+        super.end();
     }
 
     public BlackjackGameResult results() {

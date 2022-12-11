@@ -12,7 +12,7 @@ public class CommandHelp extends BaseCommand {
 
     @Override
     public SlashCommandData getData() {
-        return Commands.slash("help", "Various commands");
+        return Commands.slash("help", "Various help commands");
     }
 
     @Override

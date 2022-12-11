@@ -1,7 +1,6 @@
 package com.ambrosia.add.database.game;
 
 import com.ambrosia.add.api.CreditReservation;
-import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.client.ClientStorage;
 import com.ambrosia.add.database.operation.TransactionEntity;
 import com.ambrosia.add.database.operation.TransactionStorage;
@@ -19,22 +18,21 @@ public class GameStorage {
         instance = this;
     }
 
-    private final Map<Long, OngoingGame> clientToGames = new HashMap<>();
+    private final Map<Long, GameBase> clientToGames = new HashMap<>();
 
     public static GameStorage get() {
         return instance;
     }
 
-    public OngoingGame startGame(ClientEntity client, String name) {
-        OngoingGame startedGame = new OngoingGame(name);
+    public GameBase startGame(GameBase startedGame) {
         synchronized (this.clientToGames) {
-            this.clientToGames.put(client.uuid, startedGame);
+            this.clientToGames.put(startedGame.getClient().uuid, startedGame);
         }
         return startedGame;
     }
 
     @Nullable
-    public OngoingGame findOngoingGame(long uuid) {
+    public GameBase findOngoingGame(long uuid) {
         synchronized (this.clientToGames) {
             return this.clientToGames.get(uuid);
         }
@@ -51,5 +49,11 @@ public class GameStorage {
             this.clientToGames.remove(client);
         }
         result.save();
+    }
+
+    public Map<Long, GameBase> getOngoingGames() {
+        synchronized (this.clientToGames) {
+            return new HashMap<>(this.clientToGames);
+        }
     }
 }
