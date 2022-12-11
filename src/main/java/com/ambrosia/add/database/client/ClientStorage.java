@@ -6,6 +6,7 @@ import com.ambrosia.add.database.operation.TransactionStorage;
 import io.ebean.DB;
 import io.ebean.Transaction;
 import java.util.List;
+import net.dv8tion.jda.api.entities.Member;
 import org.jetbrains.annotations.Nullable;
 
 public class ClientStorage {
@@ -42,9 +43,10 @@ public class ClientStorage {
     }
 
     @Nullable
-    public ClientEntity createClient(long conductorId, String clientName) {
+    public ClientEntity createClient(long conductorId, String clientName, Member discord) {
         ClientEntity client = new ClientEntity(conductorId, clientName);
         client.setMinecraft(ClientMinecraftDetails.fromUsername(clientName));
+        if (discord != null) client.setDiscord(new ClientDiscordDetails(discord));
         try (Transaction transaction = DB.getDefault().beginTransaction()) {
             boolean isUnique = DB.getDefault().checkUniqueness(client, transaction).isEmpty();
             if (!isUnique) return null;
