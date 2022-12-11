@@ -3,7 +3,6 @@ package com.ambrosia.add.database;
 import apple.lib.modules.AppleModule;
 import apple.lib.modules.configs.factory.AppleConfigLike;
 import com.ambrosia.add.Ambrosia;
-import com.ambrosia.add.database.casino.GameResultAggregate;
 import com.ambrosia.add.database.client.ClientDiscordDetails;
 import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.client.ClientMinecraftDetails;
@@ -47,13 +46,9 @@ public class AmbrosiaDatabase extends AppleModule {
         dbConfig.setDataSourceConfig(dataSourceConfig);
         dbConfig.setDdlGenerate(true);
 //        dbConfig.setDdlRun(true);
-
-        // tables
-        dbConfig.addAll(List.of(TransactionEntity.class, GameResultEntity.class, ClientEntity.class));
-        // embedded
-        dbConfig.addAll(List.of(ClientMinecraftDetails.class, ClientDiscordDetails.class));
-        // aggregates
-        dbConfig.addAll(List.of(GameResultAggregate.class));
+        dbConfig.addAll(
+            List.of(TransactionEntity.class, GameResultEntity.class, ClientEntity.class, ClientMinecraftDetails.class,
+                ClientDiscordDetails.class));
         return dbConfig;
     }
 

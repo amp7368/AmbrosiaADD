@@ -19,6 +19,24 @@ public interface CommandBuilder extends SendMessage {
     String EMERALD_BLOCK_OPTION = "blocks";
     String LIQUID_EMERALD_OPTION = "liquids";
 
+    default boolean isBadPermission(SlashCommandInteractionEvent event) {
+        Member sender = event.getMember();
+        if (sender == null) {
+            event.replyEmbeds(this.error("Guilds only")).queue(); // this is a guild only command
+            return true;
+        }
+        boolean wrongDiscord = DiscordPermissions.get().wrongServer(event.getGuild());
+        if (wrongDiscord) {
+            event.replyEmbeds(this.error("Wrong server >:(")).queue();
+        }
+        boolean hasPermission = DiscordPermissions.get().isDealer(sender.getRoles());
+        if (!hasPermission) {
+            event.replyEmbeds(this.isNotDealer(event)).queue();
+            return true;
+        }
+        return false;
+    }
+
     @Nullable
     default ClientEntity findClient(SlashCommandInteractionEvent event) {
         @Nullable String clientName = findOptionProfileName(event);

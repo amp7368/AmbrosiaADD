@@ -16,8 +16,8 @@ import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 
 public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMessages {
 
-    private static final Button STAND_BUTTON = Button.danger("stand", "Stand");
-    private static final Button HIT_BUTTON = Button.success("hit", "Hit");
+    private static final Button STAND_BUTTON = Button.primary("stand", "Stand");
+    private static final Button HIT_BUTTON = Button.primary("hit", "Hit");
     private static final Button DOUBLE_DOWN_BUTTON = Button.primary("dd", "Double Down");
     private static final Button SPLIT_BUTTON = Button.primary("split", "Split");
     private final User user;
