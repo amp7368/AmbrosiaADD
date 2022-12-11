@@ -5,8 +5,10 @@ import io.ebean.annotation.Identity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "game_result_entity")
 public class GameResultEntity extends Model {
 
     @Id

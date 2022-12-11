@@ -38,7 +38,7 @@ public class BlackjackCommand extends DCFSlashCommand implements CommandBuilder 
         Integer bet = findOptionAmount(event);
         if (bet == null) return;
         if (isBetTooMuch(bet)) {
-            event.reply("16 le limit").setEphemeral(true).queue();
+            event.reply("24 le limit").setEphemeral(true).queue();
             return;
         }
         // try to reserve with double-down
@@ -63,6 +63,6 @@ public class BlackjackCommand extends DCFSlashCommand implements CommandBuilder 
     }
 
     private boolean isBetTooMuch(Integer bet) {
-        return bet > Emeralds.leToEmeralds(16);
+        return bet > Emeralds.leToEmeralds(24);
     }
 }
