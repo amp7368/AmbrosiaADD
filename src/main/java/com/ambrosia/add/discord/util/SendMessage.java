@@ -2,6 +2,7 @@ package com.ambrosia.add.discord.util;
 
 import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.operation.TransactionType;
+import com.ambrosia.add.discord.DiscordBot;
 import com.ambrosia.add.discord.DiscordModule;
 import java.awt.Color;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -27,8 +28,8 @@ public interface SendMessage {
         return error().setDescription(msg).build();
     }
 
-    default MessageEmbed isNotDealer(SlashCommandInteractionEvent event) {
-        return error(String.format("You must be a dealer to run '/%s'", event.getFullCommandName()));
+    default MessageEmbed badRole(String role, SlashCommandInteractionEvent event) {
+        return error(String.format("You must be a %s to run '/%s'", role, event.getFullCommandName()));
     }
 
     default MessageEmbed missingOption(String option) {
@@ -75,5 +76,9 @@ public interface SendMessage {
         embed.addBlankField(true);
         embed.addField("Losses", Emeralds.longMessage(client.total(TransactionType.LOSS)), true);
         return embed.build();
+    }
+
+    default EmbedBuilder embedCasino() {
+        return new EmbedBuilder().setColor(DiscordBot.CASINO_COLOR);
     }
 }
