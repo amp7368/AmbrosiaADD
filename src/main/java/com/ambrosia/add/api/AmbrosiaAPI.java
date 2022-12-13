@@ -20,7 +20,12 @@ public class AmbrosiaAPI extends AppleModule {
 
     public synchronized CreditReservation reserve(long discordId, long reserve) {
         ClientEntity client = ClientStorage.get().findByDiscord(discordId);
-        if (client == null) return new CreditReservation(null, reserve).setRejected(CreditReservationRejection.NO_CLIENT);
+        if (client == null) {
+            if(reserve == 0){
+                return new CreditReservation(new ClientEntity(0,"Guest"), reserve);
+            }
+            return new CreditReservation(null, reserve).setRejected(CreditReservationRejection.NO_CLIENT);
+        }
 
         GameBase ongoingGame = GameStorage.get().findOngoingGame(client.uuid);
         CreditReservation reservation = new CreditReservation(client, reserve);

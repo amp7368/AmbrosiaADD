@@ -39,15 +39,16 @@ public class GameStorage {
     }
 
     public void endGame(CreditReservation reservation, GameResultEntity result) {
-        TransactionType transactionType = result.deltaWinnings < 0 ? TransactionType.LOSS : TransactionType.WIN;
         long client = reservation.getClient().uuid;
+        synchronized (this.clientToGames) {
+            this.clientToGames.remove(client);
+        }
+        if (result.originalBet == 0) return;
+        TransactionType transactionType = result.deltaWinnings < 0 ? TransactionType.LOSS : TransactionType.WIN;
         TransactionEntity transaction = TransactionStorage.get()
             .createOperation(0L, client, result.deltaWinnings, transactionType);
         DiscordLog.log().operation(ClientStorage.get().findByUUID(client), transaction);
         result.transaction = transaction;
-        synchronized (this.clientToGames) {
-            this.clientToGames.remove(client);
-        }
         result.save();
     }
 

@@ -35,9 +35,4 @@ public class GameResultEntity extends Model {
     public GameResultEntity(String name) {
         this.name = name;
     }
-
-    public void addWinnings(long winnings) {
-        this.deltaWinnings += winnings;
-    }
-
 }

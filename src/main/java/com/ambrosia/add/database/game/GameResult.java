@@ -51,8 +51,8 @@ public abstract class GameResult {
         this.deltaWinnings += Math.ceil(currentBet * betMultiplier);
     }
 
-    public void multiplyBet(double multiplier) {
-        this.currentBet = (int) Math.ceil(this.currentBet * multiplier);
+    public void multiplyBet(int multiplier) {
+        this.currentBet = this.currentBet * multiplier;
     }
 
     public long getCurrentBet() {
@@ -61,5 +61,9 @@ public abstract class GameResult {
 
     public int getWinnings() {
         return this.deltaWinnings;
+    }
+
+    public int getOriginalBet() {
+        return this.originalBet;
     }
 }

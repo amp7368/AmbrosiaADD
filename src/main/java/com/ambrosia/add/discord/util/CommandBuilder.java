@@ -49,11 +49,11 @@ public interface CommandBuilder extends SendMessage {
     }
 
     default void addOptionProfileName(SlashCommandData command) {
-        command.addOption(OptionType.STRING, PROFILE_NAME_OPTION, "The name of the profile to be created", true);
+        command.addOption(OptionType.STRING, PROFILE_NAME_OPTION, "The name of the profile to be created", true, true);
     }
 
     default void addOptionProfileName(SubcommandData command) {
-        command.addOption(OptionType.STRING, PROFILE_NAME_OPTION, "The name of the profile to be created", true);
+        command.addOption(OptionType.STRING, PROFILE_NAME_OPTION, "The name of the profile to be created", true, true);
     }
 
     default Integer findOptionAmount(SlashCommandInteractionEvent event) {
@@ -68,10 +68,7 @@ public interface CommandBuilder extends SendMessage {
             event.replyEmbeds(error("Total must be positive!")).setEphemeral(true).queue();
             return null;
         }
-        if (total == 0) {
-            event.replyEmbeds(error("At least one option must be supplied")).setEphemeral(true).queue();
-            return null;
-        }
+
         return total;
     }
 

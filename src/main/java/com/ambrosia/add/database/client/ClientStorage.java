@@ -8,24 +8,39 @@ import com.ambrosia.add.database.operation.TransactionEntity;
 import com.ambrosia.add.database.operation.TransactionStorage;
 import io.ebean.DB;
 import io.ebean.Transaction;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 import net.dv8tion.jda.api.entities.Member;
 import org.jetbrains.annotations.Nullable;
 
 public class ClientStorage {
 
     private static ClientStorage instance;
+    private final Map<Long, ClientEntity> allClients = new HashMap<>();
 
     public ClientStorage() {
         instance = this;
+        List<ClientEntity> clients = new QClientEntity().findList();
+        for (ClientEntity client : clients) {
+            updateClient(client);
+        }
     }
 
     public static ClientStorage get() {
         return instance;
     }
 
+    public void updateClient(ClientEntity client) {
+        synchronized (allClients) {
+            this.allClients.put(client.uuid, client);
+        }
+    }
+
     private ClientEntity fillInClient(ClientEntity client) {
         List<TransactionEntity> byOperationType = TransactionStorage.get().aggregateByType(client);
+        client.totals = new HashMap<>();
         for (TransactionEntity aggregation : byOperationType) {
             client.totals.put(aggregation.operationType, aggregation.sumAmount);
         }
@@ -60,6 +75,7 @@ public class ClientStorage {
             client.save(transaction);
             transaction.commit();
         }
+        updateClient(client);
         return fillInClient(client);
     }
 
@@ -68,5 +84,11 @@ public class ClientStorage {
         ClientEntity client = new QClientEntity().where().uuid.eq(uuid).findOne();
         if (client == null) return null;
         return fillInClient(client);
+    }
+
+    public Stream<ClientEntity> allNames() {
+        synchronized (allClients) {
+            return allClients.values().stream();
+        }
     }
 }

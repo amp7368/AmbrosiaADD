@@ -91,9 +91,11 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
 
     @Override
     public void remove() {
-        if (!game.isGameComplete())
+        if (!game.isGameComplete()) {
+            getGame().setGameComplete();
             editMessage();
-        getGame().setGameComplete();
+            getGame().end();
+        }
     }
 
     @Override
@@ -107,7 +109,6 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
                 + "Dealer must stand on all 17s\n" + "Blackjack pays 3 to 2");
         eb.setColor(new Color(184, 0, 9));
         eb.setFooter("Game with " + user.getAsTag(), user.getAvatarUrl());
-        eb.setThumbnail("https://the-datascientist.com/wp-content/uploads/2020/05/counting-cards-black-jack.png");
 
         // Show the dealer's up card and the players hand
         eb.addField("Dealer's Hand", game.getDealerHand().get(0).toString(), false);
@@ -144,7 +145,7 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
         boolean dealerBlackjack = game.getDealerHand().getScore() == 21 && game.getDealerHand().size() == 2 && !game.hasSplit();
         if (playerBlackjack && !dealerBlackjack) {
             getGame().result(BlackjackHandResult.BLACKJACK);
-            getGame().end();
+            end();
             return this.playerBlackJack(eb);
         }
 
@@ -168,13 +169,11 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
 
         ActionRow components;
         boolean canDoubleBet = game.canReserve(game.results().getCurrentBet() * 2);
-        boolean isFirstHand = playerHand.size() == 2;
-        if (canDoubleBet && isFirstHand) {
+        boolean isFirstHand = game.getSelectedHand().size() == 2;
+        if (canDoubleBet && !game.hasSplit() && isFirstHand) {
             boolean canSplit = playerHand.get(0).equals(playerHand.get(1));
             if (canSplit) {
                 components = ActionRow.of(HIT_BUTTON, STAND_BUTTON, DOUBLE_DOWN_BUTTON, SPLIT_BUTTON);
-            } else if (game.hasSplit()) {
-                components = ActionRow.of(HIT_BUTTON, STAND_BUTTON);
             } else {
                 components = ActionRow.of(HIT_BUTTON, STAND_BUTTON, DOUBLE_DOWN_BUTTON);
             }
@@ -184,5 +183,9 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
         return buildCreate(eb.build(), components);
     }
 
-
+    @Override
+    public void end() {
+        getGame().end();
+        this.remove();
+    }
 }

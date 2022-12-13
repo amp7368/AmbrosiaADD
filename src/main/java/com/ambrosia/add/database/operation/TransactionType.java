@@ -7,8 +7,10 @@ public enum TransactionType {
     WITHDRAW(0),
     DEPOSIT(1),
     WIN(2),
-    LOSS(3);
-
+    LOSS(3),
+    TRADE_GIVE(4),
+    TRADE_GET(5),
+    AWARD(6);
     private final int id;
 
     TransactionType(int id) {

@@ -33,6 +33,31 @@ public class TransactionStorage {
         }
     }
 
+    public ClientEntity trade(long clientTradingUUID, long clientReceivingUUID, Integer amount) {
+        try (Transaction transaction = DB.getDefault().beginTransaction()) {
+            // create the transactions
+            TransactionEntity tradeGive = new TransactionEntity(clientTradingUUID, clientTradingUUID, -amount,
+                TransactionType.TRADE_GIVE);
+            TransactionEntity tradeGet = new TransactionEntity(clientTradingUUID,clientReceivingUUID, amount,
+                TransactionType.TRADE_GET);
+
+            // get the clients (in this transaction
+            ClientEntity clientTrading = ClientStorage.get().findByUUID(clientTradingUUID);
+            ClientEntity clientReceiving = ClientStorage.get().findByUUID(clientReceivingUUID);
+            if (clientReceiving == null || clientTrading == null)
+                throw new IllegalStateException("Client " + clientTradingUUID + " | " + clientReceivingUUID + " does not exist!");
+
+            // update the DB
+            clientTrading.addCredits(TransactionType.TRADE_GIVE, -amount);
+            clientReceiving.addCredits(TransactionType.TRADE_GET, amount);
+            DB.getDefault().save(tradeGive, transaction);
+            DB.getDefault().update(clientTrading, transaction);
+            DB.getDefault().save(tradeGet, transaction);
+            DB.getDefault().update(clientReceiving, transaction);
+            return clientTrading;
+        }
+    }
+
     public TransactionEntity delete(Long id) {
         TransactionEntity operation = DB.getDefault().find(TransactionEntity.class, id);
         if (operation == null) return null;

@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -51,10 +52,6 @@ public class ClientEntity extends Model {
         this.creator = creator;
     }
 
-    public ClientEntity() {
-
-    }
-
     public void addCredits(TransactionType transactionType, long add) {
         this.totals.compute(transactionType, (k, a) -> a == null ? add : add + a);
         this.credits += add;
@@ -73,6 +70,7 @@ public class ClientEntity extends Model {
             if (!DB.getDefault().checkUniqueness(this, transaction).isEmpty()) return false;
             super.save(transaction);
             transaction.commit();
+            ClientStorage.get().updateClient(this);
             return true;
         }
     }
@@ -83,5 +81,23 @@ public class ClientEntity extends Model {
 
     public boolean hasAnyTransactions() {
         return !TransactionStorage.get().findTransactions(this.uuid).isEmpty();
+    }
+
+    public String bestImgUrl() {
+        if (minecraft == null) {
+            if (discord == null) {
+                return null;
+            }
+            return discord.avatarUrl;
+        }
+        return minecraft.skinUrl();
+    }
+
+    public <T> T minecraft(Function<ClientMinecraftDetails, T> fn, T defaultIfNull) {
+        return this.minecraft == null ? defaultIfNull : fn.apply(this.minecraft);
+    }
+
+    public <T> T discord(Function<ClientDiscordDetails, T> fn, T defaultIfNull) {
+        return this.discord == null ? defaultIfNull : fn.apply(this.discord);
     }
 }

@@ -4,15 +4,17 @@ import apple.lib.modules.AppleModule;
 import apple.lib.modules.configs.data.config.AppleConfig.Builder;
 import apple.lib.modules.configs.factory.AppleConfigLike;
 import com.ambrosia.add.discord.commands.CommandHelp;
-import com.ambrosia.add.discord.commands.casino.CommandCasino;
-import com.ambrosia.add.discord.commands.delete.CommandDelete;
-import com.ambrosia.add.discord.commands.operation.CommandCash;
-import com.ambrosia.add.discord.commands.profile.CommandLink;
-import com.ambrosia.add.discord.commands.profile.CreateProfileCommand;
-import com.ambrosia.add.discord.commands.profile.ProfileCommand;
-import com.ambrosia.add.discord.commands.profile.ViewProfileCommand;
-import com.ambrosia.add.discord.commands.restart.CommandRestart;
-import com.ambrosia.add.discord.commands.stats.CommandStats;
+import com.ambrosia.add.discord.commands.dealer.cash.CommandCash;
+import com.ambrosia.add.discord.commands.dealer.profile.CommandLink;
+import com.ambrosia.add.discord.commands.dealer.profile.CreateProfileCommand;
+import com.ambrosia.add.discord.commands.dealer.view.ViewProfileCommand;
+import com.ambrosia.add.discord.commands.manager.casino.CommandCasino;
+import com.ambrosia.add.discord.commands.manager.delete.CommandDelete;
+import com.ambrosia.add.discord.commands.manager.restart.CommandRestart;
+import com.ambrosia.add.discord.commands.player.profile.ProfileCommand;
+import com.ambrosia.add.discord.commands.player.request.CommandRequest;
+import com.ambrosia.add.discord.commands.player.stats.CommandStats;
+import com.ambrosia.add.discord.commands.player.trade.CommandTrade;
 import com.ambrosia.add.discord.log.DiscordLog;
 import com.ambrosia.add.discord.log.RestartingMessageManager;
 import com.github.AndrewAlbizati.Blackjack;
@@ -64,12 +66,17 @@ public class DiscordModule extends AppleModule {
         DiscordBot.dcf = dcf;
 
         DCFCommandManager dcfCommands = dcf.commands();
-        dcfCommands.addCommand(new CreateProfileCommand(), new ProfileCommand(), new ViewProfileCommand(), new CommandLink());
-        dcfCommands.addCommand(new CommandCash());
-        dcfCommands.addCommand(new CommandDelete(), new CommandCasino());
+        // dealer
+        dcfCommands.addCommand(new CommandCash(), new ViewProfileCommand(), new CommandLink(), new CommandRestart());
+        // player
+        dcfCommands.addCommand(new CreateProfileCommand(), new ProfileCommand(), new CommandRequest(), new CommandTrade());
         dcfCommands.addCommand(new CommandHelp());
-        dcfCommands.addCommand(new CommandStats(), new CommandRestart());
+        // manager
+        dcfCommands.addCommand(new CommandDelete(), new CommandCasino());
+
+        dcfCommands.addCommand(new CommandStats());
         new DiscordLog(dcf);
+        dcf.jda().addEventListener(new ProfileAutoComplete());
     }
 
     @Override
