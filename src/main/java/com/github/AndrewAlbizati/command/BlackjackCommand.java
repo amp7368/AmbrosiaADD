@@ -47,7 +47,7 @@ public class BlackjackCommand extends BaseCommand {
         }
         if (reservation.notEnoughCredits()) {
             long difference = reservation.getReserved() - reservation.getClientCredits();
-            event.reply("Sorry, you need " + difference + " more " + "credit" + (difference == 1 ? "." : "s.")).queue();
+            event.reply("Sorry, you need " + difference + " more " + "credit" + (difference == 1 ? "." : "s.")).setEphemeral(true).queue();
             return;
         }
         BlackjackGame game = new BlackjackGame(bet, reservation);

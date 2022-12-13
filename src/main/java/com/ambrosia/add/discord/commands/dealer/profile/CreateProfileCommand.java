@@ -1,7 +1,8 @@
-package com.ambrosia.add.discord.commands.player.profile;
+package com.ambrosia.add.discord.commands.dealer.profile;
 
 import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.client.ClientStorage;
+import com.ambrosia.add.discord.commands.dealer.profile.CommandLinkDiscord;
 import com.ambrosia.add.discord.log.DiscordLog;
 import com.ambrosia.add.discord.util.BaseCommand;
 import net.dv8tion.jda.api.entities.Member;

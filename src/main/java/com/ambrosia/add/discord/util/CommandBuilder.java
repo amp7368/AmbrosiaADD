@@ -68,10 +68,7 @@ public interface CommandBuilder extends SendMessage {
             event.replyEmbeds(error("Total must be positive!")).setEphemeral(true).queue();
             return null;
         }
-        if (total == 0) {
-            event.replyEmbeds(error("At least one option must be supplied")).setEphemeral(true).queue();
-            return null;
-        }
+
         return total;
     }
 

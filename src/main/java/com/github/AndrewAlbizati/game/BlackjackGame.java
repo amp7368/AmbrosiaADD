@@ -137,6 +137,7 @@ public class BlackjackGame extends GameBase {
     }
 
     public void end() {
+        this.setGameComplete();
         this.creditReservation.release(this.results.toEntity());
         super.end();
     }

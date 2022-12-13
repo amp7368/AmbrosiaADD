@@ -52,7 +52,8 @@ public interface BlackjackMessages extends IMessageBuilder {
     private String getFinalWinningsMessage() {
         int winnings = getWinnings();
         String nowHave = Emeralds.longMessage(getGame().getPlayerTotalCredits() + winnings);
-        if (winnings == 0) return String.format("You tied!\n You still have %s", nowHave);
+        if (getGame().results().getOriginalBet() == 0) return String.format("You bet nothing, so you still have %s", nowHave);
+        else if (winnings == 0) return String.format("You tied!\n You still have %s", nowHave);
         String winLose = winnings < 0 ? "lose" : "win";
         String winningsEmeralds = Emeralds.longMessage(Math.abs(winnings));
         return String.format("You %s %s!\nYou now have %s", winLose, winningsEmeralds, nowHave);
@@ -123,9 +124,9 @@ public interface BlackjackMessages extends IMessageBuilder {
     default MessageCreateData endOneHandGame(EmbedBuilder eb) {
         Hand hand = getGame().getPlayerHands().get(0);
 
-        // Player busts
         Hand dealerHand = getGame().getDealerHand();
         if (hand.getScore() > 21) {
+            // Player busts
             getGame().result(BlackjackHandResult.LOSE);
             getGame().end();
             eb.setDescription("You busted!\n" + getFinalWinningsMessage());
@@ -176,4 +177,5 @@ public interface BlackjackMessages extends IMessageBuilder {
         return buildCreate(eb.build());
     }
 
+    void end();
 }

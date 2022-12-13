@@ -8,6 +8,7 @@ import com.ambrosia.add.database.operation.TransactionEntity;
 import com.ambrosia.add.database.operation.TransactionStorage;
 import io.ebean.DB;
 import io.ebean.Transaction;
+import java.util.HashMap;
 import java.util.List;
 import net.dv8tion.jda.api.entities.Member;
 import org.jetbrains.annotations.Nullable;
@@ -26,6 +27,7 @@ public class ClientStorage {
 
     private ClientEntity fillInClient(ClientEntity client) {
         List<TransactionEntity> byOperationType = TransactionStorage.get().aggregateByType(client);
+        client.totals = new HashMap<>();
         for (TransactionEntity aggregation : byOperationType) {
             client.totals.put(aggregation.operationType, aggregation.sumAmount);
         }

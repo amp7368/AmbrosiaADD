@@ -1,4 +1,4 @@
-package com.ambrosia.add.discord.commands.player.profile;
+package com.ambrosia.add.discord.commands.dealer.profile;
 
 import com.ambrosia.add.discord.util.BaseCommand;
 import discord.util.dcf.slash.DCFSlashSubCommand;

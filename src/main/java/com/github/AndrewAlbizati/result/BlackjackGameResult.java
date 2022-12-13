@@ -19,12 +19,12 @@ public class BlackjackGameResult extends GameResult {
     protected String overflowHandResult(String original, String next) {
         if (hands != null) {
             hands.add(next);
-            return "SPLIT";
+            return BlackjackHandResult.SPLIT.resultName();
         }
         hands = new ArrayList<>();
         hands.add(original);
         hands.add(next);
-        return "SPLIT";
+        return BlackjackHandResult.SPLIT.resultName();
 
     }
 

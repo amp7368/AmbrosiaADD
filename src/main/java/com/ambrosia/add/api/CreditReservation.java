@@ -11,6 +11,7 @@ public class CreditReservation {
     private final long reserved;
     private GameBase ongoingGame;
     private CreditReservationRejection rejection;
+    private boolean notEnded = true;
 
     public CreditReservation(ClientEntity client, long reserved) {
         this.client = client;
@@ -61,6 +62,9 @@ public class CreditReservation {
     }
 
     public void release(GameResultEntity result) {
-        GameStorage.get().endGame(this, result);
+        if (this.notEnded) {
+            notEnded = false;
+            GameStorage.get().endGame(this, result);
+        }
     }
 }

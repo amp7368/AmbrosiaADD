@@ -1,6 +1,7 @@
 package com.ambrosia.add.discord.commands.manager.restart;
 
 import apple.utilities.util.Pretty;
+import com.ambrosia.add.Ambrosia;
 import com.ambrosia.add.database.game.GameBase;
 import com.ambrosia.add.database.game.GameStorage;
 import com.ambrosia.add.discord.log.RestartingMessageManager;
@@ -10,6 +11,8 @@ import java.util.Map;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
@@ -17,6 +20,14 @@ public class CommandRestart extends BaseCommand {
 
     @Override
     protected void onCheckedCommand(SlashCommandInteractionEvent event) {
+        Boolean force = findOption(event, "force", OptionMapping::getAsBoolean, false);
+        if (force != null && force) {
+            event.reply("Disabling (doesn't actually restart the bot. Just disable and re-enable, so it might not fix things)")
+                .queue();
+            Ambrosia.get().onDisable_();
+            new Thread(Ambrosia.get()::start).start();
+            return;
+        }
         Map<Long, GameBase> ongoingGames = GameStorage.get().getOngoingGames();
         MessageEmbed embed = makeMessage(ongoingGames);
         for (GameBase game : ongoingGames.values()) {
@@ -34,7 +45,8 @@ public class CommandRestart extends BaseCommand {
         embed.setTitle(String.format("Ongoing Games (%d)", ongoingGames.size()));
         embed.setColor(Color.RED);
         for (GameBase game : ongoingGames.values()) {
-            embed.addField(Pretty.spaceEnumWords(game.getName()), game.getClient().displayName + " in " + game.getChannel().getAsMention(), false);
+            embed.addField(Pretty.spaceEnumWords(game.getName()),
+                game.getClient().displayName + " in " + game.getChannel().getAsMention(), false);
         }
         return embed.build();
     }
@@ -46,6 +58,7 @@ public class CommandRestart extends BaseCommand {
 
     @Override
     public SlashCommandData getData() {
-        return Commands.slash("restart", "Message ongoing players that the bot will restart soon.");
+        return Commands.slash("restart", "Message ongoing players that the bot will restart soon.")
+            .addOption(OptionType.BOOLEAN, "force", "Force the bot to 'restart'");
     }
 }

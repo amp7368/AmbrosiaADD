@@ -1,5 +1,6 @@
 package com.ambrosia.add.discord.commands.dealer.cash;
 
+import com.ambrosia.add.discord.commands.dealer.cash.add.CommandAward;
 import com.ambrosia.add.discord.commands.dealer.cash.add.CommandDeposit;
 import com.ambrosia.add.discord.commands.dealer.cash.add.CommandWin;
 import com.ambrosia.add.discord.commands.dealer.cash.minus.CommandLoss;
@@ -28,6 +29,6 @@ public class CommandCash extends BaseCommand {
     }
     @Override
     public List<DCFSlashSubCommand> getSubCommands() {
-        return List.of(new CommandDeposit(), new CommandWin(), new CommandLoss(), new CommandWithdraw());
+        return List.of(new CommandDeposit(), new CommandWin(), new CommandLoss(), new CommandWithdraw(), new CommandAward());
     }
 }
