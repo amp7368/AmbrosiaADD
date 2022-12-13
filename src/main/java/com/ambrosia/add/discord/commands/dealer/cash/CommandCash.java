@@ -4,6 +4,7 @@ import com.ambrosia.add.discord.commands.dealer.cash.add.CommandAward;
 import com.ambrosia.add.discord.commands.dealer.cash.add.CommandDeposit;
 import com.ambrosia.add.discord.commands.dealer.cash.add.CommandWin;
 import com.ambrosia.add.discord.commands.dealer.cash.minus.CommandLoss;
+import com.ambrosia.add.discord.commands.dealer.cash.minus.CommandUnAward;
 import com.ambrosia.add.discord.commands.dealer.cash.minus.CommandWithdraw;
 import com.ambrosia.add.discord.util.BaseCommand;
 import discord.util.dcf.slash.DCFSlashSubCommand;
@@ -23,12 +24,15 @@ public class CommandCash extends BaseCommand {
     public SlashCommandData getData() {
         return Commands.slash("cash", "Change a client's amount of cash").setDefaultPermissions(DefaultMemberPermissions.DISABLED);
     }
+
     @Override
     public boolean isOnlyDealer() {
         return true;
     }
+
     @Override
     public List<DCFSlashSubCommand> getSubCommands() {
-        return List.of(new CommandDeposit(), new CommandWin(), new CommandLoss(), new CommandWithdraw(), new CommandAward());
+        return List.of(new CommandDeposit(), new CommandWin(), new CommandLoss(), new CommandWithdraw(), new CommandAward(),
+            new CommandUnAward());
     }
 }

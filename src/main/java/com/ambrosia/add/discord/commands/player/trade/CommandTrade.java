@@ -4,6 +4,8 @@ import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.client.ClientStorage;
 import com.ambrosia.add.database.operation.TransactionStorage;
 import com.ambrosia.add.discord.util.BaseCommand;
+import com.ambrosia.add.discord.util.Emeralds;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
@@ -29,7 +31,12 @@ public class CommandTrade extends BaseCommand {
             return;
         }
         clientTrading = TransactionStorage.get().trade(clientTrading.uuid, clientReceiving.uuid, amount);
-        event.replyEmbeds(embedClientProfile(clientTrading, "Trade to " + clientReceiving.displayName)).queue();
+        String iconUrl = clientReceiving.discord == null ? null : clientReceiving.discord.avatarUrl;
+        EmbedBuilder embed = new EmbedBuilder().setAuthor("Trade to " + clientReceiving.displayName, null, iconUrl);
+        String thumbnail = clientTrading.minecraft == null ? null : clientTrading.minecraft.skinUrl();
+        embed.setTitle(clientTrading.displayName).setThumbnail(thumbnail);
+        embed.addField(clientTrading.displayName + " Credits", Emeralds.longMessage(clientTrading.credits), false);
+        event.replyEmbeds(embed.build()).queue();
     }
 
     @Override
