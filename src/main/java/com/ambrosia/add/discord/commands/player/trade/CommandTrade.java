@@ -31,11 +31,11 @@ public class CommandTrade extends BaseCommand {
             return;
         }
         clientTrading = TransactionStorage.get().trade(clientTrading.uuid, clientReceiving.uuid, amount);
-        String iconUrl = clientReceiving.discord == null ? null : clientReceiving.discord.avatarUrl;
+        String thumbnail = clientReceiving.bestImgUrl();
+        String iconUrl = clientTrading.bestImgUrl();
         EmbedBuilder embed = new EmbedBuilder().setAuthor("Trade to " + clientReceiving.displayName, null, iconUrl);
-        String thumbnail = clientTrading.minecraft == null ? null : clientTrading.minecraft.skinUrl();
         embed.setTitle(clientTrading.displayName).setThumbnail(thumbnail);
-        embed.addField(clientTrading.displayName + " Credits", Emeralds.longMessage(clientTrading.credits), false);
+        embed.addField("Amount traded", Emeralds.longMessage(amount), false);
         event.replyEmbeds(embed.build()).queue();
     }
 

@@ -76,6 +76,7 @@ public class DiscordModule extends AppleModule {
 
         dcfCommands.addCommand(new CommandStats());
         new DiscordLog(dcf);
+        dcf.jda().addEventListener(new ProfileAutoComplete());
     }
 
     @Override
