@@ -61,6 +61,6 @@ public class Card {
             default -> String.valueOf(value);
         };
 
-        return String.format("[`%s %s`](https://google.com)", suit.character, num);
+        return String.format("[`%s %s`](https://github.com/amp7368/AmbrosiaADD/wiki/Blackjack)", suit.character, num);
     }
 }
