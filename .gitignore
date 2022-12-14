@@ -42,6 +42,3 @@ bin/
 .DS_Store
 logs/
 
-### Intellij ###
-.idea
-
