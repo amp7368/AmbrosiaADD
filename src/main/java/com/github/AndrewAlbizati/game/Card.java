@@ -54,13 +54,13 @@ public class Card {
      */
     public String toString() {
         String num = switch (value) {
-            case 1 -> "Ace";
-            case 11 -> "Jack";
-            case 12 -> "Queen";
-            case 13 -> "King";
+            case 1 -> "A";
+            case 11 -> "J";
+            case 12 -> "Q";
+            case 13 -> "K";
             default -> String.valueOf(value);
         };
 
-        return num + " of " + suit.name().substring(0, 1).toUpperCase() + suit.name().substring(1).toLowerCase() + "s";
+        return String.format("[`%s %s`](https://google.com)", suit.character, num);
     }
 }
