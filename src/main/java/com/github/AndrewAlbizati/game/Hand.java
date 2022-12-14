@@ -120,7 +120,7 @@ public class Hand extends ArrayList<Card> {
         StringBuilder deckString = new StringBuilder();
         for (int i = 0; i < this.size() - 1; i++) {
             deckString.append(this.get(i));
-            deckString.append("\n");
+            deckString.append(" ");
         }
         deckString.append(this.get(this.size() - 1));
 
