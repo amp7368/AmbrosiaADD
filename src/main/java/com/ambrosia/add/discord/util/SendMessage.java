@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public interface SendMessage {
 
     default EmbedBuilder success() {
-        return new EmbedBuilder().setColor(Color.GREEN);
+        return new EmbedBuilder().setColor(AmbrosiaColor.SUCCESS);
     }
 
     default MessageEmbed success(String msg) {
@@ -21,7 +21,7 @@ public interface SendMessage {
     }
 
     default EmbedBuilder error() {
-        return new EmbedBuilder().setColor(Color.RED);
+        return new EmbedBuilder().setColor(AmbrosiaColor.BAD);
     }
 
     default MessageEmbed error(String msg) {
@@ -84,6 +84,6 @@ public interface SendMessage {
     }
 
     default EmbedBuilder embedCasino() {
-        return new EmbedBuilder().setColor(DiscordBot.CASINO_COLOR);
+        return new EmbedBuilder().setColor(AmbrosiaColor.CASINO_COLOR);
     }
 }

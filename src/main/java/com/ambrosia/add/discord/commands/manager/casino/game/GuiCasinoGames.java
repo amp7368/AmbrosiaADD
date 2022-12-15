@@ -4,6 +4,7 @@ import apple.utilities.util.Pretty;
 import com.ambrosia.add.database.casino.game.CasinoGameCountByConclusion;
 import com.ambrosia.add.database.casino.game.CasinoGamesCountByName;
 import com.ambrosia.add.discord.DiscordBot;
+import com.ambrosia.add.discord.util.AmbrosiaColor;
 import com.ambrosia.add.discord.util.Emeralds;
 import com.github.AndrewAlbizati.Blackjack;
 import discord.util.dcf.gui.base.gui.DCFGui;
@@ -33,7 +34,7 @@ public class GuiCasinoGames extends DCFGuiPage<DCFGui> {
     @Override
     public MessageCreateData makeMessage() {
         EmbedBuilder embed = new EmbedBuilder();
-        embed.setColor(DiscordBot.CASINO_COLOR);
+        embed.setColor(AmbrosiaColor.CASINO_COLOR);
         embed.setTitle(Pretty.spaceEnumWords(total.name));
         embed.setAuthor(this.authorName, this.authorIcon);
         embed.addField(conclusionField("Total", total.count, Math.abs(total.deltaWinnings)));

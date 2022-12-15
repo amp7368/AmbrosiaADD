@@ -1,21 +1,38 @@
 package com.ambrosia.add.discord.active.cash;
 
-import discord.util.dcf.gui.stored.DCFStoredGui;
-import net.dv8tion.jda.api.utils.messages.MessageCreateData;
+import com.ambrosia.add.discord.active.base.ActiveRequestGui;
+import java.util.List;
+import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 
-public class ActiveRequestCashGui extends DCFStoredGui {
+public class ActiveRequestCashGui extends ActiveRequestGui<ActiveRequestCash> {
 
-    public ActiveRequestCashGui(long messageId) {
-        super(messageId);
+
+    public ActiveRequestCashGui(long message, ActiveRequestCash activeRequestCash) {
+        super(message, activeRequestCash);
     }
 
     @Override
-    protected MessageCreateData makeMessage() {
+    protected void updateSender() {
+    }
+
+    @Override
+    protected void onComplete() {
+
+    }
+
+    @Override
+    protected List<Field> fields() {
+        return List.of();
+    }
+
+    @Override
+    protected String description() {
         return null;
     }
 
     @Override
-    public void save() {
-
+    protected String title() {
+        return null;
     }
+
 }

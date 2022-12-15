@@ -5,15 +5,17 @@ import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.operation.TransactionEntity;
 import com.ambrosia.add.discord.DiscordConfig;
 import com.ambrosia.add.discord.DiscordModule;
+import com.ambrosia.add.discord.util.AmbrosiaColor;
+import com.ambrosia.add.discord.util.AmbrosiaColor.AmbrosiaColorOperation;
+import com.ambrosia.add.discord.util.SendMessage;
 import discord.util.dcf.DCF;
-import java.awt.Color;
 import java.time.Instant;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
-public class DiscordLog {
+public class DiscordLog implements SendMessage {
 
     private static DiscordLog instance;
     private final DCF dcf;
@@ -42,22 +44,20 @@ public class DiscordLog {
     }
 
     public void createAccount(ClientEntity client, User actor) {
-        EmbedBuilder msg = constructive("Create Account", actor);
+        EmbedBuilder msg = success("Create Account", actor);
         client(msg, client);
         log(msg.build(), true);
     }
 
     public void operation(ClientEntity client, TransactionEntity operation) {
-        EmbedBuilder msg = embed(operation.display(), dcf.jda().getSelfUser()).setColor(
-            operation.changeAmount < 0 ? 0xfc5603 : 0x9dfc03);
-        client(msg, client).addBlankField(true).addField(String.format("Id: #%d", operation.id), "", true);
-        log(msg.build(), false);
+        operation(client, operation, dcf.jda().getSelfUser(), false);
     }
 
-    public void operation(ClientEntity client, TransactionEntity operation, User actor) {
-        EmbedBuilder msg = embed(operation.display(), actor).setColor(operation.changeAmount < 0 ? 0xfc5603 : 0x9dfc03);
+    public void operation(ClientEntity client, TransactionEntity operation, User actor, boolean toDiscord) {
+        int color = operation.changeAmount < 0 ? AmbrosiaColorOperation.WITHDRAW : AmbrosiaColorOperation.DEPOSIT;
+        EmbedBuilder msg = embed(operation.display(), actor).setColor(color);
         client(msg, client).addBlankField(true).addField(String.format("Id: #%d", operation.id), "", true);
-        log(msg.build(), true);
+        log(msg.build(), toDiscord);
     }
 
     private void log(MessageEmbed msg, boolean toDiscord) {
@@ -71,16 +71,12 @@ public class DiscordLog {
         return msg;
     }
 
-    private EmbedBuilder constructive(String title, User actor) {
-        return embed(title, actor).setColor(Color.GREEN);
-    }
-
-    private EmbedBuilder destructive(String title, User actor) {
-        return embed(title, actor).setColor(Color.RED);
+    private EmbedBuilder success(String title, User actor) {
+        return embed(title, actor).setColor(AmbrosiaColor.SUCCESS);
     }
 
     private EmbedBuilder normal(String title, User actor) {
-        return embed(title, actor).setColor(Color.CYAN);
+        return embed(title, actor).setColor(AmbrosiaColor.NORMAL);
     }
 
     private EmbedBuilder embed(String title, User actor) {

@@ -38,7 +38,7 @@ public class TransactionStorage {
             // create the transactions
             TransactionEntity tradeGive = new TransactionEntity(clientTradingUUID, clientTradingUUID, -amount,
                 TransactionType.TRADE_GIVE);
-            TransactionEntity tradeGet = new TransactionEntity(clientTradingUUID,clientReceivingUUID, amount,
+            TransactionEntity tradeGet = new TransactionEntity(clientTradingUUID, clientReceivingUUID, amount,
                 TransactionType.TRADE_GET);
 
             // get the clients (in this transaction
@@ -46,7 +46,9 @@ public class TransactionStorage {
             ClientEntity clientReceiving = ClientStorage.get().findByUUID(clientReceivingUUID);
             if (clientReceiving == null || clientTrading == null)
                 throw new IllegalStateException("Client " + clientTradingUUID + " | " + clientReceivingUUID + " does not exist!");
-
+            if (clientTrading.credits < amount) {
+                return null;
+            }
             // update the DB
             clientTrading.addCredits(TransactionType.TRADE_GIVE, -amount);
             clientReceiving.addCredits(TransactionType.TRADE_GET, amount);

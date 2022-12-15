@@ -35,7 +35,7 @@ public abstract class CommandOperation extends BaseSubCommand {
         client = ClientStorage.get().findByUUID(clientUUID);
         if (client == null) throw new IllegalStateException(clientUUID + " is not a valid client!");
         event.replyEmbeds(embedClientProfile(client, operation.display())).queue();
-        DiscordLog.log().operation(client, operation, event.getUser());
+        DiscordLog.log().operation(client, operation, event.getUser(), true);
     }
 
 
