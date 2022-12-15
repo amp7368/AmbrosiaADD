@@ -3,6 +3,7 @@ package com.ambrosia.add.discord;
 import apple.lib.modules.AppleModule;
 import apple.lib.modules.configs.data.config.AppleConfig.Builder;
 import apple.lib.modules.configs.factory.AppleConfigLike;
+import com.ambrosia.add.discord.active.ActiveRequestDatabase;
 import com.ambrosia.add.discord.commands.CommandHelp;
 import com.ambrosia.add.discord.commands.dealer.cash.CommandCash;
 import com.ambrosia.add.discord.commands.dealer.profile.CommandLink;
@@ -52,6 +53,7 @@ public class DiscordModule extends AppleModule {
 
     @Override
     public void onEnable() {
+
         JDABuilder builder = JDABuilder.createDefault(DiscordConfig.get().token);
         JDA jda = builder.build();
         try {
@@ -67,9 +69,10 @@ public class DiscordModule extends AppleModule {
 
         DCFCommandManager dcfCommands = dcf.commands();
         // dealer
-        dcfCommands.addCommand(new CommandCash(), new ViewProfileCommand(), new CommandLink(), new CommandRestart());
+        dcfCommands.addCommand(new CreateProfileCommand(), new CommandCash(), new ViewProfileCommand(), new CommandLink(),
+            new CommandRestart());
         // player
-        dcfCommands.addCommand(new CreateProfileCommand(), new ProfileCommand(), new CommandRequest(), new CommandTrade());
+        dcfCommands.addCommand(new ProfileCommand(), new CommandRequest(), new CommandTrade());
         dcfCommands.addCommand(new CommandHelp());
         // manager
         dcfCommands.addCommand(new CommandDelete(), new CommandCasino());
@@ -82,6 +85,7 @@ public class DiscordModule extends AppleModule {
     @Override
     public void onEnablePost() {
         DiscordBot.dcf.commands().updateCommands();
+        ActiveRequestDatabase.load();
         RestartingMessageManager.get().load();
     }
 

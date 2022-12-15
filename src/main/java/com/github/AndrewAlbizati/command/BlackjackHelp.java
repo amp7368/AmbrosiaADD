@@ -35,7 +35,11 @@ public class BlackjackHelp extends DCFSlashSubCommand implements SendMessage {
             "When a game is started, you can hit (draw a card) or stand (stop drawing cards). If you have enough credits, you can "
                 + "also double down (doubles your bet but you are only given 1 more card). If both of the cards are the same number,"
                 + " they can also be split (starts 2 Blackjack hands in the same game with each of the cards).", false);
-        eb.addField("Rules", "Dealer must stand on all 17s\n" + "Blackjack pays 3 to 2", false);
+        eb.addField("Rules", """
+            Dealer must stand on 17 or above
+            A Blackjack pays 3 to 2
+            Each hand is played with 2 decks, which are shuffled every hand
+            """, false);
         eb.setThumbnail(DiscordBot.SELF_USER_AVATAR);
         eb.setColor(new Color(184, 0, 9));
         MessageCreateBuilder message = new MessageCreateBuilder().setEmbeds(eb.build())

@@ -54,6 +54,7 @@ public class TransactionStorage {
             DB.getDefault().update(clientTrading, transaction);
             DB.getDefault().save(tradeGet, transaction);
             DB.getDefault().update(clientReceiving, transaction);
+            transaction.commit();
             return clientTrading;
         }
     }
