@@ -10,7 +10,6 @@ public class ActiveRequestSender {
     private String username;
     private String avatarUrl;
     private long discordId;
-    private String endorser;
 
     public ActiveRequestSender(Member sender) {
         this.username = sender.getUser().getAsTag();
@@ -21,21 +20,13 @@ public class ActiveRequestSender {
     public ActiveRequestSender() {
     }
 
-    public EmbedBuilder author(EmbedBuilder embed) {
-        return embed.setAuthor(String.format("%s", username), null, avatarUrl);
+    public void author(EmbedBuilder embed) {
+        embed.setAuthor(String.format("%s", username), null, avatarUrl);
     }
 
     public void sendDm(MessageCreateData message) {
         DiscordBot.dcf.jda().openPrivateChannelById(this.discordId).queue((dm) -> {
             dm.sendMessage(message).queue();
         });
-    }
-
-    public void setEndorser(String endorser) {
-        this.endorser = endorser;
-    }
-
-    public String getEndorser() {
-        return endorser;
     }
 }

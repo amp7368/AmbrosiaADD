@@ -38,6 +38,7 @@ public class ActiveRequestAccount extends ActiveRequest<ActiveRequestAccountGui>
         if (displayFields().isEmpty()) throw new UpdateAccountException("No updates were specified so no changes were made");
     }
 
+
     @Override
     public ActiveRequestAccountGui load() {
         return new ActiveRequestAccountGui(messageId, this);

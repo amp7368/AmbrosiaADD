@@ -2,9 +2,7 @@ package com.ambrosia.add.discord.util;
 
 import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.operation.TransactionType;
-import com.ambrosia.add.discord.DiscordBot;
 import com.ambrosia.add.discord.DiscordModule;
-import java.awt.Color;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -80,6 +78,7 @@ public interface SendMessage {
         embed.addField("Net " + (net < 0 ? "Losses" : "Gains"), Emeralds.longMessage(Math.abs(net)), true);
         embed.addBlankField(true);
         embed.addField("Losses", Emeralds.longMessage(losses), true);
+        embed.setColor(AmbrosiaColor.CASINO_COLOR);
         return embed.build();
     }
 

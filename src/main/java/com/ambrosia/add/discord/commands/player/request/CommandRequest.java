@@ -15,7 +15,7 @@ public class CommandRequest extends BaseCommand {
 
     @Override
     public List<DCFSlashSubCommand> getSubCommands() {
-        return List.of(new CommandRequestAccount());
+        return List.of(new CommandRequestAccount(), new CommandRequestDeposit(), new CommandRequestWithdraw());
     }
 
     @Override

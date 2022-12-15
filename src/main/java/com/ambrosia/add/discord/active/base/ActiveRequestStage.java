@@ -6,6 +6,7 @@ import com.ambrosia.add.discord.util.AmbrosiaColor.AmbrosiaColorRequest;
 public enum ActiveRequestStage {
     DENIED(AmbrosiaColor.BAD),
     CLAIMED(AmbrosiaColorRequest.CLAIMED),
+    APPROVED(AmbrosiaColorRequest.CLAIMED),
     COMPLETED(AmbrosiaColor.SUCCESS),
     UNCLAIMED(AmbrosiaColorRequest.UNCLAIMED),
     ERROR(AmbrosiaColor.ERROR),

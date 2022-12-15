@@ -20,6 +20,7 @@ public class CommandTrade extends BaseCommand {
             return;
         }
         Integer amount = findOptionAmount(event);
+        if (amount == null) return;
         if (amount == 0) {
             event.reply("Total must be > 0").setEphemeral(true).queue();
             return;

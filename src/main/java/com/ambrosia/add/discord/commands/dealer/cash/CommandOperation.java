@@ -2,6 +2,7 @@ package com.ambrosia.add.discord.commands.dealer.cash;
 
 import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.client.ClientStorage;
+import com.ambrosia.add.database.operation.CreateTransactionException;
 import com.ambrosia.add.database.operation.TransactionEntity;
 import com.ambrosia.add.database.operation.TransactionStorage;
 import com.ambrosia.add.database.operation.TransactionType;
@@ -23,15 +24,17 @@ public abstract class CommandOperation extends BaseSubCommand {
         @Nullable ClientEntity client = findClient(event);
         if (client == null) return;
         long conductorId = event.getUser().getIdLong();
-        if (sign() < 0 && amount > client.credits) {
+        int change = sign() * amount;
+        long clientUUID = client.uuid;
+        TransactionEntity operation;
+        try {
+            operation = TransactionStorage.get().createOperation(conductorId, clientUUID, change, operationReason());
+        } catch (CreateTransactionException e) {
             String msg = String.format("%s cannot afford losing %s credits.\nBalance: %d", client.displayName,
                 Emeralds.longMessage(amount), client.credits);
             event.replyEmbeds(error(msg)).queue();
             return;
         }
-        int change = sign() * amount;
-        long clientUUID = client.uuid;
-        TransactionEntity operation = TransactionStorage.get().createOperation(conductorId, clientUUID, change, operationReason());
         client = ClientStorage.get().findByUUID(clientUUID);
         if (client == null) throw new IllegalStateException(clientUUID + " is not a valid client!");
         event.replyEmbeds(embedClientProfile(client, operation.display())).queue();
