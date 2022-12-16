@@ -3,16 +3,18 @@ package com.ambrosia.add.database;
 public class AmbrosiaDatabaseConfig {
 
     private static AmbrosiaDatabaseConfig instance;
-
-    public AmbrosiaDatabaseConfig() {
-        instance = this;
-    }
+    public boolean isConfigured = false;
 
     public String username = "${username}";
     public String password = "${password}";
     public String host = "${host}";
     public String port = "${port}";
     public String database = "add";
+    public boolean DROP_THE_DATABASE_AND_RECREATE = false;
+
+    public AmbrosiaDatabaseConfig() {
+        instance = this;
+    }
 
     public static AmbrosiaDatabaseConfig get() {
         return instance;
@@ -34,4 +36,11 @@ public class AmbrosiaDatabaseConfig {
         return password;
     }
 
+    public boolean isConfigured() {
+        return this.isConfigured;
+    }
+
+    public boolean getDDLRun() {
+        return this.DROP_THE_DATABASE_AND_RECREATE;
+    }
 }

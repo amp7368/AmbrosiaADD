@@ -1,6 +1,7 @@
 package com.ambrosia.add.database;
 
 import apple.lib.modules.AppleModule;
+import apple.lib.modules.configs.data.config.AppleConfig.Builder;
 import apple.lib.modules.configs.factory.AppleConfigLike;
 import com.ambrosia.add.Ambrosia;
 import com.ambrosia.add.database.casino.GameResultAggregate;
@@ -17,11 +18,14 @@ import io.ebean.annotation.Platform;
 import io.ebean.config.DatabaseConfig;
 import io.ebean.datasource.DataSourceConfig;
 import io.ebean.dbmigration.DbMigration;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 public class AmbrosiaDatabase extends AppleModule {
+
+    private File databaseConfigFile;
 
     public static void main(String[] args) throws IOException {
         // doesn't work
@@ -32,6 +36,10 @@ public class AmbrosiaDatabase extends AppleModule {
 
     @Override
     public void onLoad() {
+        if (!AmbrosiaDatabaseConfig.get().isConfigured()) {
+            this.logger().fatal("Please configure " + this.databaseConfigFile.getAbsolutePath());
+            System.exit(1);
+        }
         DataSourceConfig dataSourceConfig = configureDataSource(AmbrosiaDatabaseConfig.get());
         DatabaseConfig dbConfig = configureDatabase(dataSourceConfig);
         DatabaseFactory.createWithContextClassLoader(dbConfig, Ambrosia.class.getClassLoader());
@@ -46,7 +54,7 @@ public class AmbrosiaDatabase extends AppleModule {
         DatabaseConfig dbConfig = new DatabaseConfig();
         dbConfig.setDataSourceConfig(dataSourceConfig);
         dbConfig.setDdlGenerate(true);
-//        dbConfig.setDdlRun(true);
+        dbConfig.setDdlRun(AmbrosiaDatabaseConfig.get().getDDLRun());
 
         // tables
         dbConfig.addAll(List.of(TransactionEntity.class, GameResultEntity.class, ClientEntity.class));
@@ -69,7 +77,9 @@ public class AmbrosiaDatabase extends AppleModule {
 
     @Override
     public List<AppleConfigLike> getConfigs() {
-        return List.of(configJson(AmbrosiaDatabaseConfig.class, "Database.config", "Config"));
+        Builder<AmbrosiaDatabaseConfig> databaseConfig = configJson(AmbrosiaDatabaseConfig.class, "Database.config", "Config");
+        this.databaseConfigFile = this.getFile("Config", "Database.config.json");
+        return List.of(databaseConfig);
     }
 
     @Override

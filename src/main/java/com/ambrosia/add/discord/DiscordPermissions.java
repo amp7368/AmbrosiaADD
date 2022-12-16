@@ -3,6 +3,7 @@ package com.ambrosia.add.discord;
 import java.util.List;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
+import org.jetbrains.annotations.NotNull;
 
 public class DiscordPermissions {
 
@@ -36,5 +37,16 @@ public class DiscordPermissions {
 
     public boolean wrongServer(Guild guild) {
         return guild == null || !allowedServers.contains(guild.getIdLong());
+    }
+
+    public void generateWarnings() {
+        if (this.dealerRole.isEmpty()) DiscordModule.get().logger().warn(warn("dealerRole"));
+        if (this.managerRole.isEmpty()) DiscordModule.get().logger().warn(warn("managerRole"));
+        if (this.allowedServers.isEmpty()) DiscordModule.get().logger().warn(warn("allowedServers"));
+    }
+
+    @NotNull
+    public String warn(String missingField) {
+        return missingField + " is not set in /Permissions.config.json";
     }
 }
