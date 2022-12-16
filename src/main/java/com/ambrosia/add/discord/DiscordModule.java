@@ -52,6 +52,24 @@ public class DiscordModule extends AppleModule {
     }
 
     @Override
+    public List<AppleConfigLike> getConfigs() {
+        Builder<RestartingMessageManager> restartingMessages = configJson(RestartingMessageManager.class, "Restarting", "Data");
+        RestartingMessageManager.setConfig(restartingMessages.getConfig());
+        return List.of(restartingMessages, configFolder("Config", configJson(DiscordConfig.class, "Discord.config"),
+            configJson(DiscordPermissions.class, "Permissions.config")));
+    }
+
+    @Override
+    public void onLoad() {
+        DiscordConfig.get().generateWarnings();
+        DiscordPermissions.get().generateWarnings();
+        if (!DiscordConfig.get().isConfigured()) {
+            this.logger().fatal("Please configure " + getFile("Config", "Discord.config.json"));
+            System.exit(1);
+        }
+    }
+
+    @Override
     public void onEnable() {
 
         JDABuilder builder = JDABuilder.createDefault(DiscordConfig.get().token);
@@ -92,14 +110,6 @@ public class DiscordModule extends AppleModule {
     @Override
     public List<AppleModule> createModules() {
         return List.of(new Blackjack());
-    }
-
-    @Override
-    public List<AppleConfigLike> getConfigs() {
-        Builder<RestartingMessageManager> restartingMessages = configJson(RestartingMessageManager.class, "Restarting", "Data");
-        RestartingMessageManager.setConfig(restartingMessages.getConfig());
-        return List.of(restartingMessages, configFolder("Config", configJson(DiscordConfig.class, "Discord.config"),
-            configJson(DiscordPermissions.class, "Permissions.config")));
     }
 
     @Override

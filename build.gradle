@@ -19,7 +19,7 @@ project.group groupValue
 project.version versionValue
 
 configurations {
-    all {
+    configureEach {
         resolutionStrategy.cacheDynamicVersionsFor 1, 'seconds'
         resolutionStrategy.cacheChangingModulesFor 1, 'seconds'
     }
@@ -52,9 +52,11 @@ shadowJar {
         attributes 'Multi-Release': true
     }
     doLast {
-        copy {
-            from getArchiveFile()
-            into file(botsBuildDir + '/ambrosia')
+        if (botsBuildDir != null) {
+            copy {
+                from getArchiveFile()
+                into file(botsBuildDir + '/ambrosia')
+            }
         }
     }
 }
