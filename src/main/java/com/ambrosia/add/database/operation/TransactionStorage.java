@@ -26,7 +26,7 @@ public class TransactionStorage {
             TransactionEntity operation = new TransactionEntity(conductorId, client, amount, transactionType);
             ClientEntity clientEntity = ClientStorage.get().findByUUID(client);
             if (clientEntity == null) throw new IllegalStateException("Client " + client + " does not exist!");
-            if (clientEntity.credits - amount < 0) {
+            if (clientEntity.credits + amount < 0) {
                 throw new CreateTransactionException("Not enough credits");
             }
             clientEntity.addCredits(transactionType, amount);

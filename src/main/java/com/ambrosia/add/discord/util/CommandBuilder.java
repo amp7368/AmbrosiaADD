@@ -85,6 +85,6 @@ public interface CommandBuilder extends SendMessage {
     }
 
     default void errorRegisterWithStaff(SlashCommandInteractionEvent event) {
-        event.reply("Register your discord and/or minecraft with staff").queue();
+        event.replyEmbeds(error("To register your account use **/request account** and fill in your Minecraft username.")).setEphemeral(true).queue();
     }
 }

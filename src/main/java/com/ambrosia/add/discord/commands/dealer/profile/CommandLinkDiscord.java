@@ -51,18 +51,18 @@ public class CommandLinkDiscord extends BaseSubCommand {
         if (user == null) return;
         MessageCreateBuilder message = new MessageCreateBuilder().setComponents(ActionRow.of(Ambrosia.inviteButton()))
             .setEmbeds(new EmbedBuilder().setDescription("""
-                    Thank you for registering with Ambrosia Casino. The following message will instruct you on how to operate the Ambrosia ADD Bot. If you believe you have gotten this message in error, please message @Tealy.
+                    Thank you for registering with Ambrosia Casino. The following message will instruct you on how to operate the Ambrosia ADD Bot.
                     All commands listed below can only be performed in the Ambrosia Discord server, within the Ambrosia Casino channel category. If you have not yet joined, here's an invite link: https://discord.gg/tEAy2dGXWF
                                         
-                    - In order to check your profile, use /profile. This will allow you to monitor your credits. Keep in mind that it may take a moment for newly cashed in credits to be applied to your account, as it must be entered into our database by an Ambrosia Casino employee.
+                    - In order to check your profile, use **/profile**. This will allow you to monitor your credits. Keep in mind that it may take a moment for newly cashed in credits to be applied to your account, as it must be entered into our database by an Ambrosia Casino employee.
                                         
-                    * If you would like to deposit more credits into your account, or withdraw them back into emeralds, you can do so in-game with a Casino Manager, such as Tealycraft or Asthae (Tealy#7401, Asthae#6668).
+                    - If you would like to deposit more credits into your account, or withdraw them back into emeralds, you can do so by creating a request with the respective **/request deposit** and **/request withdraw** commands on our discord. You will be notified once our Casino-Managers are available to take on your request and trade you in-game.
+                                     
+                    - Please ensure you are trading with a proper Casino Manager before depositing/withdrawing your credits. If you are unsure, you can ask for verification in the Ambrosia Discord.
                                         
-                    * Please ensure you are trading with a proper Casino Manager before depositing/withdrawing your credits. If you are unsure, you can ask for verification in the Ambrosia Discord.
+                    - To begin a game of blackjack, type **/blackjack**. You will also be asked to specify your bet in LE/EB/E. You can wager up to a maximum of 24 LE per hand.
                                         
-                    - To begin a game of blackjack, type /blackjack. You will also be asked to specify your bet in LE/EB/E. You can wager up to a maximum of 24 LE per hand.
-                                        
-                    - In order to view the rules and more information on how the bot functions, aswell as to get the links to view our source code, do /help blackjack.
+                    - In order to view the rules and more information on how the bot functions, as well as to get the links to view our source code, do **/help blackjack**.
                     Thank you for registering with Ambrosia Casino, best of luck!
                                         
                     **Please keep in mind that some forms of gambling can be addictive. Please exercise moderation while playing.**

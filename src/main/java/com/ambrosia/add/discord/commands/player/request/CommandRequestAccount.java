@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 public class CommandRequestAccount extends BaseSubCommand {
 
     private static final String OPTION_MINECRAFT = "minecraft";
-    private static final String OPTION_DISPLAY_NAME = "display";
+    private static final String OPTION_DISPLAY_NAME = "display_name";
 
     @Override
     protected void onCheckedCommand(SlashCommandInteractionEvent event) {
