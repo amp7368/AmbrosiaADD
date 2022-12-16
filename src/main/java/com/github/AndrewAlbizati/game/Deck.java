@@ -1,5 +1,6 @@
 package com.github.AndrewAlbizati.game;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -7,7 +8,9 @@ import java.util.Collections;
  * Represents the deck in a game of Blackjack.
  */
 public class Deck extends ArrayList<Card> {
+
     private final int amountOfDecks;
+    private final SecureRandom random = new SecureRandom(); // todo make this use a seed soon
 
     public Deck(int amountOfDecks) {
         this.amountOfDecks = amountOfDecks;
@@ -16,6 +19,7 @@ public class Deck extends ArrayList<Card> {
 
     /**
      * Clears the deck and initializes it with new cards.
+     *
      * @param amountOfDecks Number of decks of cards to be put together.
      */
     public void initializeDeck(int amountOfDecks) {
@@ -23,7 +27,7 @@ public class Deck extends ArrayList<Card> {
         for (int deck = 0; deck < amountOfDecks; deck++) {
             // Add one deck
             for (int value = 0; value < 13; value++) {
-                for (Suit suit: Suit.values()) {
+                for (Suit suit : Suit.values()) {
                     add(new Card(value + 1, suit));
                 }
             }
@@ -34,7 +38,8 @@ public class Deck extends ArrayList<Card> {
      * Shuffles the entire deck randomly.
      */
     public void shuffleDeck() {
-        Collections.shuffle(this);
+
+        Collections.shuffle(this, random);
     }
 
     /**
@@ -42,7 +47,7 @@ public class Deck extends ArrayList<Card> {
      */
     public void sortDeck() {
         boolean sorted = false;
-        while(!sorted) {
+        while (!sorted) {
             sorted = true;
             for (int i = 0; i < this.size() - 1; i++) {
                 Card c = this.get(i);

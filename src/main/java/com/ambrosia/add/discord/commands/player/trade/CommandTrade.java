@@ -20,6 +20,7 @@ public class CommandTrade extends BaseCommand {
             return;
         }
         Integer amount = findOptionAmount(event);
+        if (amount == null) return;
         if (amount == 0) {
             event.reply("Total must be > 0").setEphemeral(true).queue();
             return;
@@ -31,6 +32,9 @@ public class CommandTrade extends BaseCommand {
             return;
         }
         clientTrading = TransactionStorage.get().trade(clientTrading.uuid, clientReceiving.uuid, amount);
+        if (clientTrading == null) {
+            event.replyEmbeds(error("You don't have enough credits")).setEphemeral(true).queue();
+        }
         String thumbnail = clientReceiving.bestImgUrl();
         String iconUrl = clientTrading.bestImgUrl();
         EmbedBuilder embed = new EmbedBuilder().setAuthor("Trade to " + clientReceiving.displayName, null, iconUrl);

@@ -93,7 +93,8 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
     public void remove() {
         if (!game.isGameComplete()) {
             getGame().setGameComplete();
-            editMessage();
+            // forcefully edit the message because gui has expired
+            editMessage(makeEditMessage());
             getGame().end();
         }
     }

@@ -52,6 +52,9 @@ public class ClientEntity extends Model {
         this.creator = creator;
     }
 
+    public ClientEntity() {
+    }
+
     public void addCredits(TransactionType transactionType, long add) {
         this.totals.compute(transactionType, (k, a) -> a == null ? add : add + a);
         this.credits += add;

@@ -25,12 +25,12 @@ public class ProfileAutoComplete extends ListenerAdapter {
             .asPredicate();
 
         Stream<Choice> displayNames = ClientStorage.get().allNames().filter(c -> matchThis.test(c.displayName))
-            .map(c -> createChoice("", c.displayName, c.displayName));
+            .map(c -> createChoice(c.displayName));
         Stream<Choice> mcNames = ClientStorage.get().allNames().filter(c -> c.minecraft(mc -> matchThis.test(mc.name), false))
-            .map(c -> createChoice("[Minecraft]", c.minecraft.name, c.displayName));
+            .map(c -> createChoice(c.displayName));
         Stream<Choice> discordNames = ClientStorage.get().allNames()
             .filter(c -> c.discord(dc -> matchThis.test(dc.username) || matchThis.test(dc.guildName), false))
-            .map(c -> createChoice("[Discord]", c.discord.guildName, c.displayName));
+            .map(c -> createChoice(c.displayName));
 
         Stream<Choice> nonUniqueChoices = Stream.of(displayNames, mcNames, discordNames).flatMap(s -> s);
         List<Choice> choices = new ArrayList<>(
@@ -42,9 +42,8 @@ public class ProfileAutoComplete extends ListenerAdapter {
     }
 
     @NotNull
-    public Choice createChoice(String title, String name, String value) {
-        String choiceName = title.isEmpty() ? name : String.format("%s %s", title, name);
-        return new Choice(Pretty.truncate(name, OptionData.MAX_NAME_LENGTH),
+    public Choice createChoice(String value) {
+        return new Choice(Pretty.truncate(value, OptionData.MAX_NAME_LENGTH),
             Pretty.truncate(value, OptionData.MAX_CHOICE_VALUE_LENGTH));
     }
 }

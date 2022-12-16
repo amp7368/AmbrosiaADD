@@ -11,6 +11,7 @@ public final class CasinoTotalProfits {
     public long circulated = 0;
     public long playerHoldings = 0;
     public final Map<TransactionType, CasinoTotalProfitsByOperation> totalByType = new HashMap<>();
+    public long awarded = 0;
 
 
     public void put(TransactionEntity entity) {
@@ -18,6 +19,9 @@ public final class CasinoTotalProfits {
         this.playerHoldings += entity.sumAmount;
         if (entity.operationType == TransactionType.WIN || entity.operationType == TransactionType.LOSS) {
             circulated += Math.abs(entity.sumAmount);
+            profits -= entity.sumAmount;
+        } else if (entity.operationType == TransactionType.AWARD) {
+            awarded += entity.sumAmount;
             profits -= entity.sumAmount;
         }
     }

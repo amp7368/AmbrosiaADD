@@ -2,6 +2,7 @@ package com.ambrosia.add.database.game;
 
 import com.ambrosia.add.api.CreditReservation;
 import com.ambrosia.add.database.client.ClientStorage;
+import com.ambrosia.add.database.operation.CreateTransactionException;
 import com.ambrosia.add.database.operation.TransactionEntity;
 import com.ambrosia.add.database.operation.TransactionStorage;
 import com.ambrosia.add.database.operation.TransactionType;
@@ -45,8 +46,13 @@ public class GameStorage {
         }
         if (result.originalBet == 0) return;
         TransactionType transactionType = result.deltaWinnings < 0 ? TransactionType.LOSS : TransactionType.WIN;
-        TransactionEntity transaction = TransactionStorage.get()
-            .createOperation(0L, client, result.deltaWinnings, transactionType);
+        TransactionEntity transaction = null;
+        try {
+            transaction = TransactionStorage.get()
+                .createOperation(0L, client, result.deltaWinnings, transactionType);
+        } catch (CreateTransactionException e) {
+            throw new RuntimeException(e);
+        }
         DiscordLog.log().operation(ClientStorage.get().findByUUID(client), transaction);
         result.transaction = transaction;
         result.save();

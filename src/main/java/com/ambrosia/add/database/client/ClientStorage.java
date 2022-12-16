@@ -6,11 +6,15 @@ import com.ambrosia.add.database.casino.query.QGameResultAggregate;
 import com.ambrosia.add.database.client.query.QClientEntity;
 import com.ambrosia.add.database.operation.TransactionEntity;
 import com.ambrosia.add.database.operation.TransactionStorage;
+import com.ambrosia.add.discord.active.account.UpdateAccountException;
 import io.ebean.DB;
 import io.ebean.Transaction;
+import io.ebean.plugin.Property;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 import net.dv8tion.jda.api.entities.Member;
 import org.jetbrains.annotations.Nullable;
@@ -72,6 +76,26 @@ public class ClientStorage {
         try (Transaction transaction = DB.getDefault().beginTransaction()) {
             boolean isUnique = DB.getDefault().checkUniqueness(client, transaction).isEmpty();
             if (!isUnique) return null;
+            client.save(transaction);
+            transaction.commit();
+        }
+        updateClient(client);
+        return fillInClient(client);
+    }
+
+    public ClientEntity createClient(String displayName, ClientDiscordDetails discord) throws UpdateAccountException {
+        ClientEntity client = new ClientEntity(0, displayName);
+        client.setDiscord(discord);
+        try (Transaction transaction = DB.getDefault().beginTransaction()) {
+            Set<Property> uniqueness = DB.getDefault().checkUniqueness(client, transaction);
+            if (!uniqueness.isEmpty()) {
+                List<String> badProperties = new ArrayList<>();
+                for (Property property : uniqueness) {
+                    String format = String.format("'%s' is not unique! Provided: '%s'", property.name(), property.value(client));
+                    badProperties.add(format);
+                }
+                throw new UpdateAccountException(String.join(", ", badProperties));
+            }
             client.save(transaction);
             transaction.commit();
         }
