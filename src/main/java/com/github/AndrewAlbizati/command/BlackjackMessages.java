@@ -145,8 +145,9 @@ public interface BlackjackMessages extends IMessageBuilder {
         Hand dealerHand = getGame().getDealerHand();
         if (hand.getScore() > 21) {
             // Player busts
-            getGame().result(BlackjackHandResult.LOSE);
+            getGame().result(BlackjackHandResult.BUST);
             getGame().end();
+            eb.setColor(AmbrosiaColorGame.LOSE);
             eb.setDescription("You busted!\n" + getFinalWinningsMessage());
 
             eb.addField("Dealer's Hand (" + (dealerHand.isSoft() ? "Soft " : "") + dealerHand.getScore() + ")", dealerHand.toString(),
