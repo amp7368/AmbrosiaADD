@@ -18,6 +18,7 @@ import com.ambrosia.add.discord.commands.player.stats.CommandStats;
 import com.ambrosia.add.discord.commands.player.trade.CommandTrade;
 import com.ambrosia.add.discord.log.DiscordLog;
 import com.ambrosia.add.discord.log.RestartingMessageManager;
+import com.ambrosia.roulette.Roulette;
 import com.github.AndrewAlbizati.Blackjack;
 import discord.util.dcf.DCF;
 import discord.util.dcf.DCFCommandManager;
@@ -101,7 +102,7 @@ public class DiscordModule extends AppleModule {
 
     @Override
     public List<AppleModule> createModules() {
-        return List.of(new Blackjack());
+        return List.of(new Blackjack(), new Roulette());
     }
 
     @Override

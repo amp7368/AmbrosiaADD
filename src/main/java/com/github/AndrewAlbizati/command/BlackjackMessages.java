@@ -1,5 +1,6 @@
 package com.github.AndrewAlbizati.command;
 
+import com.ambrosia.add.discord.util.AmbrosiaColor.AmbrosiaColorGame;
 import com.ambrosia.add.discord.util.Emeralds;
 import com.github.AndrewAlbizati.game.BlackjackGame;
 import com.github.AndrewAlbizati.game.Hand;
@@ -33,6 +34,7 @@ public interface BlackjackMessages extends IMessageBuilder {
         eb.addField("Your Hand (" + (playerHand.isSoft() ? "Soft " : "") + playerHand.getScore() + ")", playerHand.toString(), false);
         eb.setDescription("You have a blackjack!\n" + getFinalWinningsMessage());
         eb.setFooter(getAsTag() + " won!", getAvatarUrl());
+        eb.setColor(AmbrosiaColorGame.EXTRA_WIN);
         return buildCreate(eb.build());
     }
 
@@ -45,7 +47,7 @@ public interface BlackjackMessages extends IMessageBuilder {
         eb.addField("Your Hand (" + (playerHand.isSoft() ? "Soft " : "") + playerHand.getScore() + ")", playerHand.toString(), false);
         eb.setDescription("Dealer has a blackjack!\n" + getFinalWinningsMessage());
         eb.setFooter(getAsTag() + " lost!", getAvatarUrl());
-
+        eb.setColor(AmbrosiaColorGame.LOSE);
         return buildCreate(eb.build());
     }
 
@@ -78,11 +80,13 @@ public interface BlackjackMessages extends IMessageBuilder {
             false);
 
         StringBuilder sb = new StringBuilder();
-        int i = 1;
+        int handIndex = 1;
+        int fakeBet = 4096;
+        int fakeWinnings = 0;
         for (Hand hand : getGame().getPlayerHands()) {
             int score = hand.getScore();
             sb.append("Hand ");
-            sb.append(i++);
+            sb.append(handIndex++);
             sb.append(": ");
             sb.append(score);
             sb.append(" **");
@@ -90,15 +94,19 @@ public interface BlackjackMessages extends IMessageBuilder {
             int dealerScore = dealerHand.getScore();
             if (score > 21) {
                 sb.append("BUST");
+                fakeWinnings += fakeBet * BlackjackHandResult.BUST.betMultiplier();
                 getGame().result(BlackjackHandResult.BUST);
             } else if (score > dealerScore || dealerScore > 21) {
                 sb.append("WIN");
+                fakeWinnings += fakeBet * BlackjackHandResult.WIN.betMultiplier();
                 getGame().result(BlackjackHandResult.WIN);
             } else if (score == dealerScore) {
                 sb.append("PUSH");
+                fakeWinnings += fakeBet * BlackjackHandResult.PUSH.betMultiplier();
                 getGame().result(BlackjackHandResult.PUSH);
             } else {
                 sb.append("LOSE");
+                fakeWinnings += fakeBet * BlackjackHandResult.LOSE.betMultiplier();
                 getGame().result(BlackjackHandResult.LOSE);
             }
 
@@ -108,11 +116,21 @@ public interface BlackjackMessages extends IMessageBuilder {
         getGame().end();
         eb.setDescription("Split hands!\n" + getFinalWinningsMessage());
         int winnings = getWinnings();
+        int originalBet = getGame().results().getOriginalBet();
+        if (originalBet == 0) {
+            originalBet = fakeBet;
+            winnings = fakeWinnings;
+        }
         if (winnings > 0) {
+            boolean extraWin = winnings / originalBet > 1;
+            if (extraWin) eb.setColor(AmbrosiaColorGame.EXTRA_WIN);
+            else eb.setColor(AmbrosiaColorGame.WIN);
             eb.setFooter(getUser().getAsTag() + " won!", getUser().getAvatarUrl());
         } else if (winnings < 0) {
+            eb.setColor(AmbrosiaColorGame.LOSE);
             eb.setFooter(getUser().getAsTag() + " lost!", getUser().getAvatarUrl());
         } else {
+            eb.setColor(AmbrosiaColorGame.TIE);
             eb.setFooter(getUser().getAsTag() + " tied!", getUser().getAvatarUrl());
         }
         return buildCreate(eb.build());
@@ -152,24 +170,28 @@ public interface BlackjackMessages extends IMessageBuilder {
         if (dealerHand.getScore() > 21) {
             getGame().result(BlackjackHandResult.WIN);
             getGame().end();
+            eb.setColor(AmbrosiaColorGame.WIN);
             eb.setDescription("Dealer busted!\n" + getFinalWinningsMessage());
             eb.setFooter(getUser().getAsTag() + " won!", getUser().getAvatarUrl());
         } else if (dealerHand.getScore() > hand.getScore()) {
             // Dealer wins
             getGame().result(BlackjackHandResult.LOSE);
             getGame().end();
+            eb.setColor(AmbrosiaColorGame.LOSE);
             eb.setDescription("The dealer beat you!\n" + getFinalWinningsMessage());
             eb.setFooter(getUser().getAsTag() + " lost!", getUser().getAvatarUrl());
         } else if (hand.getScore() > dealerHand.getScore()) {
             // Player wins
             getGame().result(BlackjackHandResult.WIN);
             getGame().end();
+            eb.setColor(AmbrosiaColorGame.WIN);
             eb.setDescription("You beat the dealer!\n" + getFinalWinningsMessage());
             eb.setFooter(getUser().getAsTag() + " won!", getUser().getAvatarUrl());
         } else {
             // Tie
             getGame().result(BlackjackHandResult.PUSH);
             getGame().end();
+            eb.setColor(AmbrosiaColorGame.TIE);
             eb.setDescription("Push!\n" + getFinalWinningsMessage());
             eb.setFooter(getUser().getAsTag() + " tied!", getUser().getAvatarUrl());
         }
