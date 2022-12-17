@@ -62,7 +62,7 @@ public class CommandLinkDiscord extends BaseSubCommand {
                                         
                     - To begin a game of blackjack, type **/blackjack**. You will also be asked to specify your bet in LE/EB/E. You can wager up to a maximum of 24 LE per hand.
                                         
-                    - In order to view the rules and more information on how the bot functions, as well as to get the links to view our source code, do **/help blackjack**.
+                    - In order to view the rules and more information on how the bot functions, as well as to get the links to view our source code, do **/help**.
                     Thank you for registering with Ambrosia Casino, best of luck!
                                         
                     **Please keep in mind that some forms of gambling can be addictive. Please exercise moderation while playing.**

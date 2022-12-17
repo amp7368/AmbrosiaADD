@@ -10,6 +10,7 @@ public class AmbrosiaColor {
     public static final int BAD = 0xfc5603;
     public static final int SUCCESS = Color.GREEN.getRGB();
     public static final int NORMAL = Color.CYAN.getRGB();
+    public static final int BLACKJACK = new Color(184, 0, 9).getRGB();
 
     public static class AmbrosiaColorRequest {
 

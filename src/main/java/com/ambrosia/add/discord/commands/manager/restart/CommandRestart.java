@@ -11,6 +11,7 @@ import java.util.Map;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -34,10 +35,17 @@ public class CommandRestart extends BaseCommand {
             RestartingMessageManager.get().sendRestarting(game.getChannel());
         }
         event.replyEmbeds(embed).queue((message) -> {
-            ongoingGames.values().forEach(game -> game.addFinishHook((g) -> {
-                message.editOriginalEmbeds(makeMessage(GameStorage.get().getOngoingGames())).queue();
-            }));
+            ongoingGames.values().forEach(game -> game.addFinishHook((g) -> edit(message)));
+            GameStorage.get().addStartHook((game) -> {
+                game.addFinishHook((g) -> edit(message));
+                RestartingMessageManager.get().sendRestarting(game.getChannel());
+                this.edit(message);
+            });
         });
+    }
+
+    private void edit(InteractionHook message) {
+        message.editOriginalEmbeds(makeMessage(GameStorage.get().getOngoingGames())).queue();
     }
 
     private MessageEmbed makeMessage(Map<Long, GameBase> ongoingGames) {

@@ -4,7 +4,7 @@ import apple.lib.modules.AppleModule;
 import apple.lib.modules.configs.data.config.AppleConfig.Builder;
 import apple.lib.modules.configs.factory.AppleConfigLike;
 import com.ambrosia.add.discord.active.ActiveRequestDatabase;
-import com.ambrosia.add.discord.commands.CommandHelp;
+import com.ambrosia.add.discord.commands.player.help.CommandHelp;
 import com.ambrosia.add.discord.commands.dealer.cash.CommandCash;
 import com.ambrosia.add.discord.commands.dealer.profile.CommandLink;
 import com.ambrosia.add.discord.commands.dealer.profile.CreateProfileCommand;
@@ -32,14 +32,6 @@ public class DiscordModule extends AppleModule {
 
     public static final String AMBROSIA_ICON =
         "https://cdn.discordapp" + ".com/icons/923749890104885271/a_52da37c184005a14d15538cb62271b9b.webp";
-    public static final Button GITHUB_README = Button.link("https://github.com/amp7368/AmbrosiaADD/blob/master/Readme.md", "Readme");
-    public static final Button GITHUB = Button.link("https://github.com/amp7368/AmbrosiaADD", "Github");
-    public static final Button BLACKJACK_WIKI = Button.link("https://github.com/amp7368/AmbrosiaADD/wiki/Blackjack", "Blackjack");
-    public static final Button WIKI = Button.link("https://github.com/amp7368/AmbrosiaADD/wiki", "Wiki");
-
-    public static ActionRow informationRow(Button gameWiki) {
-        return ActionRow.of(gameWiki, WIKI, GITHUB, GITHUB_README);
-    }
 
     private static DiscordModule instance;
 

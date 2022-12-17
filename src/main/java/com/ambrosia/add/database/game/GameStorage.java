@@ -7,13 +7,17 @@ import com.ambrosia.add.database.operation.TransactionEntity;
 import com.ambrosia.add.database.operation.TransactionStorage;
 import com.ambrosia.add.database.operation.TransactionType;
 import com.ambrosia.add.discord.log.DiscordLog;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import org.jetbrains.annotations.Nullable;
 
 public class GameStorage {
 
     private static GameStorage instance;
+    private final List<Consumer<GameBase>> startHooks = new ArrayList<>();
 
     public GameStorage() {
         instance = this;
@@ -25,11 +29,11 @@ public class GameStorage {
         return instance;
     }
 
-    public GameBase startGame(GameBase startedGame) {
+    public void startGame(GameBase startedGame) {
         synchronized (this.clientToGames) {
             this.clientToGames.put(startedGame.getClient().uuid, startedGame);
         }
-        return startedGame;
+        startHooks.forEach(hook -> hook.accept(startedGame));
     }
 
     @Nullable
@@ -62,5 +66,9 @@ public class GameStorage {
         synchronized (this.clientToGames) {
             return new HashMap<>(this.clientToGames);
         }
+    }
+
+    public void addStartHook(Consumer<GameBase> hook) {
+        this.startHooks.add(hook);
     }
 }

@@ -1,5 +1,6 @@
 package com.ambrosia.add.discord.active.cash;
 
+import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.operation.TransactionStorage;
 import com.ambrosia.add.database.operation.TransactionType;
 import com.ambrosia.add.discord.active.ActiveRequestType;
@@ -14,8 +15,8 @@ public class ActiveRequestCash extends ActiveRequest<ActiveRequestCashGui> {
 
     private final TransactionType transactionType;
 
-    public ActiveRequestCash(Member sender, int amount, TransactionType transactionType, long clientId) {
-        super(ActiveRequestType.CASH.getTypeId(), new ActiveRequestSender(sender));
+    public ActiveRequestCash(Member sender, ClientEntity client, int amount, TransactionType transactionType, long clientId) {
+        super(ActiveRequestType.CASH.getTypeId(), new ActiveRequestSender(sender, client));
         this.amount = amount;
         this.transactionType = transactionType;
         this.clientId = clientId;

@@ -24,13 +24,15 @@ public class ActiveRequestAccount extends ActiveRequest<ActiveRequestAccountGui>
         super(ActiveRequestType.ACCOUNT.getTypeId(), null);
     }
 
-    public ActiveRequestAccount(Member discord, String minecraft, String displayName) throws UpdateAccountException {
-        super(ActiveRequestType.ACCOUNT.getTypeId(), new ActiveRequestSender(discord));
+    public ActiveRequestAccount(Member discord, String minecraft, String displayName)
+        throws UpdateAccountException {
+        super(ActiveRequestType.ACCOUNT.getTypeId(), new ActiveRequestSender(discord, null));
         ClientDiscordDetails discordDetails = new ClientDiscordDetails(discord);
         ClientMinecraftDetails minecraftDetails = ClientMinecraftDetails.fromUsername(minecraft);
         if (minecraftDetails == null) throw new UpdateAccountException(String.format("Minecraft account: '%s' not found", minecraft));
         this.original = ClientStorage.get().findByDiscord(discord.getIdLong());
         if (this.original == null) this.original = ClientStorage.get().createClient(displayName, discordDetails);
+        sender.setClient(original);
         this.updated = ClientStorage.get().findByUUID(original.uuid);
         if (updated == null) throw new IllegalStateException("Client " + original.uuid + " does not exist!");
         this.updated.minecraft = minecraftDetails;
