@@ -46,27 +46,14 @@ public class Hand extends ArrayList<Card> {
         if (aceCount == 0) {
             return false;
         }
-
         int scoreWithoutAce = 0;
         for (int i = 1; i < d2.size(); i++) {
             Card c = d2.get(i);
             switch (c.getValue()) {
-                case 1:
-                    scoreWithoutAce += 1;
-
-                case 11:
-                case 12:
-                case 13:
-                    scoreWithoutAce += 10;
-                    break;
-
-                default:
-                    scoreWithoutAce += c.getValue();
+                case 1 -> scoreWithoutAce += 1;
+                case 11, 12, 13 -> scoreWithoutAce += 10;
+                default -> scoreWithoutAce += c.getValue();
             }
-        }
-
-        if (scoreWithoutAce > 9 && aceCount > 1) {
-            return false;
         }
 
         return scoreWithoutAce < 11;
@@ -86,26 +73,23 @@ public class Hand extends ArrayList<Card> {
         d2.sortDeck();
         d2.reverseDeck();
 
+        boolean hasAce = false;
+
         for (Card c : d2) {
             switch (c.getValue()) {
                 case 1 -> {
-                    // Next card is an Ace
-                    if (score + 11 <= 21) {
-                        if (d2.size() > d2.indexOf(c) + 1) {
-                            if (d2.get(d2.indexOf(c) + 1).getValue() == 1) {
-                                score += 1;
-                                break;
-                            }
-                        }
-
-                        score += 11;
-                        break;
-                    }
+                    // Check if ace can be 11 later
+                    hasAce = true;
                     score += 1;
+                    break;
                 }
                 case 11, 12, 13 -> score += 10;
                 default -> score += c.getValue();
             }
+        }
+
+        if (hasAce && score <= 11) { // there is no case where two aces are both 11
+            score += 10;
         }
 
         return score;

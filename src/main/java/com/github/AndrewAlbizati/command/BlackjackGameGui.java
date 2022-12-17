@@ -1,5 +1,7 @@
 package com.github.AndrewAlbizati.command;
 
+import com.ambrosia.add.discord.util.AmbrosiaColor;
+import com.ambrosia.add.discord.util.AmbrosiaColor.AmbrosiaColorGame;
 import com.github.AndrewAlbizati.game.BlackjackGame;
 import com.github.AndrewAlbizati.game.Card;
 import com.github.AndrewAlbizati.game.Hand;
@@ -108,7 +110,7 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
             "You bet **" + game.getCurrentBet() + "** credit" + (game.getCurrentBet() != 1 ? "s" : "") + "\n" + "You have **"
                 + game.getPlayerTotalCredits() + "** credit" + (game.getPlayerTotalCredits() != 1 ? "s" : "") + "\n\n" + "**Rules**\n"
                 + "Dealer must stand on all 17s\n" + "Blackjack pays 3 to 2");
-        eb.setColor(new Color(184, 0, 9));
+        eb.setColor(AmbrosiaColorGame.IN_PROGRESS);
         eb.setFooter("Game with " + user.getAsTag(), user.getAvatarUrl());
 
         // Show the dealer's up card and the players hand
@@ -189,4 +191,6 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
         getGame().end();
         this.remove();
     }
+
+
 }
