@@ -24,7 +24,8 @@ public class ActiveRequestSender {
     }
 
     public void author(EmbedBuilder embed) {
-        embed.setAuthor(String.format("%s - (%s)", client.minecraft, username), null, avatarUrl);
+        embed.setAuthor(String.format("%s - (%s)", client.minecraft == null ? "NA" : client.minecraft.name, username), null,
+            avatarUrl);
     }
 
     public void sendDm(MessageCreateData message) {
