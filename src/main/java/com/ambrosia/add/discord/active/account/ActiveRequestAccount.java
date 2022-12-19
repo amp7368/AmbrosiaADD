@@ -31,6 +31,7 @@ public class ActiveRequestAccount extends ActiveRequest<ActiveRequestAccountGui>
         ClientMinecraftDetails minecraftDetails = ClientMinecraftDetails.fromUsername(minecraft);
         if (minecraftDetails == null) throw new UpdateAccountException(String.format("Minecraft account: '%s' not found", minecraft));
         this.original = ClientStorage.get().findByDiscord(discord.getIdLong());
+        if(displayName == null) displayName = minecraft;
         if (this.original == null) this.original = ClientStorage.get().createClient(displayName, discordDetails);
         sender.setClient(original);
         this.updated = ClientStorage.get().findByUUID(original.uuid);
