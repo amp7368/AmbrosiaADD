@@ -1,16 +1,16 @@
-package com.ambrosia.roulette.bet.types;
+package com.ambrosia.roulette.game.bet.types;
 
-import com.ambrosia.roulette.bet.RouletteBetPart;
+import com.ambrosia.roulette.game.bet.RouletteBetPart;
 import java.util.List;
 import java.util.function.Function;
 
-public class RouletteBetStreet extends RouletteBet {
+public class RouletteBetTypeStreet extends RouletteBetType {
 
-    public RouletteBetStreet(RouletteBetType type) {
+    public RouletteBetTypeStreet(RouletteBetTypeList type) {
         super(type);
     }
 
-    public static Function<RouletteBetType, ? extends RouletteBet> factory(int i) {
+    public static Function<RouletteBetTypeList, ? extends RouletteBetType> factory(int i) {
         return null;
     }
 

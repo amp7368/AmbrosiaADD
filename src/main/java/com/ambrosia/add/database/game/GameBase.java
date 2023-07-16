@@ -9,9 +9,9 @@ import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 
 public abstract class GameBase {
 
+    protected final CreditReservation creditReservation;
+    private final List<Consumer<GameBase>> finishHooks = new ArrayList<>();
     private MessageChannel channel;
-    private CreditReservation creditReservation;
-    private List<Consumer<GameBase>> finishHooks = new ArrayList<>();
 
     public GameBase(CreditReservation creditReservation) {
         this.creditReservation = creditReservation;

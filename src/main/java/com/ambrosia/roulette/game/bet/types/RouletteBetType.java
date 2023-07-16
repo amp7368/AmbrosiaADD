@@ -1,14 +1,14 @@
-package com.ambrosia.roulette.bet.types;
+package com.ambrosia.roulette.game.bet.types;
 
-import com.ambrosia.roulette.bet.RouletteBetPart;
+import com.ambrosia.roulette.game.bet.RouletteBetPart;
 import java.util.List;
 
-public abstract class RouletteBet {
+public abstract class RouletteBetType {
 
-    private final String typeId;
-    protected transient RouletteBetType type;
+    protected String typeId;
+    protected transient RouletteBetTypeList type;
 
-    public RouletteBet(RouletteBetType type) {
+    public RouletteBetType(RouletteBetTypeList type) {
         this.type = type;
         this.typeId = type.getTypeId();
     }

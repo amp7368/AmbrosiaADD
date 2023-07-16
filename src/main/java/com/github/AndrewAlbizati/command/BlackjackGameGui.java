@@ -1,6 +1,5 @@
 package com.github.AndrewAlbizati.command;
 
-import com.ambrosia.add.discord.util.AmbrosiaColor;
 import com.ambrosia.add.discord.util.AmbrosiaColor.AmbrosiaColorGame;
 import com.github.AndrewAlbizati.game.BlackjackGame;
 import com.github.AndrewAlbizati.game.Card;
@@ -8,7 +7,6 @@ import com.github.AndrewAlbizati.game.Hand;
 import com.github.AndrewAlbizati.result.BlackjackHandResult;
 import discord.util.dcf.gui.base.gui.DCFGui;
 import discord.util.dcf.gui.base.page.DCFGuiPage;
-import java.awt.Color;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;

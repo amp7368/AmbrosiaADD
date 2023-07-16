@@ -1,6 +1,6 @@
 package com.ambrosia.roulette.table;
 
-import com.ambrosia.roulette.bet.RouletteBetPart;
+import com.ambrosia.roulette.game.bet.RouletteBetPart;
 
 public record RouletteSpace(RouletteSpaceColor isRed, int digit, RouletteBetPart betPart) {
 

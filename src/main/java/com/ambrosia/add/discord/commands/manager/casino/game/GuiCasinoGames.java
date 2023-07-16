@@ -3,7 +3,6 @@ package com.ambrosia.add.discord.commands.manager.casino.game;
 import apple.utilities.util.Pretty;
 import com.ambrosia.add.database.casino.game.CasinoGameCountByConclusion;
 import com.ambrosia.add.database.casino.game.CasinoGamesCountByName;
-import com.ambrosia.add.discord.DiscordBot;
 import com.ambrosia.add.discord.util.AmbrosiaColor;
 import com.ambrosia.add.discord.util.Emeralds;
 import com.github.AndrewAlbizati.Blackjack;
@@ -20,9 +19,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class GuiCasinoGames extends DCFGuiPage<DCFGui> {
 
-    private String authorName;
-    private String authorIcon;
-    private CasinoGamesCountByName total;
+    private final String authorName;
+    private final String authorIcon;
+    private final CasinoGamesCountByName total;
 
     public GuiCasinoGames(DCFGui dcfGui, String authorName, String authorIcon, CasinoGamesCountByName total) {
         super(dcfGui);

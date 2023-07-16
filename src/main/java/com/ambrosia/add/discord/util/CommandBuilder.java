@@ -16,6 +16,8 @@ public interface CommandBuilder extends SendMessage {
     String EMERALD_OPTION = "emeralds";
     String EMERALD_BLOCK_OPTION = "blocks";
     String LIQUID_EMERALD_OPTION = "liquids";
+    CommandBuilder instance = new CommandBuilder() {
+    };
 
     @Nullable
     default ClientEntity findClient(SlashCommandInteractionEvent event) {
@@ -85,6 +87,7 @@ public interface CommandBuilder extends SendMessage {
     }
 
     default void errorRegisterWithStaff(SlashCommandInteractionEvent event) {
-        event.replyEmbeds(error("To register your account use **/request account** and fill in your Minecraft username.")).setEphemeral(true).queue();
+        event.replyEmbeds(error("To register your account use **/request account** and fill in your Minecraft username."))
+            .setEphemeral(true).queue();
     }
 }

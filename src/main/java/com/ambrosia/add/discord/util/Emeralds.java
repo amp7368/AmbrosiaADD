@@ -16,6 +16,10 @@ public class Emeralds {
         return message(credits, Integer.MAX_VALUE, isBold) + String.format("\n(**%s** total)", Pretty.commas(credits));
     }
 
+    public static String message(long credits, boolean isBold) {
+        return message(credits, Integer.MAX_VALUE, isBold);
+    }
+
     public static String message(long credits, int truncate, boolean isBold) {
         long creditsLeft = credits;
         long stx = creditsLeft / STACK;

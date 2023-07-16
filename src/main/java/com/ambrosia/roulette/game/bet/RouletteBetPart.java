@@ -1,4 +1,4 @@
-package com.ambrosia.roulette.bet;
+package com.ambrosia.roulette.game.bet;
 
 import com.ambrosia.roulette.Roulette;
 import com.ambrosia.roulette.table.RouletteSpace;

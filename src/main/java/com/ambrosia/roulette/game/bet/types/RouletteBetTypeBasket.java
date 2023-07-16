@@ -1,7 +1,7 @@
-package com.ambrosia.roulette.bet.types;
+package com.ambrosia.roulette.game.bet.types;
 
 import com.ambrosia.roulette.Roulette;
-import com.ambrosia.roulette.bet.RouletteBetPart;
+import com.ambrosia.roulette.game.bet.RouletteBetPart;
 import com.ambrosia.roulette.table.RouletteSpace;
 import com.ambrosia.roulette.table.RouletteTable;
 import java.util.ArrayList;
@@ -10,24 +10,24 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
-public class RouletteBetBasket extends RouletteBet {
+public class RouletteBetTypeBasket extends RouletteBetType {
 
-    private final Collection<RouletteSpace> basket = new ArrayList<>();
-    private final int countOfJoin;
+    protected final Collection<RouletteSpace> basket = new ArrayList<>();
+    protected final int countOfJoin;
 
-    public RouletteBetBasket(RouletteBetType typeId, int countOfJoin) {
+    public RouletteBetTypeBasket(RouletteBetTypeList typeId, int countOfJoin) {
         super(typeId);
         this.countOfJoin = countOfJoin;
     }
 
-    public static Function<RouletteBetType, RouletteBetBasket> factory(int countOfJoin) {
-        return (type) -> new RouletteBetBasket(type, countOfJoin);
+    public static Function<RouletteBetTypeList, RouletteBetTypeBasket> factory(int countOfJoin) {
+        return (type) -> new RouletteBetTypeBasket(type, countOfJoin);
     }
 
     @Override
     public List<RouletteBetPart> actions() {
         // get all the allowed spaces of a bet
-        boolean isRequire0InBet = type == RouletteBetType.TRIO;
+        boolean isRequire0InBet = type == RouletteBetTypeList.TRIO;
         RouletteTable table = Roulette.TABLE;
         List<RouletteSpace> allowedSpaces = isRequire0InBet ? table.zeroStreet(true) : table.spaces(true);
 
