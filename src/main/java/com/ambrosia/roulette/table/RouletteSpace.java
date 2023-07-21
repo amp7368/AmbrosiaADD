@@ -34,12 +34,12 @@ public record RouletteSpace(RouletteSpaceColor isRed, int digit, RouletteBetPart
         return this.digit <= 3;
     }
 
-    private int row() {
+    public int row() {
         if (digit == 0) return -1;
         return (digit - 1) / 3;
     }
 
-    private int col() {
+    public int col() {
         if (digit == 0) return -1;
         return (digit - 1) % 3;
     }
