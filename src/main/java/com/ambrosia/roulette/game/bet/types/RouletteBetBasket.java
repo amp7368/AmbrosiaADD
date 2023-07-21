@@ -47,7 +47,7 @@ public class RouletteBetBasket extends RouletteBet {
     @Override
     protected String shortDescription() {
         return this.basket.stream()
-            .map(s -> s.toString(true, true))
+            .map(s -> s.display(true, true))
             .collect(Collectors.joining(", "));
     }
 

@@ -18,17 +18,30 @@ public record RouletteSpace(RouletteSpaceColor isRed, int digit, RouletteBetPart
 
     public boolean isNeighbor(RouletteSpace other) {
         if (other.digit == this.digit) return false;
+
         if (other.digit == 0) return this.isZeroStreet();
         if (digit == 0) return other.isZeroStreet();
-        return Math.abs(other.digit - digit) == 1 || Math.abs(other.col() - this.col()) == 1;
+
+        int rowDiff = Math.abs(other.row() - row());
+        int colDiff = Math.abs(other.col() - this.col());
+        boolean isColNeighbor = colDiff == 1 && rowDiff == 0;
+        boolean isRowNeighbor = colDiff == 0 && rowDiff == 1;
+        return isRowNeighbor || isColNeighbor;
     }
+
 
     private boolean isZeroStreet() {
         return this.digit <= 3;
     }
 
+    private int row() {
+        if (digit == 0) return -1;
+        return (digit - 1) / 3;
+    }
+
     private int col() {
-        return digit % 3;
+        if (digit == 0) return -1;
+        return (digit - 1) % 3;
     }
 
     @Override
@@ -36,7 +49,7 @@ public record RouletteSpace(RouletteSpaceColor isRed, int digit, RouletteBetPart
         return String.valueOf(this.digit);
     }
 
-    public String toString(boolean bold, boolean hashtag) {
+    public String display(boolean bold, boolean hashtag) {
         String msg = String.valueOf(this.digit);
         if (hashtag) msg = "#" + msg;
         if (bold) return "**%s**".formatted(msg);

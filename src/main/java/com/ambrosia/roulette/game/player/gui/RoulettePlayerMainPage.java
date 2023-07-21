@@ -2,8 +2,10 @@ package com.ambrosia.roulette.game.player.gui;
 
 import com.ambrosia.add.discord.util.AmbrosiaColor;
 import com.ambrosia.roulette.game.player.RoulettePlayerGame;
-import com.ambrosia.roulette.game.player.gui.bet.RouletteStraightUpPage;
-import com.ambrosia.roulette.game.player.gui.bet.RouletteStraightUpType;
+import com.ambrosia.roulette.game.player.gui.split.RouletteSplitColPage;
+import com.ambrosia.roulette.game.player.gui.split.RouletteSplitType;
+import com.ambrosia.roulette.game.player.gui.straight.RouletteStraightUpPage;
+import com.ambrosia.roulette.game.player.gui.straight.RouletteStraightUpType;
 import discord.util.dcf.gui.base.page.DCFGuiPage;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
@@ -35,6 +37,11 @@ public class RoulettePlayerMainPage extends DCFGuiPage<RoulettePlayerGui> {
         registerButton(STRAIGHT_UP_HIGH.getId(), (e) -> new RouletteStraightUpPage(getParent(), RouletteStraightUpType.HIGH));
         registerButton(STRAIGHT_UP_MIDDLE.getId(), (e) -> new RouletteStraightUpPage(getParent(), RouletteStraightUpType.MIDDLE));
         registerButton(STRAIGHT_UP_LOW.getId(), (e) -> new RouletteStraightUpPage(getParent(), RouletteStraightUpType.LOW));
+
+        registerButton(SPLIT_HIGH.getId(), (e) -> new RouletteSplitColPage(getParent(), RouletteSplitType.HIGH));
+        registerButton(SPLIT_MIDDLE.getId(), (e) -> new RouletteSplitColPage(getParent(), RouletteSplitType.MIDDLE));
+        registerButton(SPLIT_LOW.getId(), (e) -> new RouletteSplitColPage(getParent(), RouletteSplitType.LOW));
+
         registerButton(CANCEL_BET.getId(), e -> getParent().doneBettingHook());
     }
 

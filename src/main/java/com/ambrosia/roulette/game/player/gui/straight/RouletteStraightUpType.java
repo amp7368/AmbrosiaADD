@@ -1,4 +1,4 @@
-package com.ambrosia.roulette.game.player.gui.bet;
+package com.ambrosia.roulette.game.player.gui.straight;
 
 public enum RouletteStraightUpType {
     HIGH(2),

@@ -1,13 +1,14 @@
 package com.ambrosia.roulette.game.bet.types;
 
 import apple.utilities.util.Pretty;
+import com.ambrosia.roulette.game.bet.impl.RouletteBetSplit;
 import com.ambrosia.roulette.game.bet.impl.RouletteBetStraightUp;
 import com.ambrosia.roulette.game.player.RoulettePartialBet;
 
 public class RouletteBetType<Bet extends RouletteBet> {
 
     public static RouletteBetType<RouletteBetStraightUp> STRAIGHT_UP;
-    public static RouletteBetType<RouletteBetBasket> SPLIT;
+    public static RouletteBetType<RouletteBetSplit> SPLIT;
     public static RouletteBetType<RouletteBetStreet> STREET;
     public static RouletteBetType<RouletteBetBasket> TRIO;
     public static RouletteBetType<RouletteBetBasket> CORNER;
@@ -23,7 +24,7 @@ public class RouletteBetType<Bet extends RouletteBet> {
 
     static {
         STRAIGHT_UP = new RouletteBetType<>("STRAIGHT_UP", 35, RouletteBetStraightUp.class, RouletteBetStraightUp::new);
-        SPLIT = new RouletteBetType<>("SPLIT", 17, RouletteBetBasket.class, RouletteBetBasket.factory(2));
+        SPLIT = new RouletteBetType<>("SPLIT", 17, RouletteBetSplit.class, RouletteBetSplit::new);
         STREET = new RouletteBetType<>("STREET", 11, RouletteBetStreet.class, RouletteBetStreet.factory(1));
         TRIO = new RouletteBetType<>("TRIO", 11, RouletteBetBasket.class, RouletteBetBasket.factory(3));
         CORNER = new RouletteBetType<>("CORNER", 8, RouletteBetBasket.class, RouletteBetBasket.factory(4));
