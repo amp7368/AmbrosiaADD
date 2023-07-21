@@ -1,6 +1,8 @@
-package com.ambrosia.roulette.game.bet.types;
+package com.ambrosia.roulette.game.bet.impl;
 
-import com.ambrosia.roulette.Roulette;
+import com.ambrosia.roulette.game.bet.types.RouletteBet;
+import com.ambrosia.roulette.game.bet.types.RouletteBetFactory;
+import com.ambrosia.roulette.game.bet.types.RouletteBetType;
 import com.ambrosia.roulette.game.player.RoulettePartialBet;
 import com.ambrosia.roulette.table.RouletteSpace;
 import com.ambrosia.roulette.table.RouletteStreet;
@@ -12,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class RouletteBetStreet extends RouletteBet {
 
     private final int streetCount;
-    private int[] streets;
+    private RouletteStreet[] streets;
 
     public RouletteBetStreet(RouletteBetType<?> type, RoulettePartialBet bet, int streetCount) {
         super(type, bet);
@@ -40,10 +42,10 @@ public class RouletteBetStreet extends RouletteBet {
     }
 
     private List<RouletteStreet> streets() {
-        return Arrays.stream(this.streets).sorted().mapToObj(Roulette.TABLE::getStreet).toList();
+        return Arrays.stream(this.streets).sorted(RouletteStreet.COMPARATOR).toList();
     }
 
-    public RouletteBet finalizeStreets(int... streets) {
+    public RouletteBet finalizeStreets(RouletteStreet... streets) {
         this.streets = streets;
         return this;
     }

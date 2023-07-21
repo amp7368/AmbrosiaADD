@@ -1,7 +1,10 @@
-package com.ambrosia.roulette.game.bet.types;
+package com.ambrosia.roulette.game.bet.impl;
 
 import com.ambrosia.roulette.Roulette;
 import com.ambrosia.roulette.game.bet.RouletteBetPart;
+import com.ambrosia.roulette.game.bet.types.RouletteBet;
+import com.ambrosia.roulette.game.bet.types.RouletteBetFactory;
+import com.ambrosia.roulette.game.bet.types.RouletteBetType;
 import com.ambrosia.roulette.game.player.RoulettePartialBet;
 import com.ambrosia.roulette.table.RouletteSpace;
 import com.ambrosia.roulette.table.RouletteTable;
@@ -47,7 +50,7 @@ public class RouletteBetBasket extends RouletteBet {
     @Override
     protected String shortDescription() {
         return this.basket.stream()
-            .map(s -> s.toString(true, true))
+            .map(s -> s.display(true, true))
             .collect(Collectors.joining(", "));
     }
 

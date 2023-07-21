@@ -1,17 +1,22 @@
 package com.ambrosia.roulette.game.bet.types;
 
 import apple.utilities.util.Pretty;
+import com.ambrosia.roulette.game.bet.impl.RouletteBetBasket;
+import com.ambrosia.roulette.game.bet.impl.RouletteBetCorner;
+import com.ambrosia.roulette.game.bet.impl.RouletteBetSixLine;
+import com.ambrosia.roulette.game.bet.impl.RouletteBetSplit;
 import com.ambrosia.roulette.game.bet.impl.RouletteBetStraightUp;
+import com.ambrosia.roulette.game.bet.impl.RouletteBetStreet;
 import com.ambrosia.roulette.game.player.RoulettePartialBet;
 
 public class RouletteBetType<Bet extends RouletteBet> {
 
     public static RouletteBetType<RouletteBetStraightUp> STRAIGHT_UP;
-    public static RouletteBetType<RouletteBetBasket> SPLIT;
+    public static RouletteBetType<RouletteBetSplit> SPLIT;
     public static RouletteBetType<RouletteBetStreet> STREET;
     public static RouletteBetType<RouletteBetBasket> TRIO;
-    public static RouletteBetType<RouletteBetBasket> CORNER;
-    public static RouletteBetType<RouletteBetStreet> LINE;
+    public static RouletteBetType<RouletteBetCorner> CORNER;
+    public static RouletteBetType<RouletteBetSixLine> SIX_LINE;
     public static RouletteBetType<RouletteBetBasket> COLUMN;
     public static RouletteBetType<RouletteBetBasket> DOZEN;
     public static RouletteBetType<RouletteBetBasket> LOW;
@@ -23,11 +28,11 @@ public class RouletteBetType<Bet extends RouletteBet> {
 
     static {
         STRAIGHT_UP = new RouletteBetType<>("STRAIGHT_UP", 35, RouletteBetStraightUp.class, RouletteBetStraightUp::new);
-        SPLIT = new RouletteBetType<>("SPLIT", 17, RouletteBetBasket.class, RouletteBetBasket.factory(2));
+        SPLIT = new RouletteBetType<>("SPLIT", 17, RouletteBetSplit.class, RouletteBetSplit::new);
         STREET = new RouletteBetType<>("STREET", 11, RouletteBetStreet.class, RouletteBetStreet.factory(1));
         TRIO = new RouletteBetType<>("TRIO", 11, RouletteBetBasket.class, RouletteBetBasket.factory(3));
-        CORNER = new RouletteBetType<>("CORNER", 8, RouletteBetBasket.class, RouletteBetBasket.factory(4));
-        LINE = new RouletteBetType<>("LINE", 5, RouletteBetStreet.class, RouletteBetStreet.factory(2));
+        CORNER = new RouletteBetType<>("CORNER", 8, RouletteBetCorner.class, RouletteBetCorner::new);
+        SIX_LINE = new RouletteBetType<>("SIX_LINE", 5, RouletteBetSixLine.class, RouletteBetSixLine::new);
         COLUMN = new RouletteBetType<>("COLUMN", 2, null, null);
         DOZEN = new RouletteBetType<>("DOZEN", 2, null, null);
         LOW = new RouletteBetType<>("LOW", 1, null, null);

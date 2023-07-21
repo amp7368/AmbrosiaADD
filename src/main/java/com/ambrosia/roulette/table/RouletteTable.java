@@ -6,9 +6,12 @@ import java.util.stream.Stream;
 
 public class RouletteTable {
 
-    private final RouletteStreet[] streets = new RouletteStreet[12];
-    private final RouletteColumn[] columns = new RouletteColumn[3];
-    private final RouletteSpace[] spaces = new RouletteSpace[12 * 3];
+    public static final int MAX_ROWS = 12;
+    public static final int MAX_COLS = 3;
+
+    private final RouletteStreet[] streets = new RouletteStreet[MAX_ROWS];
+    private final RouletteColumn[] columns = new RouletteColumn[MAX_COLS];
+    private final RouletteSpace[] spaces = new RouletteSpace[MAX_ROWS * MAX_COLS];
     private final RouletteSpace zero = new RouletteSpace(RouletteSpaceColor.GREEN, 0);
 
     public RouletteTable() {
@@ -37,11 +40,11 @@ public class RouletteTable {
     private void setColumn(int columnIndex) {
         RouletteSpace[] column = new RouletteSpace[12];
         Arrays.setAll(column, i -> getStreet(i).getSpace(columnIndex));
-        this.columns[columnIndex] = new RouletteColumn(column);
+        this.columns[columnIndex] = new RouletteColumn(column, columnIndex);
     }
 
     private void createStreet(boolean red1, boolean red2, boolean red3, int streetNum) {
-        int numIndex = streetNum * 3;
+        int numIndex = streetNum * MAX_COLS;
         int num = numIndex + 1;
         RouletteSpace a = new RouletteSpace(red1, num++);
         RouletteSpace b = new RouletteSpace(red2, num++);
@@ -53,6 +56,7 @@ public class RouletteTable {
     }
 
     public RouletteSpace getSpace(int roll) {
+        if (roll == 0) return getZero();
         return spaces[roll - 1];
     }
 
@@ -87,10 +91,26 @@ public class RouletteTable {
     }
 
     public RouletteStreet getStreet(int street) {
-        return this.streets[street];
+        synchronized (this.streets) {
+            return this.streets[street];
+        }
+    }
+
+    public List<RouletteStreet> streets() {
+        synchronized (this.streets) {
+            return List.of(this.streets);
+        }
     }
 
     public RouletteColumn getColumn(int column) {
-        return this.columns[column];
+        synchronized (this.columns) {
+            return this.columns[column];
+        }
+    }
+
+    public List<RouletteColumn> columns() {
+        synchronized (this.columns) {
+            return List.of(this.columns);
+        }
     }
 }
