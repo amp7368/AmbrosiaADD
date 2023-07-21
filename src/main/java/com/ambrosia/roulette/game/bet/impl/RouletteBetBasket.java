@@ -1,7 +1,10 @@
-package com.ambrosia.roulette.game.bet.types;
+package com.ambrosia.roulette.game.bet.impl;
 
 import com.ambrosia.roulette.Roulette;
 import com.ambrosia.roulette.game.bet.RouletteBetPart;
+import com.ambrosia.roulette.game.bet.types.RouletteBet;
+import com.ambrosia.roulette.game.bet.types.RouletteBetFactory;
+import com.ambrosia.roulette.game.bet.types.RouletteBetType;
 import com.ambrosia.roulette.game.player.RoulettePartialBet;
 import com.ambrosia.roulette.table.RouletteSpace;
 import com.ambrosia.roulette.table.RouletteTable;

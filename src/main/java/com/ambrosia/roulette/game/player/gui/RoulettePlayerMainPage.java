@@ -2,6 +2,7 @@ package com.ambrosia.roulette.game.player.gui;
 
 import com.ambrosia.add.discord.util.AmbrosiaColor;
 import com.ambrosia.roulette.game.player.RoulettePlayerGame;
+import com.ambrosia.roulette.game.player.gui.line.RouletteSixLinePage;
 import com.ambrosia.roulette.game.player.gui.split.RouletteSplitColPage;
 import com.ambrosia.roulette.game.player.gui.split.RouletteSplitType;
 import com.ambrosia.roulette.game.player.gui.straight.RouletteStraightUpPage;
@@ -44,6 +45,8 @@ public class RoulettePlayerMainPage extends DCFGuiPage<RoulettePlayerGui> {
         registerButton(SPLIT_LOW.getId(), (e) -> new RouletteSplitColPage(getParent(), RouletteSplitType.LOW));
 
         registerButton(STREET.getId(), (e) -> new RouletteStreetPage(getParent()));
+
+        registerButton(SIX_LINE.getId(), (e) -> new RouletteSixLinePage(getParent()));
 
         registerButton(CANCEL_BET.getId(), e -> getParent().doneBettingHook());
     }

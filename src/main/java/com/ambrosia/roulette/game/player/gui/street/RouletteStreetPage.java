@@ -1,14 +1,13 @@
 package com.ambrosia.roulette.game.player.gui.street;
 
 import com.ambrosia.roulette.Roulette;
+import com.ambrosia.roulette.game.bet.impl.RouletteBetStreet;
 import com.ambrosia.roulette.game.bet.types.RouletteBet;
-import com.ambrosia.roulette.game.bet.types.RouletteBetStreet;
 import com.ambrosia.roulette.game.bet.types.RouletteBetType;
 import com.ambrosia.roulette.game.player.gui.RoulettePlayerGui;
 import com.ambrosia.roulette.game.player.gui.base.RouletteBetPage;
 import com.ambrosia.roulette.table.RouletteSpace;
 import com.ambrosia.roulette.table.RouletteStreet;
-import java.util.Arrays;
 import java.util.List;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.components.ItemComponent;
@@ -26,14 +25,16 @@ public class RouletteStreetPage extends RouletteBetPage {
     protected void initButtons() {
         super.initButtons();
         for (RouletteStreet street : Roulette.TABLE.streets()) {
-            registerButton(streetButton(street).getId(), e -> {
-                RouletteBet bet = getParent().getPlayer().finishBet((partialBet) -> {
-                    RouletteBetStreet newBet = RouletteBetType.STREET.create(partialBet);
-                    return newBet.finalizeStreets(street);
-                });
-                getParent().afterBetHook(bet);
-            });
+            registerButton(streetButton(street).getId(), e -> onStreetButton(street));
         }
+    }
+
+    protected void onStreetButton(RouletteStreet street) {
+        RouletteBet bet = getParent().getPlayer().finishBet((partialBet) -> {
+            RouletteBetStreet newBet = RouletteBetType.STREET.create(partialBet);
+            return newBet.finalizeStreets(street);
+        });
+        getParent().afterBetHook(bet);
     }
 
     @Override
@@ -50,11 +51,8 @@ public class RouletteStreetPage extends RouletteBetPage {
         return splitRows(spaces, 4);
     }
 
-    private Button streetButton(RouletteStreet street) {
-        List<String> spaces = Arrays.stream(street.getSpaces()).map(space -> space.display(false, false)).toList();
-        String id = String.join("_", spaces);
-        String name = "(%s)".formatted(String.join(", ", spaces));
-        return Button.primary(id, name);
+    protected Button streetButton(RouletteStreet street) {
+        return Button.primary(street.id(), street.display());
     }
 
     @Override
