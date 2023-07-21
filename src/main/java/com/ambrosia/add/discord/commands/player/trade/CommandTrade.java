@@ -34,6 +34,7 @@ public class CommandTrade extends BaseCommand {
         clientTrading = TransactionStorage.get().trade(clientTrading.uuid, clientReceiving.uuid, amount);
         if (clientTrading == null) {
             event.replyEmbeds(error("You don't have enough credits")).setEphemeral(true).queue();
+            return;
         }
         String thumbnail = clientReceiving.bestImgUrl();
         String iconUrl = clientTrading.bestImgUrl();

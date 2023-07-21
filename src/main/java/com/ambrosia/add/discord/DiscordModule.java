@@ -4,7 +4,6 @@ import apple.lib.modules.AppleModule;
 import apple.lib.modules.configs.data.config.AppleConfig.Builder;
 import apple.lib.modules.configs.factory.AppleConfigLike;
 import com.ambrosia.add.discord.active.ActiveRequestDatabase;
-import com.ambrosia.add.discord.commands.player.help.CommandHelp;
 import com.ambrosia.add.discord.commands.dealer.cash.CommandCash;
 import com.ambrosia.add.discord.commands.dealer.profile.CommandLink;
 import com.ambrosia.add.discord.commands.dealer.profile.CreateProfileCommand;
@@ -12,6 +11,7 @@ import com.ambrosia.add.discord.commands.dealer.view.ViewProfileCommand;
 import com.ambrosia.add.discord.commands.manager.casino.CommandCasino;
 import com.ambrosia.add.discord.commands.manager.delete.CommandDelete;
 import com.ambrosia.add.discord.commands.manager.restart.CommandRestart;
+import com.ambrosia.add.discord.commands.player.help.CommandHelp;
 import com.ambrosia.add.discord.commands.player.profile.ProfileCommand;
 import com.ambrosia.add.discord.commands.player.request.CommandRequest;
 import com.ambrosia.add.discord.commands.player.stats.CommandStats;
@@ -26,8 +26,6 @@ import java.util.List;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 public class DiscordModule extends AppleModule {
 

@@ -18,9 +18,8 @@ public class BlackjackGame extends GameBase {
     private final Hand dealerHand;
     private final List<Hand> playerHand = new ArrayList<>();
     private final Deck deck;
-
-    private int selectedHandIndex = 0;
     private final BlackjackGameResult results;
+    private int selectedHandIndex = 0;
     private boolean isDoubleDown;
 
 
@@ -136,6 +135,7 @@ public class BlackjackGame extends GameBase {
         this.results.result(handResult);
     }
 
+    @Override
     public void end() {
         this.setGameComplete();
         this.creditReservation.release(this.results.toEntity());

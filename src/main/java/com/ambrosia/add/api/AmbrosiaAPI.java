@@ -3,36 +3,39 @@ package com.ambrosia.add.api;
 import apple.lib.modules.AppleModule;
 import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.client.ClientStorage;
-import com.ambrosia.add.database.game.GameBase;
 import com.ambrosia.add.database.game.GameStorage;
 
 public class AmbrosiaAPI extends AppleModule {
 
     private static AmbrosiaAPI instance;
 
-    public static AmbrosiaAPI get() {
-        return instance;
-    }
-
     public AmbrosiaAPI() {
         instance = this;
     }
 
-    public synchronized CreditReservation reserve(long discordId, long reserve) {
+    public static AmbrosiaAPI get() {
+        return instance;
+    }
+
+    public synchronized CreditReservation reserve(long discordId, long reserve, boolean allowAlreadyPlaying) {
         ClientEntity client = ClientStorage.get().findByDiscord(discordId);
         if (client == null) {
-            if(reserve == 0){
-                return new CreditReservation(new ClientEntity(0,"Guest"), reserve);
+            if (reserve == 0) {
+                ClientEntity guest = new ClientEntity(0, "Guest");
+                return new CreditReservation(guest, reserve);
             }
-            return new CreditReservation(null, reserve).setRejected(CreditReservationRejection.NO_CLIENT);
+            return new CreditReservation(null, reserve)
+                .setRejected(CreditReservationRejection.NO_CLIENT);
         }
 
-        GameBase ongoingGame = GameStorage.get().findOngoingGame(client.uuid);
         CreditReservation reservation = new CreditReservation(client, reserve);
-        if (ongoingGame != null)
-            return reservation.setOngoingGame(ongoingGame).setRejected(CreditReservationRejection.ALREADY_IN_GAME);
+        reservation.setOngoingGame(GameStorage.get().findOngoingGame(client.uuid));
 
-        if (client.credits < reserve) return reservation.setRejected(CreditReservationRejection.NOT_ENOUGH_CREDITS);
+        if (!allowAlreadyPlaying && reservation.alreadyPlaying())
+            return reservation.setRejected(CreditReservationRejection.ALREADY_IN_GAME);
+
+        if (reservation.notEnoughCredits())
+            return reservation.setRejected(CreditReservationRejection.NOT_ENOUGH_CREDITS);
 
         return reservation;
     }
