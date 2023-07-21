@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 public class RouletteTable {
 
     private final RouletteStreet[] streets = new RouletteStreet[12];
+    private final RouletteColumn[] columns = new RouletteColumn[3];
     private final RouletteSpace[] spaces = new RouletteSpace[12 * 3];
     private final RouletteSpace zero = new RouletteSpace(RouletteSpaceColor.GREEN, 0);
 
@@ -27,6 +28,16 @@ public class RouletteTable {
         createStreet(false, false, true, street++);
         createStreet(false, true, false, street++);
         createStreet(true, false, true, street);
+
+        setColumn(0);
+        setColumn(1);
+        setColumn(2);
+    }
+
+    private void setColumn(int columnIndex) {
+        RouletteSpace[] column = new RouletteSpace[12];
+        Arrays.setAll(column, i -> getStreet(i).getSpace(columnIndex));
+        this.columns[columnIndex] = new RouletteColumn(column);
     }
 
     private void createStreet(boolean red1, boolean red2, boolean red3, int streetNum) {
@@ -79,4 +90,7 @@ public class RouletteTable {
         return this.streets[street];
     }
 
+    public RouletteColumn getColumn(int column) {
+        return this.columns[column];
+    }
 }

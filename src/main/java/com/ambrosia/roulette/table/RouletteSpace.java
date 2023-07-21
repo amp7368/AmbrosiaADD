@@ -30,4 +30,16 @@ public record RouletteSpace(RouletteSpaceColor isRed, int digit, RouletteBetPart
     private int col() {
         return digit % 3;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(this.digit);
+    }
+
+    public String toString(boolean bold, boolean hashtag) {
+        String msg = String.valueOf(this.digit);
+        if (hashtag) msg = "#" + msg;
+        if (bold) return "**%s**".formatted(msg);
+        return msg;
+    }
 }

@@ -22,11 +22,11 @@ public class RouletteBetSubCommand extends BaseSubCommand implements BetCommand 
 
         RouletteGame game = RouletteGameManager.getGame(event.getChannel().getIdLong());
         if (game == null) {
-            error("There is no game in-progress in this channel!");
+            event.replyEmbeds(error("There is no game in-progress in this channel!")).setEphemeral(true).queue();
             return;
         }
 
-        RoulettePlayerGame player = game.getOrCreatePlayer(reservation);
+        RoulettePlayerGame player = game.getOrCreatePlayer(event.getMember(), reservation);
 
         boolean additionalBetSuccess = player.startBet((int) reservation.getReserved());
         if (!additionalBetSuccess) {
@@ -34,7 +34,7 @@ public class RouletteBetSubCommand extends BaseSubCommand implements BetCommand 
             return;
         }
 
-        RoulettePlayerGui gui = new RoulettePlayerGui(dcf, msg -> event.reply(msg).setEphemeral(true), player);
+        RoulettePlayerGui gui = new RoulettePlayerGui(dcf, msg -> event.reply(msg).setEphemeral(false), player);
         gui.addPage(new RoulettePlayerMainPage(gui));
         player.setGui(gui);
         gui.send();

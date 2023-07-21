@@ -9,6 +9,8 @@ public class RouletteTableGui extends DCFGui {
 
     private final RouletteGame game;
 
+    private final EditOnTimer timer = new EditOnTimer(this::editMessage, 1750);
+
     public RouletteTableGui(RouletteGame game, DCF dcf, GuiReplyFirstMessage createFirstMessage) {
         super(dcf, createFirstMessage);
         this.game = game;
@@ -16,5 +18,9 @@ public class RouletteTableGui extends DCFGui {
 
     public RouletteGame getGame() {
         return this.game;
+    }
+
+    public void updateBetsUI() {
+        timer.tryRun();
     }
 }

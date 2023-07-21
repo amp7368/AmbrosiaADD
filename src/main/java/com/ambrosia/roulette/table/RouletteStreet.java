@@ -11,4 +11,8 @@ public class RouletteStreet {
     public RouletteSpace[] getSpaces() {
         return street;
     }
+
+    public RouletteSpace getSpace(int column) {
+        return this.street[column];
+    }
 }

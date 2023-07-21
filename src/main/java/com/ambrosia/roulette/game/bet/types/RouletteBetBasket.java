@@ -2,32 +2,37 @@ package com.ambrosia.roulette.game.bet.types;
 
 import com.ambrosia.roulette.Roulette;
 import com.ambrosia.roulette.game.bet.RouletteBetPart;
+import com.ambrosia.roulette.game.player.RoulettePartialBet;
 import com.ambrosia.roulette.table.RouletteSpace;
 import com.ambrosia.roulette.table.RouletteTable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Function;
+import java.util.stream.Collectors;
 
-public class RouletteBetTypeBasket extends RouletteBetType {
+public class RouletteBetBasket extends RouletteBet {
 
     protected final Collection<RouletteSpace> basket = new ArrayList<>();
     protected final int countOfJoin;
 
-    public RouletteBetTypeBasket(RouletteBetTypeList typeId, int countOfJoin) {
-        super(typeId);
+    public RouletteBetBasket(RouletteBetType<?> typeId, RoulettePartialBet bet, int countOfJoin) {
+        super(typeId, bet);
         this.countOfJoin = countOfJoin;
     }
 
-    public static Function<RouletteBetTypeList, RouletteBetTypeBasket> factory(int countOfJoin) {
-        return (type) -> new RouletteBetTypeBasket(type, countOfJoin);
+    public static RouletteBetFactory<RouletteBetBasket> factory(int countOfJoin) {
+        return (type, bet) -> new RouletteBetBasket(type, bet, countOfJoin);
     }
 
-    @Override
+    public RouletteBet finalizeDigits(Collection<RouletteSpace> space) {
+        this.basket.addAll(space);
+        return this;
+    }
+
     public List<RouletteBetPart> actions() {
         // get all the allowed spaces of a bet
-        boolean isRequire0InBet = type == RouletteBetTypeList.TRIO;
+        boolean isRequire0InBet = type == RouletteBetType.TRIO;
         RouletteTable table = Roulette.TABLE;
         List<RouletteSpace> allowedSpaces = isRequire0InBet ? table.zeroStreet(true) : table.spaces(true);
 
@@ -39,16 +44,21 @@ public class RouletteBetTypeBasket extends RouletteBetType {
         return allowedSpaces.stream().filter(this::isNeighbor).map(RouletteSpace::betPart).toList();
     }
 
+    @Override
+    protected String shortDescription() {
+        return this.basket.stream()
+            .map(s -> s.toString(true, true))
+            .collect(Collectors.joining(", "));
+    }
+
     public boolean isNeighbor(RouletteSpace space) {
         return basket.stream().allMatch(space::isNeighbor);
     }
 
-    @Override
     public List<RouletteBetPart> partList() {
         return basket.stream().map(RouletteSpace::betPart).toList();
     }
 
-    @Override
     public boolean isComplete() {
         return basket.size() == countOfJoin;
     }

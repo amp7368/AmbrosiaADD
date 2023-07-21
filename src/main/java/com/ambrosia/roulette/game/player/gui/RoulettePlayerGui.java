@@ -1,5 +1,6 @@
 package com.ambrosia.roulette.game.player.gui;
 
+import com.ambrosia.roulette.game.bet.types.RouletteBet;
 import com.ambrosia.roulette.game.player.RoulettePlayerGame;
 import discord.util.dcf.DCF;
 import discord.util.dcf.gui.base.GuiReplyFirstMessage;
@@ -23,5 +24,16 @@ public class RoulettePlayerGui extends DCFGui {
 
     public RoulettePlayerGame getPlayer() {
         return player;
+    }
+
+    public void afterBetHook(RouletteBet bet) {
+        this.clearSubPages();
+        this.addSubPage(new RouletteBetAgainPage(this, bet));
+    }
+
+    public void doneBettingHook() {
+        this.getPlayer().setIsBetting(false);
+        this.clearSubPages();
+        this.addSubPage(new RouletteDoneBettingPage(this));
     }
 }

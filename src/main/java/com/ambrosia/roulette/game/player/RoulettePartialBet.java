@@ -1,14 +1,11 @@
 package com.ambrosia.roulette.game.player;
 
-public class RoulettePartialBet {
+import com.ambrosia.add.discord.util.Emeralds;
 
-    private final int amount;
+public record RoulettePartialBet(int amount, RoulettePlayerGame player) {
 
-    public RoulettePartialBet(int amount) {
-        this.amount = amount;
+    public String display() {
+        return Emeralds.message(amount(), true);
     }
 
-    public int getAmount() {
-        return amount;
-    }
 }
