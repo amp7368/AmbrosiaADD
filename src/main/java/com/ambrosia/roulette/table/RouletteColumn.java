@@ -6,9 +6,11 @@ import java.util.stream.Stream;
 public class RouletteColumn {
 
     private final RouletteSpace[] column;
+    private final int id;
 
-    public RouletteColumn(RouletteSpace[] column) {
+    public RouletteColumn(RouletteSpace[] column, int id) {
         this.column = column;
+        this.id = id;
     }
 
     public RouletteSpace[] spaces() {
@@ -19,4 +21,7 @@ public class RouletteColumn {
         return Arrays.stream(column);
     }
 
+    public int getId() {
+        return this.id;
+    }
 }

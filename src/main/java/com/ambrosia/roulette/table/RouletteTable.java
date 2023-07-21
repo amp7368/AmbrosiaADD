@@ -37,7 +37,7 @@ public class RouletteTable {
     private void setColumn(int columnIndex) {
         RouletteSpace[] column = new RouletteSpace[12];
         Arrays.setAll(column, i -> getStreet(i).getSpace(columnIndex));
-        this.columns[columnIndex] = new RouletteColumn(column);
+        this.columns[columnIndex] = new RouletteColumn(column, columnIndex);
     }
 
     private void createStreet(boolean red1, boolean red2, boolean red3, int streetNum) {
@@ -87,10 +87,26 @@ public class RouletteTable {
     }
 
     public RouletteStreet getStreet(int street) {
-        return this.streets[street];
+        synchronized (this.streets) {
+            return this.streets[street];
+        }
+    }
+
+    public List<RouletteStreet> streets() {
+        synchronized (this.streets) {
+            return List.of(this.streets);
+        }
     }
 
     public RouletteColumn getColumn(int column) {
-        return this.columns[column];
+        synchronized (this.columns) {
+            return this.columns[column];
+        }
+    }
+
+    public List<RouletteColumn> columns() {
+        synchronized (this.columns) {
+            return List.of(this.columns);
+        }
     }
 }

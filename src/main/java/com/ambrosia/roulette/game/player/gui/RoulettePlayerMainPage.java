@@ -6,6 +6,7 @@ import com.ambrosia.roulette.game.player.gui.split.RouletteSplitColPage;
 import com.ambrosia.roulette.game.player.gui.split.RouletteSplitType;
 import com.ambrosia.roulette.game.player.gui.straight.RouletteStraightUpPage;
 import com.ambrosia.roulette.game.player.gui.straight.RouletteStraightUpType;
+import com.ambrosia.roulette.game.player.gui.street.RouletteStreetPage;
 import discord.util.dcf.gui.base.page.DCFGuiPage;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
@@ -41,6 +42,8 @@ public class RoulettePlayerMainPage extends DCFGuiPage<RoulettePlayerGui> {
         registerButton(SPLIT_HIGH.getId(), (e) -> new RouletteSplitColPage(getParent(), RouletteSplitType.HIGH));
         registerButton(SPLIT_MIDDLE.getId(), (e) -> new RouletteSplitColPage(getParent(), RouletteSplitType.MIDDLE));
         registerButton(SPLIT_LOW.getId(), (e) -> new RouletteSplitColPage(getParent(), RouletteSplitType.LOW));
+
+        registerButton(STREET.getId(), (e) -> new RouletteStreetPage(getParent()));
 
         registerButton(CANCEL_BET.getId(), e -> getParent().doneBettingHook());
     }
