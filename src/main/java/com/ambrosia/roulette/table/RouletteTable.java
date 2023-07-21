@@ -56,6 +56,7 @@ public class RouletteTable {
     }
 
     public RouletteSpace getSpace(int roll) {
+        if (roll == 0) return getZero();
         return spaces[roll - 1];
     }
 

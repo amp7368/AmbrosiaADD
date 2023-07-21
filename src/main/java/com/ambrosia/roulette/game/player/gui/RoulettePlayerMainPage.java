@@ -10,6 +10,7 @@ import com.ambrosia.roulette.game.player.gui.split.RouletteSplitType;
 import com.ambrosia.roulette.game.player.gui.straight.RouletteStraightUpPage;
 import com.ambrosia.roulette.game.player.gui.straight.RouletteStraightUpType;
 import com.ambrosia.roulette.game.player.gui.street.RouletteStreetPage;
+import com.ambrosia.roulette.game.player.gui.trio.RouletteTrioPage;
 import discord.util.dcf.gui.base.page.DCFGuiPage;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
@@ -28,7 +29,7 @@ public class RoulettePlayerMainPage extends DCFGuiPage<RoulettePlayerGui> {
     private static final Button CORNER_LOWER = Button.primary("corner_lower", "Corner (Lower)");
     private static final Button CORNER_UPPER = Button.primary("corner_upper", "Corner (Upper)");
     private static final Button SIX_LINE = Button.primary("six_line", "Six Line");
-    private static final Button BASKET = Button.primary("basket", "Basket");
+    private static final Button TRIO = Button.primary("trio", "Trio");
     private static final Button OUTSIDE = Button.primary("outside", "Outside");
     private static final Button CANCEL_BET = Button.danger("cancel", "Cancel");
 
@@ -51,6 +52,8 @@ public class RoulettePlayerMainPage extends DCFGuiPage<RoulettePlayerGui> {
         registerButton(CORNER_LOWER.getId(), e -> new RouletteCornerPage(getParent(), RouletteCornerType.LOW));
         registerButton(CORNER_UPPER.getId(), e -> new RouletteCornerPage(getParent(), RouletteCornerType.HIGH));
 
+        registerButton(TRIO.getId(), e -> new RouletteTrioPage(getParent()));
+
         registerButton(SIX_LINE.getId(), (e) -> new RouletteSixLinePage(getParent()));
 
         registerButton(CANCEL_BET.getId(), e -> getParent().doneBettingHook());
@@ -71,7 +74,7 @@ public class RoulettePlayerMainPage extends DCFGuiPage<RoulettePlayerGui> {
         ActionRow row1 = ActionRow.of(STRAIGHT_UP_HIGH, STRAIGHT_UP_MIDDLE, STRAIGHT_UP_LOW);
         ActionRow row2 = ActionRow.of(SPLIT_HIGH, SPLIT_MIDDLE, SPLIT_LOW);
         ActionRow row3 = ActionRow.of(STREET, CORNER_LOWER, CORNER_UPPER);
-        ActionRow row4 = ActionRow.of(SIX_LINE, BASKET, OUTSIDE);
+        ActionRow row4 = ActionRow.of(SIX_LINE, TRIO, OUTSIDE);
         ActionRow actions = ActionRow.of(CANCEL_BET);
         return buildCreate(embed.build(), row1, row2, row3, row4, actions);
     }
