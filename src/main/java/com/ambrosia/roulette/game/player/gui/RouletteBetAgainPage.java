@@ -3,6 +3,7 @@ package com.ambrosia.roulette.game.player.gui;
 import com.ambrosia.add.discord.util.AmbrosiaColor;
 import com.ambrosia.add.discord.util.Emeralds;
 import com.ambrosia.roulette.game.bet.types.RouletteBet;
+import com.ambrosia.roulette.game.player.RoulettePlayerGame;
 import discord.util.dcf.gui.base.page.DCFGuiPage;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +19,15 @@ public class RouletteBetAgainPage extends DCFGuiPage<RoulettePlayerGui> {
 
     public RouletteBetAgainPage(RoulettePlayerGui parent, RouletteBet bet) {
         super(parent);
-        int emeralds = bet.getAmount();
-        betAgainButtons.add(new BetAgainButton(emeralds, 0, 0.5));
-        betAgainButtons.add(new BetAgainButton(emeralds, 1, 1));
-        betAgainButtons.add(new BetAgainButton(emeralds, 2, 1.5));
-        betAgainButtons.add(new BetAgainButton(emeralds, 3, 2));
+        int lastBet = bet.getAmount();
+
+        RoulettePlayerGame player = getParent().getPlayer();
+        long playerCredits = player.getPlayer().credits;
+        int playerTotal = player.getBetTotal();
+        betAgainButtons.add(new BetAgainButton(lastBet, 0, 0.5, playerTotal, playerCredits));
+        betAgainButtons.add(new BetAgainButton(lastBet, 1, 1, playerTotal, playerCredits));
+        betAgainButtons.add(new BetAgainButton(lastBet, 2, 1.5, playerTotal, playerCredits));
+        betAgainButtons.add(new BetAgainButton(lastBet, 3, 2, playerTotal, playerCredits));
         this.initButtons();
     }
 
@@ -32,7 +37,12 @@ public class RouletteBetAgainPage extends DCFGuiPage<RoulettePlayerGui> {
 
     private void registerButton(BetAgainButton btn) {
         registerButton(btn.btnId(), e -> {
-            getParent().getPlayer().startBet(btn.btnAmount());
+            RoulettePlayerGame player = getParent().getPlayer();
+            int askAmount = player.getBetTotal() + btn.btnAmount();
+            boolean canReserve = askAmount <= player.getPlayer().credits;
+            if (!canReserve) return;
+
+            player.startBet(btn.btnAmount());
             getParent().clearSubPages();
         });
         registerButton(DONE_BETTING.getId(), e -> getParent().doneBettingHook());
@@ -53,13 +63,17 @@ public class RouletteBetAgainPage extends DCFGuiPage<RoulettePlayerGui> {
         return msg.build();
     }
 
-    private record BetAgainButton(int emeralds, int index, double multiplier) {
+    private record BetAgainButton(int emeralds, int index, double multiplier, int betTotal, long playerCredits) {
+
+        private boolean cannotReserve() {
+            return betTotal + btnAmount() > playerCredits;
+        }
 
         public Button btn() {
             String emeralds = Emeralds.message(btnAmount(), false);
             String display = "Bet %s (%1.1fX)".formatted(emeralds, multiplier());
             String id = btnId();
-            return Button.success(id, display);
+            return Button.success(id, display).withDisabled(cannotReserve());
         }
 
         public String btnId() {

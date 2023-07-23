@@ -1,10 +1,13 @@
 package com.ambrosia.roulette.game.game;
 
 import com.ambrosia.add.api.CreditReservation;
+import com.ambrosia.roulette.Roulette;
 import com.ambrosia.roulette.game.bet.types.RouletteBet;
 import com.ambrosia.roulette.game.player.RoulettePlayerGame;
 import com.ambrosia.roulette.game.table.gui.RouletteTableBettingPage;
 import com.ambrosia.roulette.game.table.gui.RouletteTableGui;
+import com.ambrosia.roulette.table.RouletteSpace;
+import java.security.SecureRandom;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +19,10 @@ public class RouletteGame {
 
     private final TextChannel channel;
     private final Map<Long, RoulettePlayerGame> players = new HashMap<>();
+    private final SecureRandom random = new SecureRandom();
+    private final int id = new SecureRandom().nextInt(1, 100000);
     private RouletteTableGui tableGui;
+    private RouletteSpace spinResult;
 
     public RouletteGame(TextChannel channel) {
         this.channel = channel;
@@ -58,5 +64,25 @@ public class RouletteGame {
             .flatMap(p -> p.getBets().stream())
             .sorted(Comparator.comparing(RouletteBet::getTimestamp).reversed())
             .toList();
+    }
+
+    public RouletteSpace spin() {
+        int roll = this.random.nextInt(Roulette.TABLE.spaces(true).size());
+        return this.spinResult = Roulette.TABLE.getSpace(roll);
+    }
+
+    public RouletteSpace getSpinResult() {
+        return this.spinResult;
+    }
+
+    public void awardWinnings() {
+        RouletteGameManager.removeTable(this.channel);
+        for (RoulettePlayerGame player : getPlayers()) {
+            player.awardWinnings(this.spinResult.digit());
+        }
+    }
+
+    public int getId() {
+        return id;
     }
 }

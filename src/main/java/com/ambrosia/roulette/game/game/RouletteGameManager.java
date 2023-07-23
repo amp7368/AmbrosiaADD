@@ -15,7 +15,7 @@ public class RouletteGameManager {
         }
     }
 
-    public static RouletteGame createSession(TextChannel channel) {
+    public static RouletteGame createTable(TextChannel channel) {
         RouletteGame game = new RouletteGame(channel);
         synchronized (games) {
             long channelId = channel.getIdLong();
@@ -24,5 +24,11 @@ public class RouletteGameManager {
             games.put(channelId, game);
         }
         return game;
+    }
+
+    public static void removeTable(TextChannel channel) {
+        synchronized (games) {
+            games.remove(channel.getIdLong());
+        }
     }
 }

@@ -1,21 +1,60 @@
 package com.ambrosia.roulette.game.table.gui;
 
+import static com.ambrosia.roulette.img.RouletteImage.IMAGE_BETTING_TABLE;
+
 import com.ambrosia.add.discord.util.Emeralds;
 import com.ambrosia.roulette.game.bet.types.RouletteBet;
+import com.ambrosia.roulette.game.game.RouletteGame;
 import com.ambrosia.roulette.game.player.RoulettePlayerGame;
 import discord.util.dcf.gui.base.page.DCFGuiPage;
 import java.util.List;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 
 public class RouletteTableBettingPage extends DCFGuiPage<RouletteTableGui> {
 
-    public static final String IMAGE_BETTING_TABLE = "https://static.voltskiya.com/assets/BettingTable.jpg";
+    private static final Button SPIN_BUTTON = Button.primary("spin", "SPIN!!!");
 
     public RouletteTableBettingPage(RouletteTableGui tableGui) {
         super(tableGui);
+        this.initButtons();
+    }
+
+    private void initButtons() {
+        registerButton(SPIN_BUTTON.getId(), this::spin);
+    }
+
+    private void spin(ButtonInteractionEvent event) {
+        if (this.isAnyPlayerBetting()) return;
+        getParent().addSubPage(new RouletteSpinWarmup(getParent()));
+        new Thread(() -> {
+
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ignored) {
+            }
+            RouletteSpinningPage spinPage = new RouletteSpinningPage(getParent(), getGame().spin());
+            getParent().addSubPage(spinPage);
+            editMessage();
+            long start = System.currentTimeMillis();
+            getGame().awardWinnings();
+            try {
+                long duration = System.currentTimeMillis() - start;
+                Thread.sleep(13500 - duration);
+            } catch (InterruptedException ignored) {
+            }
+            getParent().addSubPage(new RouletteSpinWinningsPage(getParent(), spinPage.getSpinImage().last()));
+            editMessage();
+        }).start();
+    }
+
+    private RouletteGame getGame() {
+        return getParent().getGame();
     }
 
     @Override
@@ -46,6 +85,13 @@ public class RouletteTableBettingPage extends DCFGuiPage<RouletteTableGui> {
         }
         embed.setDescription(description);
 
-        return buildCreate(embed.build());
+        ActionRow actions = ActionRow.of(SPIN_BUTTON.withDisabled(isAnyPlayerBetting()));
+        return buildCreate(embed.build(), actions);
+    }
+
+    private boolean isAnyPlayerBetting() {
+        List<RoulettePlayerGame> players = this.getParent().getGame().getPlayers();
+        if (players.isEmpty()) return false;
+        return players.stream().anyMatch(RoulettePlayerGame::isBetting);
     }
 }

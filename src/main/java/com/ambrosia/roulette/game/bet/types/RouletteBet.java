@@ -35,7 +35,7 @@ public abstract class RouletteBet {
 
     protected abstract String shortDescription();
 
-    private RouletteBetType<?> getType() {
+    public RouletteBetType<?> getType() {
         return this.type;
     }
 
@@ -47,5 +47,9 @@ public abstract class RouletteBet {
 
     public RoulettePlayerGame getPlayer() {
         return player;
+    }
+
+    public int winAmount() {
+        return (int) Math.ceil(this.betAmount * this.type.betMultiplier());
     }
 }
