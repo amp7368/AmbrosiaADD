@@ -29,6 +29,7 @@ public class Emeralds {
         long eb = creditsLeft / BLOCK;
         creditsLeft -= eb * BLOCK;
         long e = creditsLeft;
+        if (credits == 0) return isBold ? "**0** E" : "0 E";
 
         StringBuilder message = new StringBuilder();
         if (stx != 0) truncate -= append(message, stx, "STX", truncate, isBold, false);

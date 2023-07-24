@@ -3,10 +3,11 @@ package com.ambrosia.roulette.game.player;
 import com.ambrosia.add.api.CreditReservation;
 import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.game.GameBase;
+import com.ambrosia.add.database.game.GameResultEntity;
 import com.ambrosia.roulette.Roulette;
 import com.ambrosia.roulette.game.bet.types.RouletteBet;
-import com.ambrosia.roulette.game.game.RouletteGame;
 import com.ambrosia.roulette.game.player.gui.RoulettePlayerGui;
+import com.ambrosia.roulette.game.table.RouletteGame;
 import discord.util.dcf.gui.base.GuiReplyFirstMessage;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -23,6 +24,7 @@ public class RoulettePlayerGame extends GameBase {
     private final Member discord;
     protected String name;
     protected List<RouletteBet> bets = new ArrayList<>();
+    protected RoulettePlayerWinnings winnings;
     private boolean isBetting = true;
     private RoulettePlayerGui gui;
     private RoulettePartialBet partialBet;
@@ -107,5 +109,15 @@ public class RoulettePlayerGame extends GameBase {
 
     public int getBetTotal() {
         return this.betTotal;
+    }
+
+    public void awardWinnings(int roll) {
+        this.winnings = new RoulettePlayerWinnings(this, roll);
+        GameResultEntity result = RouletteGameResult.result(betTotal, winnings.getWinningsTotal());
+        creditReservation.release(result);
+    }
+
+    public RoulettePlayerWinnings getWinnings() {
+        return this.winnings;
     }
 }

@@ -18,12 +18,11 @@ public class GameStorage {
 
     private static GameStorage instance;
     private final List<Consumer<GameBase>> startHooks = new ArrayList<>();
+    private final Map<Long, GameBase> clientToGames = new HashMap<>();
 
     public GameStorage() {
         instance = this;
     }
-
-    private final Map<Long, GameBase> clientToGames = new HashMap<>();
 
     public static GameStorage get() {
         return instance;
@@ -50,7 +49,7 @@ public class GameStorage {
         }
         if (result.originalBet == 0) return;
         TransactionType transactionType = result.deltaWinnings < 0 ? TransactionType.LOSS : TransactionType.WIN;
-        TransactionEntity transaction = null;
+        TransactionEntity transaction;
         try {
             transaction = TransactionStorage.get()
                 .createOperation(0L, client, result.deltaWinnings, transactionType);
