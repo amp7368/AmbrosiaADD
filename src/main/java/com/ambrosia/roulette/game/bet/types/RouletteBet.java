@@ -26,14 +26,18 @@ public abstract class RouletteBet {
     }
 
     public Field toDiscordField() {
-        String emeralds = Emeralds.message(getAmount(), true);
+        return toDiscordField(true);
+    }
+
+    public Field toDiscordField(boolean bold) {
+        String emeralds = Emeralds.message(getAmount(), bold);
         String title = "%s (%s)".formatted(getType().displayName(), emeralds);
 
-        String description = "%s".formatted(shortDescription());
+        String description = "%s".formatted(shortDescription(bold));
         return new Field(title, description, false);
     }
 
-    protected abstract String shortDescription();
+    protected abstract String shortDescription(boolean bold);
 
     public RouletteBetType<?> getType() {
         return this.type;

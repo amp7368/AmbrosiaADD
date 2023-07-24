@@ -4,8 +4,8 @@ import static com.ambrosia.roulette.img.RouletteImage.IMAGE_BETTING_TABLE;
 
 import com.ambrosia.add.discord.util.Emeralds;
 import com.ambrosia.roulette.game.bet.types.RouletteBet;
-import com.ambrosia.roulette.game.game.RouletteGame;
 import com.ambrosia.roulette.game.player.RoulettePlayerGame;
+import com.ambrosia.roulette.game.table.RouletteGame;
 import discord.util.dcf.gui.base.page.DCFGuiPage;
 import java.util.List;
 import net.dv8tion.jda.api.EmbedBuilder;

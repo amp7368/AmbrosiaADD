@@ -2,6 +2,7 @@ package com.ambrosia.roulette.game;
 
 import com.ambrosia.add.discord.util.BaseCommand;
 import com.ambrosia.roulette.game.bet.RouletteBetSubCommand;
+import com.ambrosia.roulette.game.stats.RoulettePlayerStatsSubCommand;
 import com.ambrosia.roulette.game.table.RouletteTableSubCommand;
 import discord.util.dcf.slash.DCFSlashSubCommand;
 import java.util.List;
@@ -22,6 +23,6 @@ public class RouletteCommand extends BaseCommand {
 
     @Override
     public List<DCFSlashSubCommand> getSubCommands() {
-        return List.of(new RouletteBetSubCommand(), new RouletteTableSubCommand());
+        return List.of(new RouletteBetSubCommand(), new RoulettePlayerStatsSubCommand(), new RouletteTableSubCommand());
     }
 }

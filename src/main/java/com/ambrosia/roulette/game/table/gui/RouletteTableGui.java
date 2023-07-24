@@ -1,9 +1,11 @@
 package com.ambrosia.roulette.game.table.gui;
 
-import com.ambrosia.roulette.game.game.RouletteGame;
+import com.ambrosia.roulette.game.table.RouletteGame;
+import com.ambrosia.roulette.game.table.RouletteGameManager;
 import discord.util.dcf.DCF;
 import discord.util.dcf.gui.base.GuiReplyFirstMessage;
 import discord.util.dcf.gui.base.gui.DCFGui;
+import discord.util.dcf.util.TimeMillis;
 
 public class RouletteTableGui extends DCFGui {
 
@@ -14,6 +16,17 @@ public class RouletteTableGui extends DCFGui {
     public RouletteTableGui(RouletteGame game, DCF dcf, GuiReplyFirstMessage createFirstMessage) {
         super(dcf, createFirstMessage);
         this.game = game;
+    }
+
+    @Override
+    public long getMillisToOld() {
+        return TimeMillis.minToMillis(60);
+    }
+
+    @Override
+    public void remove() {
+        RouletteGameManager.removeGame(game.getId());
+        super.remove();
     }
 
     public RouletteGame getGame() {

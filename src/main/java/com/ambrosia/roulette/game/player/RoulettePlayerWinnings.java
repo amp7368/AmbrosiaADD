@@ -42,6 +42,21 @@ public class RoulettePlayerWinnings {
         this.losingBets.sort(LOSE_BET_COMPARATOR);
     }
 
+    private static String winBetToString(RouletteBet bet) {
+        String betType = bet.getType().displayName();
+        Field field = bet.toDiscordField(false);
+        double multiplier = bet.getType().betMultiplier();
+        String winAmount = Emeralds.message(bet.winAmount(), false);
+        return "* **%s** (*x%.0f*) [+%s]\n * %s\n".formatted(betType, multiplier, winAmount, field.getValue());
+    }
+
+    private static String loseBetToString(RouletteBet bet) {
+        String betType = bet.getType().displayName();
+        Field field = bet.toDiscordField(false);
+        String winAmount = Emeralds.message(bet.getAmount(), false);
+        return "* **%s** [-%s]\n * %s\n".formatted(betType, winAmount, field.getValue());
+    }
+
     public int getWinningsTotal() {
         return this.winningsTotal;
     }
@@ -72,5 +87,13 @@ public class RoulettePlayerWinnings {
 
     private int getLossesTotal() {
         return this.lossesTotal;
+    }
+
+    public List<String> getWinningBetsDescriptions() {
+        return getWinningBets().stream().map(RoulettePlayerWinnings::winBetToString).toList();
+    }
+
+    public List<String> getLosingBetsDescriptions() {
+        return getLosingBets().stream().map(RoulettePlayerWinnings::loseBetToString).toList();
     }
 }

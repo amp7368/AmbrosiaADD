@@ -4,7 +4,6 @@ import com.ambrosia.roulette.game.bet.types.RouletteBet;
 import com.ambrosia.roulette.game.bet.types.RouletteBetFactory;
 import com.ambrosia.roulette.game.bet.types.RouletteBetType;
 import com.ambrosia.roulette.game.player.RoulettePartialBet;
-import com.ambrosia.roulette.table.RouletteSpace;
 import com.ambrosia.roulette.table.RouletteStreet;
 import java.util.Arrays;
 import java.util.List;
@@ -26,17 +25,16 @@ public class RouletteBetStreet extends RouletteBet {
     }
 
     @NotNull
-    private static String shortDescriptionStreet(RouletteStreet street) {
+    private static String shortDescriptionStreet(RouletteStreet street, boolean bold) {
         return Arrays.stream(street.getSpaces())
-            .map(RouletteSpace::digit)
-            .map(String::valueOf)
+            .map(space -> space.display(bold, bold))
             .collect(Collectors.joining(", "));
     }
 
     @Override
-    protected String shortDescription() {
+    protected String shortDescription(boolean bold) {
         return "(" + streets().stream()
-            .map(RouletteBetStreet::shortDescriptionStreet)
+            .map(street -> shortDescriptionStreet(street, bold))
             .collect(Collectors.joining("), ("))
             + ")";
     }
@@ -52,6 +50,11 @@ public class RouletteBetStreet extends RouletteBet {
 
     @Override
     public boolean isWinningSpace(int roll) {
-        return false;
+        return Arrays.stream(this.streets).anyMatch(street -> streetHasRoll(roll, street));
+    }
+
+    private boolean streetHasRoll(int roll, RouletteStreet street) {
+        return Arrays.stream(street.getSpaces())
+            .anyMatch(space -> space.digit() == roll);
     }
 }

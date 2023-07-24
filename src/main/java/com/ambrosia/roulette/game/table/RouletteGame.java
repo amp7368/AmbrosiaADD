@@ -1,6 +1,7 @@
-package com.ambrosia.roulette.game.game;
+package com.ambrosia.roulette.game.table;
 
 import com.ambrosia.add.api.CreditReservation;
+import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.roulette.Roulette;
 import com.ambrosia.roulette.game.bet.types.RouletteBet;
 import com.ambrosia.roulette.game.player.RoulettePlayerGame;
@@ -14,17 +15,19 @@ import java.util.List;
 import java.util.Map;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import org.jetbrains.annotations.Nullable;
 
 public class RouletteGame {
 
     private final TextChannel channel;
     private final Map<Long, RoulettePlayerGame> players = new HashMap<>();
     private final SecureRandom random = new SecureRandom();
-    private final int id = new SecureRandom().nextInt(1, 100000);
+    private final int id;
     private RouletteTableGui tableGui;
     private RouletteSpace spinResult;
 
-    public RouletteGame(TextChannel channel) {
+    public RouletteGame(int id, TextChannel channel) {
+        this.id = id;
         this.channel = channel;
     }
 
@@ -76,7 +79,7 @@ public class RouletteGame {
     }
 
     public void awardWinnings() {
-        RouletteGameManager.removeTable(this.channel);
+        RouletteGameManager.removeChannelGame(this.channel);
         for (RoulettePlayerGame player : getPlayers()) {
             player.awardWinnings(this.spinResult.digit());
         }
@@ -84,5 +87,10 @@ public class RouletteGame {
 
     public int getId() {
         return id;
+    }
+
+    @Nullable
+    public RoulettePlayerGame getPlayer(ClientEntity user) {
+        return this.players.get(user.uuid);
     }
 }

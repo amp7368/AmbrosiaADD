@@ -4,11 +4,11 @@ import com.ambrosia.add.api.CreditReservation;
 import com.ambrosia.add.discord.util.BaseSubCommand;
 import com.ambrosia.add.discord.util.BetCommand;
 import com.ambrosia.add.discord.util.Emeralds;
-import com.ambrosia.roulette.game.game.RouletteGame;
-import com.ambrosia.roulette.game.game.RouletteGameManager;
 import com.ambrosia.roulette.game.player.RoulettePlayerGame;
 import com.ambrosia.roulette.game.player.gui.RoulettePlayerGui;
 import com.ambrosia.roulette.game.player.gui.RoulettePlayerMainPage;
+import com.ambrosia.roulette.game.table.RouletteGame;
+import com.ambrosia.roulette.game.table.RouletteGameManager;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
@@ -20,7 +20,7 @@ public class RouletteBetSubCommand extends BaseSubCommand implements BetCommand 
         CreditReservation reservation = reserve(event, true);
         if (reservation == null) return;
 
-        RouletteGame game = RouletteGameManager.getGame(event.getChannel().getIdLong());
+        RouletteGame game = RouletteGameManager.getGame(event.getChannel());
         if (game == null) {
             event.replyEmbeds(error("There is no game in-progress in this channel!")).setEphemeral(true).queue();
             return;
