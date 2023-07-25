@@ -8,6 +8,7 @@ import com.ambrosia.roulette.game.player.RoulettePlayerGame;
 import com.ambrosia.roulette.game.player.RoulettePlayerWinnings;
 import com.ambrosia.roulette.game.table.RouletteGame;
 import com.ambrosia.roulette.game.table.RouletteGameManager;
+import com.ambrosia.roulette.img.RouletteImage;
 import discord.util.dcf.slash.DCFSlashSubCommand;
 import java.util.List;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -36,7 +37,7 @@ public class RoulettePlayerStatsSubCommand extends DCFSlashSubCommand implements
 
         EmbedBuilder embed = new EmbedBuilder();
         embed.setColor(AmbrosiaColor.CASINO_COLOR);
-        String title = "## Landed on %s!".formatted(game.getSpinResult().display(false, true));
+        String title = "Landed on %s!".formatted(game.getSpinResult().display(false, true));
         embed.setTitle(title);
         embed.setAuthor(player.getPlayerName(), null, player.getClient().bestImgUrl());
         RoulettePlayerWinnings winnings = player.getWinnings();
@@ -55,6 +56,7 @@ public class RoulettePlayerStatsSubCommand extends DCFSlashSubCommand implements
             %s
             """.formatted(summary, winningsDesc, lossesDesc);
         embed.setDescription(desc);
+        embed.setImage(RouletteImage.IMAGE_BETTING_TABLE);
         event.replyEmbeds(embed.build()).queue();
     }
 

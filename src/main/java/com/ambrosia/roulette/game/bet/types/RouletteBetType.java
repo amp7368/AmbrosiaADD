@@ -7,7 +7,13 @@ import com.ambrosia.roulette.game.bet.impl.RouletteBetSixLine;
 import com.ambrosia.roulette.game.bet.impl.RouletteBetSplit;
 import com.ambrosia.roulette.game.bet.impl.RouletteBetStraightUp;
 import com.ambrosia.roulette.game.bet.impl.RouletteBetStreet;
+import com.ambrosia.roulette.game.bet.impl.outside.RouletteBetColor;
+import com.ambrosia.roulette.game.bet.impl.outside.RouletteBetColumn;
+import com.ambrosia.roulette.game.bet.impl.outside.RouletteBetDozen;
+import com.ambrosia.roulette.game.bet.impl.outside.RouletteBetEvenOdd;
+import com.ambrosia.roulette.game.bet.impl.outside.RouletteBetHighLow;
 import com.ambrosia.roulette.game.player.RoulettePartialBet;
+import com.ambrosia.roulette.table.RouletteSpaceColor;
 
 public class RouletteBetType<Bet extends RouletteBet> {
 
@@ -17,14 +23,14 @@ public class RouletteBetType<Bet extends RouletteBet> {
     public static RouletteBetType<RouletteBetBasket> TRIO;
     public static RouletteBetType<RouletteBetCorner> CORNER;
     public static RouletteBetType<RouletteBetSixLine> SIX_LINE;
-    public static RouletteBetType<RouletteBetBasket> COLUMN;
-    public static RouletteBetType<RouletteBetBasket> DOZEN;
-    public static RouletteBetType<RouletteBetBasket> LOW;
-    public static RouletteBetType<RouletteBetBasket> HIGH;
-    public static RouletteBetType<RouletteBetBasket> EVEN;
-    public static RouletteBetType<RouletteBetBasket> ODD;
-    public static RouletteBetType<RouletteBetBasket> RED;
-    public static RouletteBetType<RouletteBetBasket> BLACK;
+    public static RouletteBetType<RouletteBetColumn> COLUMN;
+    public static RouletteBetType<RouletteBetDozen> DOZEN;
+    public static RouletteBetType<RouletteBetHighLow> LOW;
+    public static RouletteBetType<RouletteBetHighLow> HIGH;
+    public static RouletteBetType<RouletteBetEvenOdd> EVEN;
+    public static RouletteBetType<RouletteBetEvenOdd> ODD;
+    public static RouletteBetType<RouletteBetColor> RED;
+    public static RouletteBetType<RouletteBetColor> BLACK;
 
     static {
         STRAIGHT_UP = new RouletteBetType<>("STRAIGHT_UP", 35, RouletteBetStraightUp.class, RouletteBetStraightUp::new);
@@ -33,14 +39,14 @@ public class RouletteBetType<Bet extends RouletteBet> {
         TRIO = new RouletteBetType<>("TRIO", 11, RouletteBetBasket.class, RouletteBetBasket.factory(3));
         CORNER = new RouletteBetType<>("CORNER", 8, RouletteBetCorner.class, RouletteBetCorner::new);
         SIX_LINE = new RouletteBetType<>("SIX_LINE", 5, RouletteBetSixLine.class, RouletteBetSixLine::new);
-        COLUMN = new RouletteBetType<>("COLUMN", 2, null, null);
-        DOZEN = new RouletteBetType<>("DOZEN", 2, null, null);
-        LOW = new RouletteBetType<>("LOW", 1, null, null);
-        HIGH = new RouletteBetType<>("HIGH", 1, null, null);
-        EVEN = new RouletteBetType<>("EVEN", 1, null, null);
-        ODD = new RouletteBetType<>("ODD", 1, null, null);
-        RED = new RouletteBetType<>("RED", 1, null, null);
-        BLACK = new RouletteBetType<>("BLACK", 1, null, null);
+        COLUMN = new RouletteBetType<>("COLUMN", 2, RouletteBetColumn.class, RouletteBetColumn::new);
+        DOZEN = new RouletteBetType<>("DOZEN", 2, RouletteBetDozen.class, RouletteBetDozen::new);
+        LOW = new RouletteBetType<>("LOW", 1, RouletteBetHighLow.class, RouletteBetHighLow.factory(false));
+        HIGH = new RouletteBetType<>("HIGH", 1, RouletteBetHighLow.class, RouletteBetHighLow.factory(true));
+        EVEN = new RouletteBetType<>("EVEN", 1, RouletteBetEvenOdd.class, RouletteBetEvenOdd.factory(true));
+        ODD = new RouletteBetType<>("ODD", 1, RouletteBetEvenOdd.class, RouletteBetEvenOdd.factory(false));
+        RED = new RouletteBetType<>("RED", 1, RouletteBetColor.class, RouletteBetColor.factory(RouletteSpaceColor.RED));
+        BLACK = new RouletteBetType<>("BLACK", 1, RouletteBetColor.class, RouletteBetColor.factory(RouletteSpaceColor.BLACK));
     }
 
     private final String name;
@@ -65,10 +71,6 @@ public class RouletteBetType<Bet extends RouletteBet> {
 
     public double betMultiplier() {
         return this.betMultiplier;
-    }
-
-    public Class<? extends RouletteBet> getTypeClass() {
-        return this.type;
     }
 
     public Bet create(RoulettePartialBet bet) {

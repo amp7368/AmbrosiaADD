@@ -47,7 +47,7 @@ public class RoulettePlayerWinnings {
         Field field = bet.toDiscordField(false);
         double multiplier = bet.getType().betMultiplier();
         String winAmount = Emeralds.message(bet.winAmount(), false);
-        return "* **%s** (*x%.0f*) [+%s]\n * %s\n".formatted(betType, multiplier, winAmount, field.getValue());
+        return "* **%s** (x%.0f) [+%s]\n * %s\n".formatted(betType, multiplier, winAmount, field.getValue());
     }
 
     private static String loseBetToString(RouletteBet bet) {
@@ -75,7 +75,7 @@ public class RoulettePlayerWinnings {
         if (change == 0) changePrefix = "";
         else if (change > 0) changePrefix = "+";
         else changePrefix = "-";
-        changePrefix = "**%s** ".formatted(changePrefix);
+        changePrefix = "%s ".formatted(changePrefix);
 
         String desc = "Win (%s) - Loss (%s) - Change (%s)".formatted(
             Emeralds.message(getWinningsTotal(), true),

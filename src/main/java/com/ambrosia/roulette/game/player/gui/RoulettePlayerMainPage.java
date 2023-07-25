@@ -5,6 +5,7 @@ import com.ambrosia.roulette.game.player.RoulettePlayerGame;
 import com.ambrosia.roulette.game.player.gui.corner.RouletteCornerPage;
 import com.ambrosia.roulette.game.player.gui.corner.RouletteCornerType;
 import com.ambrosia.roulette.game.player.gui.line.RouletteSixLinePage;
+import com.ambrosia.roulette.game.player.gui.outside.RouletteOutsidePage;
 import com.ambrosia.roulette.game.player.gui.split.RouletteSplitColPage;
 import com.ambrosia.roulette.game.player.gui.split.RouletteSplitType;
 import com.ambrosia.roulette.game.player.gui.straight.RouletteStraightUpPage;
@@ -53,9 +54,8 @@ public class RoulettePlayerMainPage extends DCFGuiPage<RoulettePlayerGui> {
         registerButton(CORNER_UPPER.getId(), e -> new RouletteCornerPage(getParent(), RouletteCornerType.HIGH));
 
         registerButton(TRIO.getId(), e -> new RouletteTrioPage(getParent()));
-
         registerButton(SIX_LINE.getId(), (e) -> new RouletteSixLinePage(getParent()));
-
+        registerButton(OUTSIDE.getId(), e -> new RouletteOutsidePage(getParent()));
         registerButton(CANCEL_BET.getId(), e -> getParent().doneBettingHook());
     }
 

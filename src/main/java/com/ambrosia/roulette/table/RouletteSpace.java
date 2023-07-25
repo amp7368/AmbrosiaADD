@@ -2,7 +2,7 @@ package com.ambrosia.roulette.table;
 
 import com.ambrosia.roulette.game.bet.RouletteBetPart;
 
-public record RouletteSpace(RouletteSpaceColor isRed, int digit, RouletteBetPart betPart) {
+public record RouletteSpace(RouletteSpaceColor color, int digit, RouletteBetPart betPart) {
 
     public RouletteSpace(boolean isRed, int digit) {
         this(isRed ? RouletteSpaceColor.RED : RouletteSpaceColor.BLACK, digit);
@@ -13,7 +13,12 @@ public record RouletteSpace(RouletteSpaceColor isRed, int digit, RouletteBetPart
     }
 
     public boolean isEven() {
+        if (digit == 0) return false;
         return digit % 2 == 0;
+    }
+
+    public boolean isOdd() {
+        return !this.isEven() && this.digit != 0;
     }
 
     public boolean isNeighbor(RouletteSpace other) {
@@ -50,9 +55,16 @@ public record RouletteSpace(RouletteSpaceColor isRed, int digit, RouletteBetPart
     }
 
     public String display(boolean bold, boolean hashtag) {
+        return this.display(bold, hashtag, false);
+    }
+
+    public String display(boolean bold, boolean hashtag, boolean color) {
         String msg = String.valueOf(this.digit);
         if (hashtag) msg = "#" + msg;
-        if (bold) return "**%s**".formatted(msg);
+        if (bold) msg = "**%s**".formatted(msg);
+        if (color) msg = color().emoji() + " " + msg;
         return msg;
     }
+
+
 }

@@ -5,5 +5,5 @@ import com.ambrosia.roulette.game.player.RoulettePartialBet;
 @FunctionalInterface
 public interface RouletteBetFactory<Bet extends RouletteBet> {
 
-    Bet create(RouletteBetType type, RoulettePartialBet bet);
+    Bet create(RouletteBetType<?> type, RoulettePartialBet bet);
 }
