@@ -42,11 +42,6 @@ public class RouletteBetSubCommand extends BaseSubCommand implements BetCommand 
 
 
     @Override
-    public boolean isOnlyDealer() {
-        return true;
-    }
-
-    @Override
     public SubcommandData getData() {
         return new SubcommandData("bet", "Bet credits and/or join an ongoing roulette game in this channel")
             .addOption(OptionType.INTEGER, "credits", "The credits to make 1 bet with", true);
