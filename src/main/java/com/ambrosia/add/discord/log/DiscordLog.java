@@ -80,6 +80,6 @@ public class DiscordLog implements SendMessage {
     }
 
     private EmbedBuilder embed(String title, User actor) {
-        return new EmbedBuilder().setTitle(title).setFooter(actor.getAsTag(), actor.getAvatarUrl()).setTimestamp(Instant.now());
+        return new EmbedBuilder().setTitle(title).setFooter(actor.getName(), actor.getAvatarUrl()).setTimestamp(Instant.now());
     }
 }

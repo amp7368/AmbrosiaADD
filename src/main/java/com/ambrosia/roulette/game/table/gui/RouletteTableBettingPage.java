@@ -91,7 +91,7 @@ public class RouletteTableBettingPage extends DCFGuiPage<RouletteTableGui> {
 
     private boolean isAnyPlayerBetting() {
         List<RoulettePlayerGame> players = this.getParent().getGame().getPlayers();
-        if (players.isEmpty()) return false;
+        if (players.isEmpty()) return true;
         return players.stream().anyMatch(RoulettePlayerGame::isBetting);
     }
 }

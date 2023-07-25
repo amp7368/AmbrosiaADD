@@ -10,10 +10,11 @@ import com.ambrosia.roulette.game.player.gui.RoulettePlayerMainPage;
 import com.ambrosia.roulette.game.table.RouletteGame;
 import com.ambrosia.roulette.game.table.RouletteGameManager;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 public class RouletteBetSubCommand extends BaseSubCommand implements BetCommand {
+
+    public static final int ONE_HAND_MAX_BET = Emeralds.leToEmeralds(8);
 
     @Override
     protected void onCheckedCommand(SlashCommandInteractionEvent event) {
@@ -34,7 +35,7 @@ public class RouletteBetSubCommand extends BaseSubCommand implements BetCommand 
             return;
         }
 
-        RoulettePlayerGui gui = new RoulettePlayerGui(dcf, msg -> event.reply(msg).setEphemeral(false), player);
+        RoulettePlayerGui gui = new RoulettePlayerGui(dcf, msg -> event.reply(msg).setEphemeral(true), player);
         gui.addPage(new RoulettePlayerMainPage(gui));
         player.setGui(gui);
         gui.send();
@@ -43,12 +44,14 @@ public class RouletteBetSubCommand extends BaseSubCommand implements BetCommand 
 
     @Override
     public SubcommandData getData() {
-        return new SubcommandData("bet", "Bet credits and/or join an ongoing roulette game in this channel")
-            .addOption(OptionType.INTEGER, "credits", "The credits to make 1 bet with", true);
+        SubcommandData data = new SubcommandData("bet", "Bet credits and/or join an ongoing roulette game in this channel");
+        addOptionAmount(data);
+        return data;
+
     }
 
     @Override
     public int getInitialBetLimit() {
-        return Emeralds.leToEmeralds(1);
+        return ONE_HAND_MAX_BET;
     }
 }

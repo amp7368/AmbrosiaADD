@@ -6,12 +6,13 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.utils.messages.MessageEditBuilder;
 
 public class RestartingMessage {
 
-    private long channelId;
-    private long messageId;
+    protected long channelId;
+    protected long messageId;
 
     public RestartingMessage(long channelId, long messageId) {
         this.channelId = channelId;
@@ -19,7 +20,11 @@ public class RestartingMessage {
     }
 
     public void editAndDelete() {
-        TextChannel channel = DiscordBot.dcf.jda().getTextChannelById(channelId);
+        TextChannel channel = null;
+        try {
+            channel = DiscordBot.dcf.jda().getTextChannelById(channelId);
+        } catch (InsufficientPermissionException ignored) {
+        }
         if (channel == null) RestartingMessageManager.get().removeRestarting(this);
         else channel.retrieveMessageById(messageId).queue(this::editAndDelete);
     }

@@ -109,7 +109,7 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
                 + game.getPlayerTotalCredits() + "** credit" + (game.getPlayerTotalCredits() != 1 ? "s" : "") + "\n\n" + "**Rules**\n"
                 + "Dealer must stand on all 17s\n" + "Blackjack pays 3 to 2");
         eb.setColor(AmbrosiaColorGame.IN_PROGRESS);
-        eb.setFooter("Game with " + user.getAsTag(), user.getAvatarUrl());
+        eb.setFooter("Game with " + user.getName(), user.getAvatarUrl());
 
         // Show the dealer's up card and the players hand
         eb.addField("Dealer's Hand", game.getDealerHand().get(0).toString(), false);

@@ -3,8 +3,8 @@ package com.ambrosia.roulette.table;
 import apple.utilities.util.Pretty;
 
 public enum RouletteSpaceColor {
-    BLACK("\u26AB"),
-    RED("\uD83D\uDD34"),
+    BLACK("\uD83D\uDD33"),
+    RED("\uD83D\uDFE5"),
     GREEN("\uD83D\uDFE2");
 
     private final String emoji;
@@ -18,6 +18,6 @@ public enum RouletteSpaceColor {
     }
 
     public String emoji() {
-        return emoji;
+        return Pretty.spaceEnumWords(name());
     }
 }

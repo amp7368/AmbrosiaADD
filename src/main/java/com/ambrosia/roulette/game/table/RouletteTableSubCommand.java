@@ -16,7 +16,7 @@ public class RouletteTableSubCommand extends BaseSubCommand {
         }
         RouletteGame game = RouletteGameManager.getGame(channel);
         if (game != null) {
-            error("There is already an ongoing game in this channel! Use `/roulette bet` to join.");
+            game.resendGui(event::reply);
             return;
         }
         game = RouletteGameManager.createTable(channel);

@@ -70,19 +70,31 @@ public class RoulettePlayerWinnings {
     }
 
     public Field shortSummaryField() {
-        int change = getWinningsTotal() - getLossesTotal();
+
+        String desc = "Win (%s) - Loss (%s)".formatted(
+            Emeralds.message(getWinningsTotal(), true),
+            Emeralds.message(getLossesTotal(), true)
+        );
+        String title = "%s - %s".formatted(
+            player.getPlayerName(),
+            summaryChange()
+        );
+        return new Field(title, desc, false);
+    }
+
+    public String summaryChange() {
+        int change = getChangeTotal();
         String changePrefix;
         if (change == 0) changePrefix = "";
-        else if (change > 0) changePrefix = "+";
-        else changePrefix = "-";
+        else if (change > 0) changePrefix = "WIN! \uD83C\uDF89";
+        else changePrefix = "LOSS! \u274C";
         changePrefix = "%s ".formatted(changePrefix);
 
-        String desc = "Win (%s) - Loss (%s) - Change (%s)".formatted(
-            Emeralds.message(getWinningsTotal(), true),
-            Emeralds.message(getLossesTotal(), true),
-            changePrefix + Emeralds.message(Math.abs(change), true)
-        );
-        return new Field(player.getPlayerName(), desc, false);
+        return changePrefix + Emeralds.message(Math.abs(change), true);
+    }
+
+    public int getChangeTotal() {
+        return getWinningsTotal() - getLossesTotal();
     }
 
     private int getLossesTotal() {

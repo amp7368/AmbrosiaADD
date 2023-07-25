@@ -113,7 +113,7 @@ public class RoulettePlayerGame extends GameBase {
 
     public void awardWinnings(int roll) {
         this.winnings = new RoulettePlayerWinnings(this, roll);
-        GameResultEntity result = RouletteGameResult.result(betTotal, winnings.getWinningsTotal());
+        GameResultEntity result = RouletteGameResult.result(this, betTotal, winnings.getChangeTotal());
         creditReservation.release(result);
     }
 

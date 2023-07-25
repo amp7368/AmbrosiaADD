@@ -36,4 +36,11 @@ public class RouletteTableGui extends DCFGui {
     public void updateBetsUI() {
         timer.tryRun();
     }
+
+    public RouletteTableGui recreate(GuiReplyFirstMessage reply) {
+        RouletteTableGui gui = new RouletteTableGui(this.game, this.dcf, reply);
+        this.pageMap.forEach(gui::addPage);
+        this.subPages.forEach(gui::addSubPage);
+        return gui;
+    }
 }

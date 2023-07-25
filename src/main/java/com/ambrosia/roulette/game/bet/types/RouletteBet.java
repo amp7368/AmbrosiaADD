@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 public abstract class RouletteBet {
 
     protected final transient RoulettePlayerGame player;
-    protected final Instant timestamp = Instant.now();
+    protected final transient Instant timestamp = Instant.now();
     public int betAmount;
     protected String typeId;
     protected transient RouletteBetType<?> type;

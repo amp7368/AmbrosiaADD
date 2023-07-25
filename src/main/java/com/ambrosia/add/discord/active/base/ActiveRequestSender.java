@@ -14,7 +14,7 @@ public class ActiveRequestSender {
     private ClientEntity client;
 
     public ActiveRequestSender(Member sender, ClientEntity client) {
-        this.username = sender.getUser().getAsTag();
+        this.username = sender.getUser().getName();
         this.avatarUrl = sender.getEffectiveAvatarUrl();
         this.discordId = sender.getIdLong();
         this.client = client;

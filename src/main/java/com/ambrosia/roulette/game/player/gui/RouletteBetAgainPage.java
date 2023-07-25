@@ -2,6 +2,7 @@ package com.ambrosia.roulette.game.player.gui;
 
 import com.ambrosia.add.discord.util.AmbrosiaColor;
 import com.ambrosia.add.discord.util.Emeralds;
+import com.ambrosia.roulette.game.bet.RouletteBetSubCommand;
 import com.ambrosia.roulette.game.bet.types.RouletteBet;
 import com.ambrosia.roulette.game.player.RoulettePlayerGame;
 import discord.util.dcf.gui.base.page.DCFGuiPage;
@@ -66,7 +67,8 @@ public class RouletteBetAgainPage extends DCFGuiPage<RoulettePlayerGui> {
     private record BetAgainButton(int emeralds, int index, double multiplier, int betTotal, long playerCredits) {
 
         private boolean cannotReserve() {
-            return betTotal + btnAmount() > playerCredits;
+            return betTotal + btnAmount() > playerCredits ||
+                btnAmount() > RouletteBetSubCommand.ONE_HAND_MAX_BET;
         }
 
         public Button btn() {

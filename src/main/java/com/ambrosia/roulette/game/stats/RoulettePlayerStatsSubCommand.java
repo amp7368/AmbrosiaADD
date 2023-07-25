@@ -41,6 +41,7 @@ public class RoulettePlayerStatsSubCommand extends DCFSlashSubCommand implements
         embed.setTitle(title);
         embed.setAuthor(player.getPlayerName(), null, player.getClient().bestImgUrl());
         RoulettePlayerWinnings winnings = player.getWinnings();
+        String change = winnings.summaryChange();
         String summary = winnings.shortSummaryField().getValue();
         String winningsDesc = joinBets(winnings.getWinningBetsDescriptions());
         String lossesDesc = joinBets(winnings.getLosingBetsDescriptions());
@@ -48,13 +49,14 @@ public class RoulettePlayerStatsSubCommand extends DCFSlashSubCommand implements
         String desc = """
             # Summary
             %s
+            %s
                         
             # Winning bets:
             %s
                         
             # Losing bets:
             %s
-            """.formatted(summary, winningsDesc, lossesDesc);
+            """.formatted(change, summary, winningsDesc, lossesDesc);
         embed.setDescription(desc);
         embed.setImage(RouletteImage.IMAGE_BETTING_TABLE);
         event.replyEmbeds(embed.build()).queue();

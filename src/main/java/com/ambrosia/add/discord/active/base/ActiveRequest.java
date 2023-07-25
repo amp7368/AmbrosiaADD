@@ -26,13 +26,13 @@ public abstract class ActiveRequest<Gui extends ActiveRequestGui<?>> extends DCF
         return obj instanceof ActiveRequest<?> other && other.getId() == this.getId();
     }
 
-    public void setEndorser(User endorser) {
-        this.endorser = endorser.getAsTag();
-        this.endorserId = endorser.getIdLong();
-    }
-
     public String getEndorser() {
         return endorser;
+    }
+
+    public void setEndorser(User endorser) {
+        this.endorser = endorser.getName();
+        this.endorserId = endorser.getIdLong();
     }
 
     public long getEndorserId() {
