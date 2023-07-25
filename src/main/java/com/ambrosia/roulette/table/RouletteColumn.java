@@ -24,4 +24,13 @@ public class RouletteColumn {
     public int getId() {
         return this.id;
     }
+
+    public String display() {
+        return switch (this.id) {
+            case 0 -> "1st";
+            case 1 -> "2nd";
+            case 2 -> "3rd";
+            default -> "?";
+        };
+    }
 }

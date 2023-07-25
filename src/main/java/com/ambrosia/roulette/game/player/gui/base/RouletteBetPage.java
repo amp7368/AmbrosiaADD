@@ -56,8 +56,12 @@ public abstract class RouletteBetPage extends DCFGuiPage<RoulettePlayerGui> {
     protected final EmbedBuilder betEmbed() {
         EmbedBuilder embed = new EmbedBuilder();
         embed.setColor(AmbrosiaColor.CASINO_COLOR);
-        embed.setTitle("%s - (Bet %s)".formatted(betType().displayName(), getParent().getPlayer().getPartialBet().display()));
+        embed.setTitle("%s - (Bet %s)".formatted(betTypeDisplay(), getParent().getPlayer().getPartialBet().display()));
         return embed;
+    }
+
+    protected String betTypeDisplay() {
+        return betType().displayName();
     }
 
     protected abstract RouletteBetType<?> betType();
@@ -71,7 +75,7 @@ public abstract class RouletteBetPage extends DCFGuiPage<RoulettePlayerGui> {
     }
 
     protected List<List<ItemComponent>> betActionRows() {
-        List<List<ItemComponent>> buttons = betButtons();
+        List<List<ItemComponent>> buttons = new ArrayList<>(betButtons());
         buttons.add(betNavigationRow());
         return buttons;
     }

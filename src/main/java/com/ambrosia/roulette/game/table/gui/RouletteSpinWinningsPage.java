@@ -20,7 +20,7 @@ public class RouletteSpinWinningsPage extends DCFGuiPage<RouletteTableGui> {
     @Override
     public MessageCreateData makeMessage() {
         String title = "Landed on %s!".formatted(
-            getGame().getSpinResult().display(false, true));
+            getGame().getSpinResult().display(false, true, true));
         String personalBets = "/roulette pstats game_id:%d".formatted(getGame().getId());
         EmbedBuilder embed = new EmbedBuilder()
             .setAuthor(personalBets)
