@@ -14,6 +14,8 @@ import com.ambrosia.roulette.game.bet.impl.outside.RouletteBetEvenOdd;
 import com.ambrosia.roulette.game.bet.impl.outside.RouletteBetHighLow;
 import com.ambrosia.roulette.game.player.RoulettePartialBet;
 import com.ambrosia.roulette.table.RouletteSpaceColor;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RouletteBetType<Bet extends RouletteBet> {
 
@@ -31,6 +33,7 @@ public class RouletteBetType<Bet extends RouletteBet> {
     public static RouletteBetType<RouletteBetEvenOdd> ODD;
     public static RouletteBetType<RouletteBetColor> RED;
     public static RouletteBetType<RouletteBetColor> BLACK;
+    private static final Map<String, RouletteBetType<?>> NAME_TO_BET_TYPE = new HashMap<>();
 
     static {
         STRAIGHT_UP = new RouletteBetType<>("STRAIGHT_UP", 35, RouletteBetStraightUp.class, RouletteBetStraightUp::new);
@@ -59,10 +62,19 @@ public class RouletteBetType<Bet extends RouletteBet> {
         this.betMultiplier = betMultiplier;
         this.type = type;
         this.createFn = createFn;
+        NAME_TO_BET_TYPE.put(this.getTypeName(), this);
+    }
+
+    public static RouletteBetType<?> fromName(String type) {
+        return NAME_TO_BET_TYPE.get(type);
     }
 
     public String displayName() {
         return Pretty.spaceEnumWords(name);
+    }
+
+    public String getTypeName() {
+        return this.name;
     }
 
     public String getTypeId() {

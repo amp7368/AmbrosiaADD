@@ -1,9 +1,9 @@
 package com.ambrosia.add.discord.commands.player.request;
 
+import com.ambrosia.add.discord.DiscordModule;
 import com.ambrosia.add.discord.active.ActiveRequestDatabase;
 import com.ambrosia.add.discord.active.account.ActiveRequestAccount;
 import com.ambrosia.add.discord.active.account.ActiveRequestAccountGui;
-import com.ambrosia.add.discord.active.account.UpdateAccountException;
 import com.ambrosia.add.discord.util.BaseSubCommand;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -25,8 +25,9 @@ public class CommandRequestAccount extends BaseSubCommand {
         ActiveRequestAccount request;
         try {
             request = new ActiveRequestAccount(member, minecraft, displayName);
-        } catch (UpdateAccountException e) {
+        } catch (Exception e) {
             event.replyEmbeds(error(e.getMessage())).queue();
+            DiscordModule.get().logger().error("", e);
             return;
         }
 

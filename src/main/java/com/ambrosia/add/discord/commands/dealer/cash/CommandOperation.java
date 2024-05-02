@@ -25,7 +25,7 @@ public abstract class CommandOperation extends BaseSubCommand {
         if (client == null) return;
         long conductorId = event.getUser().getIdLong();
         int change = sign() * amount;
-        long clientUUID = client.uuid;
+        long clientUUID = client.id;
         TransactionEntity operation;
         try {
             operation = TransactionStorage.get().createOperation(conductorId, clientUUID, change, operationReason());
@@ -35,7 +35,7 @@ public abstract class CommandOperation extends BaseSubCommand {
             event.replyEmbeds(error(msg)).queue();
             return;
         }
-        client = ClientStorage.get().findByUUID(clientUUID);
+        client = ClientStorage.get().findById(clientUUID);
         if (client == null) throw new IllegalStateException(clientUUID + " is not a valid client!");
         event.replyEmbeds(embedClientProfile(client, operation.display())).queue();
         DiscordLog.log().operation(client, operation, event.getUser(), true);

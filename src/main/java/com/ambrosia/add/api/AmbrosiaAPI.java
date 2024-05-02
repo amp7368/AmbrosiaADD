@@ -29,7 +29,7 @@ public class AmbrosiaAPI extends AppleModule {
         }
 
         CreditReservation reservation = new CreditReservation(client, reserve);
-        reservation.setOngoingGame(GameStorage.get().findOngoingGame(client.uuid));
+        reservation.setOngoingGame(GameStorage.get().findOngoingGame(client.id));
 
         if (!allowAlreadyPlaying && reservation.alreadyPlaying())
             return reservation.setRejected(CreditReservationRejection.ALREADY_IN_GAME);

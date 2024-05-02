@@ -1,6 +1,7 @@
 package com.ambrosia.add.discord.active.base;
 
 import com.ambrosia.add.database.client.ClientEntity;
+import com.ambrosia.add.database.client.ClientStorage;
 import com.ambrosia.add.discord.DiscordBot;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -11,21 +12,25 @@ public class ActiveRequestSender {
     private String username;
     private String avatarUrl;
     private long discordId;
-    private ClientEntity client;
+    private long client;
 
     public ActiveRequestSender(Member sender, ClientEntity client) {
         this.username = sender.getUser().getName();
         this.avatarUrl = sender.getEffectiveAvatarUrl();
         this.discordId = sender.getIdLong();
-        this.client = client;
+        this.client = client.id;
     }
 
     public ActiveRequestSender() {
     }
 
     public void author(EmbedBuilder embed) {
-        embed.setAuthor(String.format("%s - (%s)", client.minecraft == null ? "NA" : client.minecraft.name, username), null,
+        embed.setAuthor(String.format("%s - (%s)", client().minecraft == null ? "NA" : client().minecraft.name, username), null,
             avatarUrl);
+    }
+
+    private ClientEntity client() {
+        return ClientStorage.get().findById(client);
     }
 
     public void sendDm(MessageCreateData message) {
@@ -35,6 +40,6 @@ public class ActiveRequestSender {
     }
 
     public void setClient(ClientEntity client) {
-        this.client = client;
+        this.client = client.id;
     }
 }

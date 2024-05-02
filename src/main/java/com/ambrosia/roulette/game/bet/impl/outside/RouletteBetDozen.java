@@ -3,6 +3,8 @@ package com.ambrosia.roulette.game.bet.impl.outside;
 import com.ambrosia.roulette.game.bet.types.RouletteBet;
 import com.ambrosia.roulette.game.bet.types.RouletteBetType;
 import com.ambrosia.roulette.game.player.RoulettePartialBet;
+import com.google.gson.Gson;
+import java.util.Map;
 
 public class RouletteBetDozen extends RouletteBet {
 
@@ -25,5 +27,10 @@ public class RouletteBetDozen extends RouletteBet {
     @Override
     public boolean isWinningSpace(int roll) {
         return dozen.inRange(roll);
+    }
+
+    @Override
+    public String toJson() {
+        return new Gson().toJson(Map.of("dozen", dozen));
     }
 }

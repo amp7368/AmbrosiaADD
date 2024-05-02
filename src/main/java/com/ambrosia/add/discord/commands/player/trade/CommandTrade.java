@@ -27,11 +27,11 @@ public class CommandTrade extends BaseCommand {
         }
         ClientEntity clientReceiving = findClient(event);
         if (clientReceiving == null) return;
-        if (clientReceiving.uuid == clientTrading.uuid) {
+        if (clientReceiving.id == clientTrading.id) {
             event.reply("Trade to someone else").setEphemeral(true).queue();
             return;
         }
-        clientTrading = TransactionStorage.get().trade(clientTrading.uuid, clientReceiving.uuid, amount);
+        clientTrading = TransactionStorage.get().trade(clientTrading.id, clientReceiving.id, amount);
         if (clientTrading == null) {
             event.replyEmbeds(error("You don't have enough credits")).setEphemeral(true).queue();
             return;

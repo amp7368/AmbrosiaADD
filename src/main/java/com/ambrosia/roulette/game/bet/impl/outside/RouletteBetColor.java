@@ -6,6 +6,8 @@ import com.ambrosia.roulette.game.bet.types.RouletteBetFactory;
 import com.ambrosia.roulette.game.bet.types.RouletteBetType;
 import com.ambrosia.roulette.game.player.RoulettePartialBet;
 import com.ambrosia.roulette.table.RouletteSpaceColor;
+import com.google.gson.Gson;
+import java.util.Map;
 
 public class RouletteBetColor extends RouletteBet {
 
@@ -28,5 +30,10 @@ public class RouletteBetColor extends RouletteBet {
     @Override
     public boolean isWinningSpace(int roll) {
         return Roulette.TABLE.getSpace(roll).color() == color;
+    }
+
+    @Override
+    public String toJson() {
+        return new Gson().toJson(Map.of("color", color));
     }
 }

@@ -9,9 +9,15 @@ public class RouletteStreet {
     public static final Comparator<RouletteStreet> COMPARATOR = Comparator.comparingInt(
         street -> street.getSpaces()[0].digit());
     private final RouletteSpace[] street;
+    private final int streetNum;
 
-    public RouletteStreet(RouletteSpace col1, RouletteSpace col2, RouletteSpace col3) {
+    public RouletteStreet(int streetNum, RouletteSpace col1, RouletteSpace col2, RouletteSpace col3) {
+        this.streetNum = streetNum;
         street = new RouletteSpace[]{col1, col2, col3};
+    }
+
+    public int getStreetNum() {
+        return streetNum;
     }
 
     public RouletteSpace[] getSpaces() {

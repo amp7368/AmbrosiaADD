@@ -66,7 +66,7 @@ public class DiscordLog implements SendMessage {
     }
 
     private EmbedBuilder client(EmbedBuilder msg, ClientEntity client) {
-        msg.setAuthor(String.format("%s (#%d)", client.displayName, client.uuid));
+        msg.setAuthor(String.format("%s (#%d)", client.displayName, client.id));
         msg.addField("Credits", Pretty.commas(client.credits), true);
         return msg;
     }

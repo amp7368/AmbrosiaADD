@@ -13,12 +13,16 @@ import java.util.Objects;
 import java.util.function.Function;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ActiveRequestAccount extends ActiveRequest<ActiveRequestAccountGui> {
 
-    public ClientEntity original;
-    public ClientEntity updated;
+
+    private ClientMinecraftDetails minecraft;
+    private String displayName;
+    private long clientId;
+    private transient ClientEntity client;
 
     public ActiveRequestAccount() {
         super(ActiveRequestType.ACCOUNT.getTypeId(), null);
@@ -30,14 +34,13 @@ public class ActiveRequestAccount extends ActiveRequest<ActiveRequestAccountGui>
         ClientDiscordDetails discordDetails = new ClientDiscordDetails(discord);
         ClientMinecraftDetails minecraftDetails = ClientMinecraftDetails.fromUsername(minecraft);
         if (minecraftDetails == null) throw new UpdateAccountException(String.format("Minecraft account: '%s' not found", minecraft));
-        this.original = ClientStorage.get().findByDiscord(discord.getIdLong());
-        if(displayName == null) displayName = minecraft;
-        if (this.original == null) this.original = ClientStorage.get().createClient(displayName, discordDetails);
+        if (displayName == null) displayName = minecraft;
+        ClientEntity original = ClientStorage.get().findByDiscord(discord.getIdLong());
+        if (original == null) original = ClientStorage.get().createClient(displayName, discordDetails);
+        this.clientId = original.id;
         sender.setClient(original);
-        this.updated = ClientStorage.get().findByUUID(original.uuid);
-        if (updated == null) throw new IllegalStateException("Client " + original.uuid + " does not exist!");
-        this.updated.minecraft = minecraftDetails;
-        if (displayName != null) this.updated.displayName = displayName;
+        this.minecraft = minecraftDetails;
+        if (displayName != null) this.displayName = displayName;
         if (displayFields().isEmpty()) throw new UpdateAccountException("No updates were specified so no changes were made");
     }
 
@@ -48,31 +51,32 @@ public class ActiveRequestAccount extends ActiveRequest<ActiveRequestAccountGui>
     }
 
     public void onComplete() throws UpdateAccountException {
-        ClientEntity newVersion = ClientStorage.get().findByUUID(updated.uuid);
-        if (newVersion == null) throw new UpdateAccountException("Client no longer exists");
-        newVersion.minecraft = updateField(newVersion, client -> client.minecraft);
-        newVersion.displayName = updateField(newVersion, client -> client.displayName);
-        ClientStorage.get().updateClient(newVersion);
-        newVersion.trySave();
+        ClientEntity client = getClient();
+        if (minecraft != null)
+            client.setMinecraft(minecraft);
+        if (displayName != null)
+            client.setDisplayName(displayName);
+        client.save();
     }
 
-    public <T> T updateField(ClientEntity newVersion, Function<ClientEntity, T> extract) {
-        boolean isAnUpdate = Objects.equals(extract.apply(original), extract.apply(updated));
-        return extract.apply(isAnUpdate ? newVersion : updated);
+    @NotNull
+    private ClientEntity getClient() {
+        if (this.client != null) return client;
+        this.client = ClientStorage.get().findById(clientId);
+        if (client == null) throw new IllegalStateException("Client no longer exists");
+        return client;
     }
 
     public List<Field> displayFields() {
         List<Field> fields = new ArrayList<>();
-        fields.add(checkEqual((client) -> client.displayName, Objects::toString, "Profile DisplayName"));
-        fields.add(checkEqual((client) -> client.minecraft, mc -> mc.name, "Minecraft"));
+        fields.add(checkEqual(getClient().displayName, displayName, Objects::toString, "Profile DisplayName"));
+        fields.add(checkEqual(getClient().minecraft, minecraft, mc -> mc.name, "Minecraft"));
         fields.removeIf(Objects::isNull);
         return fields;
     }
 
     @Nullable
-    private <T> Field checkEqual(Function<ClientEntity, T> extractKey, Function<T, String> toString, String title) {
-        T original = extractKey.apply(this.original);
-        T updated = extractKey.apply(this.updated);
+    private <T> Field checkEqual(T original, T updated, Function<T, String> toString, String title) {
         if (Objects.equals(original, updated)) return null;
         String originalMsg = original == null ? "None" : toString.apply(original);
         String updatedMsg = updated == null ? "None" : toString.apply(updated);

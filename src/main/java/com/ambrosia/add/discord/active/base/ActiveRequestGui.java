@@ -44,6 +44,7 @@ public abstract class ActiveRequestGui<Data extends ActiveRequest<?>> extends DC
         } catch (Exception e) {
             this.error = e.getMessage();
             this.data.stage = ActiveRequestStage.ERROR;
+            e.printStackTrace();
         }
     }
 
@@ -75,6 +76,7 @@ public abstract class ActiveRequestGui<Data extends ActiveRequest<?>> extends DC
         } catch (Exception e) {
             this.data.stage = ActiveRequestStage.ERROR;
             this.error = e.getMessage();
+            e.printStackTrace();
         }
         this.remove();
         this.updateSender();

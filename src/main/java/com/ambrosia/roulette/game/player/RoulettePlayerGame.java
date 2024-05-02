@@ -3,7 +3,7 @@ package com.ambrosia.roulette.game.player;
 import com.ambrosia.add.api.CreditReservation;
 import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.game.GameBase;
-import com.ambrosia.add.database.game.GameResultEntity;
+import com.ambrosia.add.database.game.roulette.DRouletteTableGame;
 import com.ambrosia.roulette.Roulette;
 import com.ambrosia.roulette.game.bet.types.RouletteBet;
 import com.ambrosia.roulette.game.player.gui.RoulettePlayerGui;
@@ -78,6 +78,7 @@ public class RoulettePlayerGame extends GameBase {
         this.bets.add(bet);
         this.betTotal += bet.getAmount();
         this.partialBet = null;
+        this.tableGame.resetLastBetTimer();
         this.tableGame.updateBetsUI();
         return bet;
     }
@@ -111,10 +112,11 @@ public class RoulettePlayerGame extends GameBase {
         return this.betTotal;
     }
 
-    public void awardWinnings(int roll) {
+    public void awardWinnings(DRouletteTableGame dbTableGame, int roll) {
         this.winnings = new RoulettePlayerWinnings(this, roll);
-        GameResultEntity result = RouletteGameResult.result(this, betTotal, winnings.getChangeTotal());
-        creditReservation.release(result);
+
+        RouletteEndGame.endGame(this, dbTableGame, creditReservation);
+
     }
 
     public RoulettePlayerWinnings getWinnings() {

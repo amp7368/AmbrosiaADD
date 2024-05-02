@@ -24,6 +24,7 @@ services:
       - '${SECRETS_DIR}/Discord:${WORKINGDIR}/Discord/Config'
       - '/dev/urandom:/dev/random'
   mysql:
+    restart: unless-stopped
     image: ${MYSQL_VERSION}
     container_name: ${COMPOSE_NAME}.${DATABASE_IMAGE}
     env_file: '.env'

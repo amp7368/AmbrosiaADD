@@ -4,7 +4,7 @@ import java.security.SecureRandom;
 
 public class RouletteImage {
 
-    public static final String IMAGE_BETTING_TABLE = "https://static.voltskiya.com/assets/BettingTable.jpg";
+    public static final String IMAGE_BETTING_TABLE = "https://static.voltskiya.com/assets/BettingTable.2.jpg";
     public static final String IMAGE_STARTING_WHEEL = "https://static.voltskiya.com/assets/StartingWheel.png";
     private static final SecureRandom random = new SecureRandom();
 
@@ -21,5 +21,9 @@ public class RouletteImage {
         String gif = String.format("https://%s/%d/gif/%d-%02d.%d.gif", domain, iteration, iteration, num, version);
         String last = String.format("https://%s/%d/last/%d-%02d.%d.png", domain, iteration, iteration, num, version);
         return new SpinImage(gif, last);
+    }
+
+    public record SpinImage(String gif, String last) {
+
     }
 }

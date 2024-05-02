@@ -2,7 +2,6 @@ package com.ambrosia.add.database.game;
 
 import com.ambrosia.add.database.operation.TransactionEntity;
 import io.ebean.Model;
-import io.ebean.annotation.Identity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,20 +13,21 @@ import javax.persistence.Table;
 public class GameResultEntity extends Model {
 
     @Id
-    @Identity
-    public Long id;
+    public long id;
 
-
+    @Column
     public String name;
 
     @Column(columnDefinition = "JSON")
     public String extraResults;
-
+    @Column
     public String conclusion;
+    @Column
     public int deltaWinnings = 0;
+    @Column
     public int originalBet;
 
-    @OneToOne(targetEntity = TransactionEntity.class)
+    @OneToOne
     public TransactionEntity transaction;
 
 

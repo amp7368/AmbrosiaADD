@@ -52,7 +52,7 @@ public class RouletteTable {
         spaces[numIndex] = a;
         spaces[numIndex + 1] = b;
         spaces[numIndex + 2] = c;
-        streets[streetNum] = new RouletteStreet(a, b, c);
+        streets[streetNum] = new RouletteStreet(streetNum, a, b, c);
     }
 
     public RouletteSpace getSpace(int roll) {
