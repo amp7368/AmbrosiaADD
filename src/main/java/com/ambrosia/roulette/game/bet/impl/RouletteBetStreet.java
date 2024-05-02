@@ -1,5 +1,6 @@
 package com.ambrosia.roulette.game.bet.impl;
 
+import com.ambrosia.roulette.Roulette;
 import com.ambrosia.roulette.game.bet.types.RouletteBet;
 import com.ambrosia.roulette.game.bet.types.RouletteBetFactory;
 import com.ambrosia.roulette.game.bet.types.RouletteBetType;
@@ -7,6 +8,7 @@ import com.ambrosia.roulette.game.player.RoulettePartialBet;
 import com.ambrosia.roulette.table.RouletteStreet;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,6 +53,11 @@ public class RouletteBetStreet extends RouletteBet {
     @Override
     public boolean isWinningSpace(int roll) {
         return Arrays.stream(this.streets).anyMatch(street -> streetHasRoll(roll, street));
+    }
+
+    @Override
+    public String toJson() {
+        return Roulette.gson().toJson(Map.of("streets", streets));
     }
 
     private boolean streetHasRoll(int roll, RouletteStreet street) {

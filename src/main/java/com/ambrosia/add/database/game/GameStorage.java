@@ -7,6 +7,7 @@ import com.ambrosia.add.database.operation.TransactionEntity;
 import com.ambrosia.add.database.operation.TransactionStorage;
 import com.ambrosia.add.database.operation.TransactionType;
 import com.ambrosia.add.discord.log.DiscordLog;
+import io.ebean.Transaction;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,35 +31,35 @@ public class GameStorage {
 
     public void startGame(GameBase startedGame) {
         synchronized (this.clientToGames) {
-            this.clientToGames.put(startedGame.getClient().uuid, startedGame);
+            this.clientToGames.put(startedGame.getClient().id, startedGame);
         }
         startHooks.forEach(hook -> hook.accept(startedGame));
     }
 
     @Nullable
-    public GameBase findOngoingGame(long uuid) {
+    public GameBase findOngoingGame(long id) {
         synchronized (this.clientToGames) {
-            return this.clientToGames.get(uuid);
+            return this.clientToGames.get(id);
         }
     }
 
-    public void endGame(CreditReservation reservation, GameResultEntity result) {
-        long client = reservation.getClient().uuid;
+    public void endGame(CreditReservation reservation, GameResultEntity result, Transaction transaction) {
+        long client = reservation.getClient().id;
         synchronized (this.clientToGames) {
             this.clientToGames.remove(client);
         }
         if (result.originalBet == 0) return;
         TransactionType transactionType = result.deltaWinnings < 0 ? TransactionType.LOSS : TransactionType.WIN;
-        TransactionEntity transaction;
+        TransactionEntity emeraldTransaction;
         try {
-            transaction = TransactionStorage.get()
+            emeraldTransaction = TransactionStorage.get()
                 .createOperation(0L, client, result.deltaWinnings, transactionType);
         } catch (CreateTransactionException e) {
             throw new RuntimeException(e);
         }
-        DiscordLog.log().operation(ClientStorage.get().findByUUID(client), transaction);
-        result.transaction = transaction;
-        result.save();
+        DiscordLog.log().operation(ClientStorage.get().findById(client), emeraldTransaction);
+        result.transaction = emeraldTransaction;
+        result.save(transaction);
     }
 
     public Map<Long, GameBase> getOngoingGames() {

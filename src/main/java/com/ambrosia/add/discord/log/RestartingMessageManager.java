@@ -3,8 +3,9 @@ package com.ambrosia.add.discord.log;
 import apple.lib.modules.configs.data.config.AppleConfig;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
@@ -14,10 +15,18 @@ public class RestartingMessageManager {
 
     private static RestartingMessageManager instance;
     private static AppleConfig<RestartingMessageManager> config;
-    private final List<RestartingMessage> restartingMessages = new ArrayList<>();
+    private final Set<RestartingMessage> restartingMessages = new HashSet<>();
+
+    public RestartingMessageManager() {
+        instance = this;
+    }
 
     public static RestartingMessageManager get() {
         return instance;
+    }
+
+    public static void setConfig(AppleConfig<RestartingMessageManager> config) {
+        RestartingMessageManager.config = config;
     }
 
     public void load() {
@@ -29,14 +38,6 @@ public class RestartingMessageManager {
         for (RestartingMessage message : copy) {
             message.editAndDelete();
         }
-    }
-
-    public RestartingMessageManager() {
-        instance = this;
-    }
-
-    public static void setConfig(AppleConfig<RestartingMessageManager> config) {
-        RestartingMessageManager.config = config;
     }
 
     public void sendRestarting(MessageChannel channel) {

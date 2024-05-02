@@ -22,25 +22,6 @@ public class CommandLinkDiscord extends BaseSubCommand {
 
     public static final String DISCORD_OPTION = "discord";
 
-    @Override
-    public void onCheckedCommand(SlashCommandInteractionEvent event) {
-        ClientEntity client = this.findClient(event);
-        if (client == null) return;
-        Member member = this.findOption(event, DISCORD_OPTION, OptionMapping::getAsMember);
-        if (member == null) return;
-        client.setDiscord(new ClientDiscordDetails(member));
-        sendRegistrationMessage(member);
-        if (client.trySave()) {
-            event.replyEmbeds(this.embedClientProfile(client)).queue();
-            DiscordLog.log().modifyDiscord(client, event.getUser());
-        } else event.replyEmbeds(this.error("Discord was already assigned")).queue();
-    }
-
-    @Override
-    public boolean isOnlyDealer() {
-        return true;
-    }
-
     public static void sendRegistrationMessage(Member member) {
         member.getUser().openPrivateChannel().queue(CommandLinkDiscord::sendRegisteredMessage);
     }
@@ -66,11 +47,29 @@ public class CommandLinkDiscord extends BaseSubCommand {
                     Thank you for registering with Ambrosia Casino, best of luck!
                                         
                     **Please keep in mind that some forms of gambling can be addictive. Please exercise moderation while playing.**
-                    """).setTitle("Ambrosia Casino").setAuthor(user.getAsTag(), null, channel.getUser().getAvatarUrl())
+                    """).setTitle("Ambrosia Casino").setAuthor(user.getName(), null, channel.getUser().getAvatarUrl())
                 .setThumbnail(self.getAvatarUrl()).build());
         channel.sendMessage(message.build()).queue();
     }
 
+    @Override
+    public void onCheckedCommand(SlashCommandInteractionEvent event) {
+        ClientEntity client = this.findClient(event);
+        if (client == null) return;
+        Member member = this.findOption(event, DISCORD_OPTION, OptionMapping::getAsMember);
+        if (member == null) return;
+        client.setDiscord(new ClientDiscordDetails(member));
+        sendRegistrationMessage(member);
+        if (client.trySave()) {
+            event.replyEmbeds(this.embedClientProfile(client)).queue();
+            DiscordLog.log().modifyDiscord(client, event.getUser());
+        } else event.replyEmbeds(this.error("Discord was already assigned")).queue();
+    }
+
+    @Override
+    public boolean isOnlyDealer() {
+        return true;
+    }
 
     @Override
     public SubcommandData getData() {

@@ -14,31 +14,30 @@ public class EditOnTimer {
 
     public void tryRun() {
         synchronized (this) {
-            if (canUpdate()) {
-                this.lastUpdated = System.currentTimeMillis();
-            } else if (this.isQueued) {
-                return;
-            } else {
-                this.isQueued = true;
-            }
+            if (this.isQueued) return;
+            this.isQueued = true;
             new Thread(this::callback).start();
         }
     }
 
     private void callback() {
+        try {
+            long sleep = getSleep();
+            if (sleep > 0)
+                Thread.sleep(sleep);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         synchronized (this) {
-            try {
-                Thread.sleep(System.currentTimeMillis() - this.lastUpdated);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
             this.lastUpdated = System.currentTimeMillis();
             this.isQueued = false;
         }
         this.callback.run();
     }
 
-    private boolean canUpdate() {
-        return lastUpdated + interval < System.currentTimeMillis();
+    private long getSleep() {
+        synchronized (this) {
+            return interval - (System.currentTimeMillis() - this.lastUpdated);
+        }
     }
 }

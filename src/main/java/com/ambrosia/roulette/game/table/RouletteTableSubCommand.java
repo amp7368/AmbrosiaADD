@@ -11,21 +11,16 @@ public class RouletteTableSubCommand extends BaseSubCommand {
     @Override
     protected void onCheckedCommand(SlashCommandInteractionEvent event) {
         if (!(event.getChannel() instanceof TextChannel channel)) {
-            error("Only in TextChannels");
+            error("Only in Ambrosia Server");
             return;
         }
         RouletteGame game = RouletteGameManager.getGame(channel);
         if (game != null) {
-            error("There is already an ongoing game in this channel! Use `/roulette bet` to join.");
+            game.resendGui(event::reply);
             return;
         }
         game = RouletteGameManager.createTable(channel);
         game.start(new RouletteTableGui(game, dcf, event::reply));
-    }
-
-    @Override
-    public boolean isOnlyDealer() {
-        return true;
     }
 
     @Override

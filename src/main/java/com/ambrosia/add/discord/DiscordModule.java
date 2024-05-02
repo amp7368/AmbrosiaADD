@@ -70,7 +70,7 @@ public class DiscordModule extends AppleModule {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        jda.getPresence().setPresence(Activity.playing("!"), false);
+        jda.getPresence().setPresence(Activity.playing("Roulette!"), false);
 
         DCF dcf = new DCF(jda);
         DiscordBot.SELF_USER_AVATAR = jda.getSelfUser().getAvatarUrl();

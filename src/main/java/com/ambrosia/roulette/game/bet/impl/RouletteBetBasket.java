@@ -8,6 +8,7 @@ import com.ambrosia.roulette.game.player.RoulettePartialBet;
 import com.ambrosia.roulette.table.RouletteSpace;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class RouletteBetBasket extends RouletteBet {
@@ -39,5 +40,10 @@ public class RouletteBetBasket extends RouletteBet {
     @Override
     public boolean isWinningSpace(int roll) {
         return this.basket.contains(Roulette.TABLE.getSpace(roll));
+    }
+
+    @Override
+    public String toJson() {
+        return Roulette.gson().toJson(Map.of("basket", basket));
     }
 }

@@ -4,6 +4,8 @@ import com.ambrosia.roulette.game.bet.types.RouletteBet;
 import com.ambrosia.roulette.game.bet.types.RouletteBetFactory;
 import com.ambrosia.roulette.game.bet.types.RouletteBetType;
 import com.ambrosia.roulette.game.player.RoulettePartialBet;
+import com.google.gson.Gson;
+import java.util.Map;
 
 public class RouletteBetHighLow extends RouletteBet {
 
@@ -27,5 +29,10 @@ public class RouletteBetHighLow extends RouletteBet {
     public boolean isWinningSpace(int roll) {
         if (isHigh) return roll > 18;
         return roll != 0 && roll <= 18;
+    }
+
+    @Override
+    public String toJson() {
+        return new Gson().toJson(Map.of("isHigh", isHigh));
     }
 }

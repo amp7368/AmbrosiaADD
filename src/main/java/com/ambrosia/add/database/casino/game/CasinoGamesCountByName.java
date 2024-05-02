@@ -31,6 +31,7 @@ public final class CasinoGamesCountByName {
         if (totalExchanged == 0) return null;
         BigDecimal deltaWinnings = BigDecimal.valueOf(-this.deltaWinnings); // we're House, so flip the sign
         BigDecimal totalExchanged = BigDecimal.valueOf(this.totalExchanged);
+
         BigDecimal houseWins = deltaWinnings.divide(totalExchanged, Double.SIZE, RoundingMode.HALF_UP);
         return houseWins.multiply(BigDecimal.TEN).multiply(BigDecimal.TEN).doubleValue();
     }

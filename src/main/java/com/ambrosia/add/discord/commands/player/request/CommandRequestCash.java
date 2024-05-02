@@ -33,7 +33,7 @@ public abstract class CommandRequestCash extends BaseSubCommand {
             event.replyEmbeds(error("Not enough credits")).setEphemeral(true).queue();
             return;
         }
-        ActiveRequestCash request = new ActiveRequestCash(member,client, sign() * amount, transactionType(), client.uuid);
+        ActiveRequestCash request = new ActiveRequestCash(member, client, sign() * amount, transactionType(), client.id);
 
         ActiveRequestCashGui gui = request.create();
         event.reply(gui.makeClientMessage()).queue();

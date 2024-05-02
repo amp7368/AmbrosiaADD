@@ -5,6 +5,8 @@ import com.ambrosia.add.database.game.GameBase;
 import com.ambrosia.add.database.game.GameResultEntity;
 import com.ambrosia.add.database.game.GameStorage;
 import com.ambrosia.add.discord.util.CommandBuilder;
+import io.ebean.DB;
+import io.ebean.Transaction;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,9 +67,16 @@ public class CreditReservation {
     }
 
     public void release(GameResultEntity result) {
+        try (Transaction transaction = DB.beginTransaction()) {
+            release(result, transaction);
+            transaction.commit();
+        }
+    }
+
+    public synchronized void release(GameResultEntity result, Transaction transaction) {
         if (this.notEnded) {
             notEnded = false;
-            GameStorage.get().endGame(this, result);
+            GameStorage.get().endGame(this, result, transaction);
         }
     }
 

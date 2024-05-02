@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.net.URL;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import org.jetbrains.annotations.Nullable;
 
 @Embeddable
@@ -18,9 +17,9 @@ public class ClientMinecraftDetails {
 
     @Column(unique = true)
     public String name;
-    @EmbeddedId
+
     @Column(unique = true)
-    public String id;
+    public String uuid;
 
     @Nullable
     public static ClientMinecraftDetails fromUsername(String username) {
@@ -37,7 +36,14 @@ public class ClientMinecraftDetails {
         }
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof ClientMinecraftDetails other)
+            return this.uuid.equals(other.uuid) && this.name.equals(other.name);
+        return false;
+    }
+
     public String skinUrl() {
-        return "https://mc-heads.net/head/" + this.id;
+        return "https://mc-heads.net/head/" + this.uuid;
     }
 }

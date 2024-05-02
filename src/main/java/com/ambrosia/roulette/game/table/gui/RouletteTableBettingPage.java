@@ -30,7 +30,7 @@ public class RouletteTableBettingPage extends DCFGuiPage<RouletteTableGui> {
     }
 
     private void spin(ButtonInteractionEvent event) {
-        if (this.isAnyPlayerBetting()) return;
+        if (this.isDisableSpin()) return;
         getParent().addSubPage(new RouletteSpinWarmup(getParent()));
         new Thread(() -> {
 
@@ -84,14 +84,21 @@ public class RouletteTableBettingPage extends DCFGuiPage<RouletteTableGui> {
             description.append(line);
         }
         embed.setDescription(description);
+        long untilBettingStale = getParent().getUntilBettingStaleSeconds();
+        embed.setFooter("%ds until betting is stale".formatted(untilBettingStale));
 
-        ActionRow actions = ActionRow.of(SPIN_BUTTON.withDisabled(isAnyPlayerBetting()));
+        ActionRow actions = ActionRow.of(SPIN_BUTTON.withDisabled(isDisableSpin()));
         return buildCreate(embed.build(), actions);
+    }
+
+    private boolean isDisableSpin() {
+        boolean isBettingStale = !parent.getUntilBettingStale().isNegative();
+        return isBettingStale && isAnyPlayerBetting();
     }
 
     private boolean isAnyPlayerBetting() {
         List<RoulettePlayerGame> players = this.getParent().getGame().getPlayers();
-        if (players.isEmpty()) return false;
+        if (players.isEmpty()) return true;
         return players.stream().anyMatch(RoulettePlayerGame::isBetting);
     }
 }

@@ -61,7 +61,7 @@ public class CommandRestart extends BaseCommand {
 
     @Override
     public boolean isOnlyManager() {
-        return super.isOnlyManager();
+        return true;
     }
 
     @Override

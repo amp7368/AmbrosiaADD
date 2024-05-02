@@ -24,7 +24,7 @@ public class TransactionStorage {
         throws CreateTransactionException {
         try (Transaction transaction = DB.getDefault().beginTransaction()) {
             TransactionEntity operation = new TransactionEntity(conductorId, client, amount, transactionType);
-            ClientEntity clientEntity = ClientStorage.get().findByUUID(client);
+            ClientEntity clientEntity = ClientStorage.get().findById(client);
             if (clientEntity == null) throw new IllegalStateException("Client " + client + " does not exist!");
             if (clientEntity.credits + amount < 0) {
                 throw new CreateTransactionException("Not enough credits");
@@ -46,8 +46,8 @@ public class TransactionStorage {
                 TransactionType.TRADE_GET);
 
             // get the clients (in this transaction
-            ClientEntity clientTrading = ClientStorage.get().findByUUID(clientTradingUUID);
-            ClientEntity clientReceiving = ClientStorage.get().findByUUID(clientReceivingUUID);
+            ClientEntity clientTrading = ClientStorage.get().findById(clientTradingUUID);
+            ClientEntity clientReceiving = ClientStorage.get().findById(clientReceivingUUID);
             if (clientReceiving == null || clientTrading == null)
                 throw new IllegalStateException("Client " + clientTradingUUID + " | " + clientReceivingUUID + " does not exist!");
             if (clientTrading.credits < amount) {
@@ -79,6 +79,6 @@ public class TransactionStorage {
     @NotNull
     public List<TransactionEntity> aggregateByType(ClientEntity client) {
         QTransactionEntity o = QTransactionEntity.alias();
-        return new QTransactionEntity().select(o.operationType, o.sumAmount).clientId.eq(client.uuid).findList();
+        return new QTransactionEntity().select(o.operationType, o.sumAmount).clientId.eq(client.id).findList();
     }
 }

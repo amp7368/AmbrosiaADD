@@ -66,7 +66,7 @@ public class DiscordLog implements SendMessage {
     }
 
     private EmbedBuilder client(EmbedBuilder msg, ClientEntity client) {
-        msg.setAuthor(String.format("%s (#%d)", client.displayName, client.uuid));
+        msg.setAuthor(String.format("%s (#%d)", client.displayName, client.id));
         msg.addField("Credits", Pretty.commas(client.credits), true);
         return msg;
     }
@@ -80,6 +80,6 @@ public class DiscordLog implements SendMessage {
     }
 
     private EmbedBuilder embed(String title, User actor) {
-        return new EmbedBuilder().setTitle(title).setFooter(actor.getAsTag(), actor.getAvatarUrl()).setTimestamp(Instant.now());
+        return new EmbedBuilder().setTitle(title).setFooter(actor.getName(), actor.getAvatarUrl()).setTimestamp(Instant.now());
     }
 }

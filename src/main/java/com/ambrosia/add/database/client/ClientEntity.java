@@ -16,20 +16,20 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "client_entity")
 public class ClientEntity extends Model {
 
     @Id
-    @Column
     @Identity(start = 1000)
-    public long uuid;
+    public long id;
 
-    @Column
-    @Embedded
+    @Embedded(prefix = "minecraft_")
     public ClientMinecraftDetails minecraft;
-    @Column
-    @Embedded
+
+    @Embedded(prefix = "discord_")
     public ClientDiscordDetails discord;
 
     @Column(unique = true, nullable = false)
@@ -73,7 +73,6 @@ public class ClientEntity extends Model {
             if (!DB.getDefault().checkUniqueness(this, transaction).isEmpty()) return false;
             super.save(transaction);
             transaction.commit();
-            ClientStorage.get().updateClient(this);
             return true;
         }
     }
@@ -83,7 +82,7 @@ public class ClientEntity extends Model {
     }
 
     public boolean hasAnyTransactions() {
-        return !TransactionStorage.get().findTransactions(this.uuid).isEmpty();
+        return !TransactionStorage.get().findTransactions(this.id).isEmpty();
     }
 
     public String bestImgUrl() {
@@ -102,5 +101,9 @@ public class ClientEntity extends Model {
 
     public <T> T discord(Function<ClientDiscordDetails, T> fn, T defaultIfNull) {
         return this.discord == null ? defaultIfNull : fn.apply(this.discord);
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 }

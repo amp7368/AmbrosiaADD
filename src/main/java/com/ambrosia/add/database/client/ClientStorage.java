@@ -13,7 +13,6 @@ import io.ebean.plugin.Property;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 import net.dv8tion.jda.api.entities.Member;
@@ -22,24 +21,13 @@ import org.jetbrains.annotations.Nullable;
 public class ClientStorage {
 
     private static ClientStorage instance;
-    private final Map<Long, ClientEntity> allClients = new HashMap<>();
 
     public ClientStorage() {
         instance = this;
-        List<ClientEntity> clients = new QClientEntity().findList();
-        for (ClientEntity client : clients) {
-            updateClient(client);
-        }
     }
 
     public static ClientStorage get() {
         return instance;
-    }
-
-    public void updateClient(ClientEntity client) {
-        synchronized (allClients) {
-            this.allClients.put(client.uuid, client);
-        }
     }
 
     private ClientEntity fillInClient(ClientEntity client) {
@@ -63,7 +51,8 @@ public class ClientStorage {
 
 
     public ClientEntity findByDiscord(long discordId) {
-        ClientEntity client = new QClientEntity().where().discord.discordId.eq(discordId).findOne();
+        new QClientEntity().findList();
+        ClientEntity client = new QClientEntity().where().discord.id.eq(discordId).findOne();
         if (client == null) return null;
         return fillInClient(client);
     }
@@ -79,7 +68,6 @@ public class ClientStorage {
             client.save(transaction);
             transaction.commit();
         }
-        updateClient(client);
         return fillInClient(client);
     }
 
@@ -99,20 +87,17 @@ public class ClientStorage {
             client.save(transaction);
             transaction.commit();
         }
-        updateClient(client);
         return fillInClient(client);
     }
 
     @Nullable
-    public ClientEntity findByUUID(long uuid) {
-        ClientEntity client = new QClientEntity().where().uuid.eq(uuid).findOne();
+    public ClientEntity findById(long uuid) {
+        ClientEntity client = new QClientEntity().where().id.eq(uuid).findOne();
         if (client == null) return null;
         return fillInClient(client);
     }
 
     public Stream<ClientEntity> allNames() {
-        synchronized (allClients) {
-            return allClients.values().stream();
-        }
+        return new QClientEntity().findStream();
     }
 }

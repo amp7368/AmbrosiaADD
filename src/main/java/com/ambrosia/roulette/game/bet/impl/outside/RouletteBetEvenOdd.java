@@ -6,6 +6,8 @@ import com.ambrosia.roulette.game.bet.types.RouletteBetFactory;
 import com.ambrosia.roulette.game.bet.types.RouletteBetType;
 import com.ambrosia.roulette.game.player.RoulettePartialBet;
 import com.ambrosia.roulette.table.RouletteSpace;
+import com.google.gson.Gson;
+import java.util.Map;
 
 public class RouletteBetEvenOdd extends RouletteBet {
 
@@ -29,5 +31,10 @@ public class RouletteBetEvenOdd extends RouletteBet {
     public boolean isWinningSpace(int roll) {
         RouletteSpace space = Roulette.TABLE.getSpace(roll);
         return this.isEven ? space.isEven() : space.isOdd();
+    }
+
+    @Override
+    public String toJson() {
+        return new Gson().toJson(Map.of("isEven", isEven));
     }
 }

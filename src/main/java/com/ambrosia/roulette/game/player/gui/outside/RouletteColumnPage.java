@@ -32,8 +32,7 @@ public class RouletteColumnPage extends RouletteBetPage {
 
     private void finishBet(RouletteBetColumnType dozen) {
         RouletteBet bet = getParent().getPlayer()
-            .finishBet(bet1 -> RouletteBetType.COLUMN.create(bet1)
-                .finalizeColumn(dozen));
+            .finishBet(bet1 -> RouletteBetType.COLUMN.create(bet1).finalizeColumn(dozen));
         getParent().afterBetHook(bet);
     }
 

@@ -44,6 +44,6 @@ public class BlackjackCommand extends BaseCommand implements BetCommand {
 
     @Override
     public int getInitialBetLimit() {
-        return Emeralds.leToEmeralds(24);
+        return Emeralds.leToEmeralds(16);
     }
 }
