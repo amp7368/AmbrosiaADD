@@ -5,9 +5,11 @@ import com.ambrosia.add.database.client.ClientEntity;
 import com.ambrosia.add.database.game.GameBase;
 import com.ambrosia.add.database.game.roulette.DRouletteTableGame;
 import com.ambrosia.roulette.Roulette;
+import com.ambrosia.roulette.game.bet.RouletteBetSubCommand;
 import com.ambrosia.roulette.game.bet.types.RouletteBet;
 import com.ambrosia.roulette.game.player.gui.RoulettePlayerGui;
 import com.ambrosia.roulette.game.table.RouletteGame;
+import com.ambrosia.roulette.table.RouletteSpace;
 import discord.util.dcf.gui.base.GuiReplyFirstMessage;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -74,13 +76,30 @@ public class RoulettePlayerGame extends GameBase {
     }
 
     public synchronized RouletteBet finishBet(Function<RoulettePartialBet, RouletteBet> finalizeBet) {
-        RouletteBet bet = finalizeBet.apply(partialBet);
-        this.bets.add(bet);
-        this.betTotal += bet.getAmount();
+        RouletteBet newBet = finalizeBet.apply(partialBet);
+        if (checkOverBetError(newBet)) return null;
+
+        this.bets.add(newBet);
+        this.betTotal += newBet.getAmount();
         this.partialBet = null;
         this.tableGame.resetLastBetTimer();
         this.tableGame.updateBetsUI();
-        return bet;
+        return newBet;
+    }
+
+    private boolean checkOverBetError(RouletteBet newBet) {
+        for (RouletteSpace space : Roulette.TABLE.spaces(true)) {
+            int spaceDigit = space.digit();
+            if (!newBet.isWinningSpace(spaceDigit)) continue;
+            double totalBetAmount = getBets().stream()
+                .filter(bet -> bet.isWinningSpace(spaceDigit))
+                .mapToDouble(RouletteBet::getAmount)
+                .sum() + newBet.getAmount();
+            if (totalBetAmount > RouletteBetSubCommand.ONE_HAND_MAX_BET) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void addBetsFieldSummary(EmbedBuilder embed) {

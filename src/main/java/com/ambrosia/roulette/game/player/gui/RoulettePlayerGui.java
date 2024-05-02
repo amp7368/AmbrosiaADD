@@ -5,6 +5,7 @@ import com.ambrosia.roulette.game.player.RoulettePlayerGame;
 import discord.util.dcf.DCF;
 import discord.util.dcf.gui.base.GuiReplyFirstMessage;
 import discord.util.dcf.gui.base.gui.DCFGui;
+import org.jetbrains.annotations.Nullable;
 
 public class RoulettePlayerGui extends DCFGui {
 
@@ -26,7 +27,11 @@ public class RoulettePlayerGui extends DCFGui {
         return player;
     }
 
-    public void afterBetHook(RouletteBet bet) {
+    public void afterBetHook(@Nullable RouletteBet bet) {
+        if (bet == null) {
+            this.addSubPage(new RouletteErrorPage(this));
+            return;
+        }
         this.clearSubPages();
         this.addSubPage(new RouletteBetAgainPage(this, bet));
     }
