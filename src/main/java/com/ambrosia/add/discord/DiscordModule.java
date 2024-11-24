@@ -18,6 +18,7 @@ import com.ambrosia.add.discord.commands.player.stats.CommandStats;
 import com.ambrosia.add.discord.commands.player.trade.CommandTrade;
 import com.ambrosia.add.discord.log.DiscordLog;
 import com.ambrosia.add.discord.log.RestartingMessageManager;
+import com.ambrosia.add.discord.misc.ProfileAutoComplete;
 import com.ambrosia.roulette.Roulette;
 import com.github.AndrewAlbizati.Blackjack;
 import discord.util.dcf.DCF;
@@ -30,7 +31,7 @@ import net.dv8tion.jda.api.entities.Activity;
 public class DiscordModule extends AppleModule {
 
     public static final String AMBROSIA_ICON =
-        "https://cdn.discordapp" + ".com/icons/923749890104885271/a_52da37c184005a14d15538cb62271b9b.webp";
+        "https://cdn.discordapp.com/icons/923749890104885271/a_52da37c184005a14d15538cb62271b9b.webp";
 
     private static DiscordModule instance;
 
@@ -55,7 +56,7 @@ public class DiscordModule extends AppleModule {
         DiscordConfig.get().generateWarnings();
         DiscordPermissions.get().generateWarnings();
         if (!DiscordConfig.get().isConfigured()) {
-            this.logger().fatal("Please configure " + getFile("Config", "Discord.config.json"));
+            this.logger().fatal("Please configure {}", getFile("Config", "Discord.config.json"));
             System.exit(1);
         }
     }

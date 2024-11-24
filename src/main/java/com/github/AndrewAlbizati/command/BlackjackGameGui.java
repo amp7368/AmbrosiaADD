@@ -1,6 +1,7 @@
 package com.github.AndrewAlbizati.command;
 
 import com.ambrosia.add.discord.util.AmbrosiaColor.AmbrosiaColorGame;
+import com.ambrosia.add.discord.util.Emeralds;
 import com.github.AndrewAlbizati.game.BlackjackGame;
 import com.github.AndrewAlbizati.game.Card;
 import com.github.AndrewAlbizati.game.Hand;
@@ -104,9 +105,11 @@ public class BlackjackGameGui extends DCFGuiPage<DCFGui> implements BlackjackMes
         // Create new embed with all current game information
         EmbedBuilder eb = new EmbedBuilder();
         eb.setTitle("Blackjack");
+        String betMsg = Emeralds.message(game.getCurrentBet(), true);
+        String playerCredits = Emeralds.message(game.getPlayerTotalCredits(), true);
         eb.setDescription(
-            "You bet **" + game.getCurrentBet() + "** credit" + (game.getCurrentBet() != 1 ? "s" : "") + "\n" + "You have **"
-                + game.getPlayerTotalCredits() + "** credit" + (game.getPlayerTotalCredits() != 1 ? "s" : "") + "\n\n" + "**Rules**\n"
+            "You bet " + betMsg + "\n" + "You have "
+                + playerCredits + "\n\n" + "**Rules**\n"
                 + "Dealer must stand on all 17s\n" + "Blackjack pays 3 to 2");
         eb.setColor(AmbrosiaColorGame.IN_PROGRESS);
         eb.setFooter("Game with " + user.getName(), user.getAvatarUrl());

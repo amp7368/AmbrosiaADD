@@ -48,15 +48,17 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
 
     // logging
-    implementation 'org.apache.logging.log4j:log4j-core:2.19.0'
-    implementation 'org.apache.logging.log4j:log4j-slf4j2-impl:2.19.0'
+    implementation 'org.apache.logging.log4j:log4j-core:2.24.1'
+    implementation 'org.apache.logging.log4j:log4j-slf4j2-impl:2.24.1'
     // image
     implementation 'com.sksamuel.scrimage:scrimage-core:4.0.32'
+    // fuzzy string matching
+    implementation 'me.xdrop:fuzzywuzzy:1.4.0'
     // discord
-    implementation 'net.dv8tion:JDA:5.0.0-beta.19'
+    implementation 'net.dv8tion:JDA:5.1.2'
 
     // apple
-    implementation 'discord.util:discorddcf:1.0-SNAPSHOT'
+    implementation 'discord.util:discorddcf:1.1-SNAPSHOT'
     implementation 'apple.lib:applemodules:2.0-SNAPSHOT'
     implementation "apple.utilities:AppleUtilities:1.4-SNAPSHOT"
     implementation 'apple.lib:AppleEbeanDatabase:1.1-SNAPSHOT'

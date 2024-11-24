@@ -1,6 +1,6 @@
 select (select c.display_name
         from client_entity c
-        where t.client_id = c.uuid)      cName,
+        where t.client_id = c.id)        cName,
        sum(g.delta_winnings) / 4096 / 64 winnings,
        t.client_id,
        count(*)                          games_count
@@ -9,11 +9,11 @@ from game_result_entity g
 group by t.client_id
 order by winnings desc;
 
-select avg(winnings)
+select winnings, cName
 from (select (select c.display_name
               from client_entity c
-              where t.client_id = c.uuid) cName,
-             sum(g.delta_winnings) / 4096 winnings,
+              where t.client_id = c.id)   cName,
+             avg(g.delta_winnings / 4096) winnings,
              t.client_id,
              count(*)                     games_count
       from game_result_entity g

@@ -13,7 +13,7 @@ import javax.persistence.Table;
 public class GameResultEntity extends Model {
 
     @Id
-    public long id;
+    public Long id;
 
     @Column
     public String name;
