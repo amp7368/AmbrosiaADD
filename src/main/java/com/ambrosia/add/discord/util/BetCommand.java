@@ -11,7 +11,7 @@ public interface BetCommand extends CommandBuilder {
         if (bet == null) return null;
         if (bet > getInitialBetLimit()) {
             String betLimitMessage = Emeralds.message(getInitialBetLimit(), 2, true);
-            event.reply("%s le per bet limit".formatted(betLimitMessage)).setEphemeral(true).queue();
+            event.reply("%s per bet limit".formatted(betLimitMessage)).setEphemeral(true).queue();
             return null;
         }
         CreditReservation reservation = AmbrosiaAPI.get().reserve(event.getUser().getIdLong(), bet, allowAlreadyPlaying);

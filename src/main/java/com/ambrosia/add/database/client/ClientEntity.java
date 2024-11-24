@@ -103,6 +103,10 @@ public class ClientEntity extends Model {
         return this.discord == null ? defaultIfNull : fn.apply(this.discord);
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }

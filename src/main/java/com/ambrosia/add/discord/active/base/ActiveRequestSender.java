@@ -9,19 +9,20 @@ import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 
 public class ActiveRequestSender {
 
-    private String username;
-    private String avatarUrl;
-    private long discordId;
-    private long client;
+    protected String username;
+    protected String avatarUrl;
+    protected long discordId;
+    protected long client;
 
     public ActiveRequestSender(Member sender, ClientEntity client) {
-        this.username = sender.getUser().getName();
-        this.avatarUrl = sender.getEffectiveAvatarUrl();
-        this.discordId = sender.getIdLong();
+        this(sender);
         this.client = client.id;
     }
 
-    public ActiveRequestSender() {
+    public ActiveRequestSender(Member sender) {
+        this.username = sender.getUser().getName();
+        this.avatarUrl = sender.getEffectiveAvatarUrl();
+        this.discordId = sender.getIdLong();
     }
 
     public void author(EmbedBuilder embed) {
@@ -42,4 +43,5 @@ public class ActiveRequestSender {
     public void setClient(ClientEntity client) {
         this.client = client.id;
     }
+
 }

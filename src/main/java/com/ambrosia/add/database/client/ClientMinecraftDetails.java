@@ -2,6 +2,7 @@ package com.ambrosia.add.database.client;
 
 import apple.utilities.fileio.serializing.FileIOJoined;
 import apple.utilities.threading.service.queue.TaskHandlerQueue;
+import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -21,6 +22,11 @@ public class ClientMinecraftDetails {
     @Column(unique = true)
     public String uuid;
 
+    public ClientMinecraftDetails(String name, String uuid) {
+        this.name = name;
+        this.uuid = uuid;
+    }
+
     @Nullable
     public static ClientMinecraftDetails fromUsername(String username) {
         return rateLimited.taskCreator().accept(() -> loadUrl(username)).complete();
@@ -30,8 +36,11 @@ public class ClientMinecraftDetails {
     private static ClientMinecraftDetails loadUrl(String username) {
         try {
             InputStream urlInput = new URL(MOJANG_API + username).openConnection().getInputStream();
-            return FileIOJoined.get().loadJson(urlInput, ClientMinecraftDetails.class, null);
-        } catch (IOException e) {
+            JsonObject json = FileIOJoined.get().loadJson(urlInput, JsonObject.class, null);
+            String name = json.get("name").getAsString();
+            String uuid = json.get("id").getAsString();
+            return new ClientMinecraftDetails(name, uuid);
+        } catch (IOException | NullPointerException e) {
             return null;
         }
     }

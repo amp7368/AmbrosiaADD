@@ -38,7 +38,6 @@ public class Deck extends ArrayList<Card> {
      * Shuffles the entire deck randomly.
      */
     public void shuffleDeck() {
-
         Collections.shuffle(this, random);
     }
 

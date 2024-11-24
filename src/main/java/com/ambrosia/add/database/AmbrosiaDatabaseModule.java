@@ -19,7 +19,7 @@ public class AmbrosiaDatabaseModule extends AppleModule {
             logger()::error,
             logger()::info);
         try {
-            Thread.sleep(200);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
